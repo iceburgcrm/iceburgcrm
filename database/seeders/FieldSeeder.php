@@ -565,23 +565,6 @@ class FieldSeeder extends Seeder
         $moduleId=Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'test_color',
-            'label'         => 'color',
-            'module_id'     => $moduleId,
-            'input_type'    => 'color',
-            'field_length'  => 10,
-        ], $order++));
-
-        Field::insert(Field::getField([
-            'name'          => 'test_checkbox',
-            'label'         => 'checkbox',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
-            'data_type'     => 'boolean',
-            'field_length'  => 64,
-        ], $order++));
-
-        Field::insert(Field::getField([
             'name'          => 'name',
             'label'         => 'Name',
             'module_id'     => $moduleId,
