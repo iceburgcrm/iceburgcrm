@@ -2,7 +2,30 @@
 
 # Iceburg CRM
 
-- [Demo](https://demo.iceburg.ca)
+Screenshots:
+<p>
+<a href="https://www.iceburg.ca/images/screenshot1.jpg" target="_blank">
+	<img src="https://www.iceburg.ca/images/screenshot1.jpg" width="50" />
+</a>
+<a href="https://www.iceburg.ca/images/screenshot2.jpg" target="_blank">
+	<img src="https://www.iceburg.ca/images/screenshot2.jpg" width="50" />
+</a>
+<a href="https://www.iceburg.ca/images/screenshot3.jpg" target="_blank">
+	<img src="https://www.iceburg.ca/images/screenshot3.jpg" width="50" />
+</a>
+<a href="https://www.iceburg.ca/images/screenshot4.jpg" target="_blank">
+	<img src="https://www.iceburg.ca/images/screenshot4.jpg" width="50" />
+</a>
+<a href="https://www.iceburg.ca/images/screenshot5.jpg" target="_blank">
+	<img src="https://www.iceburg.ca/images/screenshot5.jpg" width="50" />
+</a>
+</p>
+
+
+[Demo](http://demo.iceburg.ca)
+
+
+Default usernames and passwords
 
 - admin@iceburg.ca:admin
 - user@iceburg.ca:user
@@ -118,4 +141,9 @@ If you discover a security vulnerability within Iceburg CRM, please send an e-ma
 ## License
 
 The Iceburg CRM is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Community Discussion
+
+Join our [reddit group](https://reddit.com/r/iceburgcrm/)
 
