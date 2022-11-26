@@ -1,8 +1,8 @@
 {
-    "name": "laravel/laravel",
+    "name": "iceburgcrm/iceburgcrm",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Iceburg CRM is a metadriven CRM that allows you to quickly prototype any CRM.",
+    "keywords": ["framework", "crm", "vue3", "inertia", "iceburg", "iceburg crm", "cms", "composition api"],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
