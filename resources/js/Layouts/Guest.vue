@@ -15,8 +15,7 @@ import { Link } from '@inertiajs/inertia-vue3';
                         {{$page.props.auth.system_settings.description ? $page.props.auth.system_settings.description : ''}}
                     </p>
                     <p class="py-4">
-                            <a class="text-xl" href="https://www.iceburg.ca">Iceburg CRM</a> 
-                            <a class="text-xl font=semibold" href="https://www.github.com/iceburgcrm">Download</a>
+                            <a class="text-xl font-semibold" href="https://www.iceburg.ca">Iceburg CRM</a> 
                         </p>
                 </div></div>
                 <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
