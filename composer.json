@@ -16,10 +16,10 @@
     "support": {
         "docs": "docs.iceburg.ca"
     },
-    "funding": {
+    "funding": [{
         "type": "patreon",
         "url": "https://www.patreon.com/iceburgcrm"
-    },
+    }],
     "require": {
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
