@@ -61,6 +61,57 @@ Iceburg CRM is created with:
 - [heroicons](https://heroicons.com)
  
 
+## Installation
+
+If you do not have a server available visit [digitalocean](https://m.do.co/c/a52593511cc4) and get $200 dollars in free credit
+
+If not installed, please install [composer](https://getcomposer.org/download/) 
+
+If not installed, please install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/) 
+
+```php
+composer create-project iceburgcrm/iceburgcrm iceburgcrm
+
+or 
+
+git clone git@github.com:iceburgcrm/iceburgcrm.git
+
+cd iceburgcrm
+```
+
+Edit your database environment variables 
+```php
+vim .env
+
+DB_HOST=
+DB_PORT=
+DB_USERNAME=
+DB_PASSWORD=
+DB_DATABASE=
+
+```
+
+Open permissions on the storage and 
+```php
+sudo chown -R www-data:www-data /path/to/your/project/public
+sudo chown -R www-data:www-data /path/to/your/project/storage
+
+or 
+
+sudo chmod 777 storage
+sudo chmod 777 public
+```
+
+Migrate
+```php
+php artisan migrate
+php artisan db:seed
+```
+
+Deploy
+```php
+sudo chmod 777 storage
+```
 
 ## Default Iceburg CRM
 
