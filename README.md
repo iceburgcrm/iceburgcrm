@@ -21,6 +21,7 @@ Screenshots:
 </a>
 </p>
 
+[Iceburg CRM](https://www.iceburg.ca)
 
 [Demo](http://demo.iceburg.ca)
 
@@ -36,7 +37,7 @@ Default usernames and passwords
 
 ## About Iceburg CRM
 
-Iceburg CRM is a metadriven CRM that allows you to quickly prototype any CRM.  The default CRM is based on a typical business CRM but the flexibility of dymanic modules, fields, subpanels allows prototyping of any number of different tyes of CRMs.   
+Iceburg CRM is a metadriven CRM that allows you to quickly prototype any CRM.  The default CRM is based on a typical business CRM but the flexibility of dynamic modules, fields, subpanels allows prototyping of any number of different tyes of CRMs.   
 
 
 
