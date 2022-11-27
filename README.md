@@ -54,7 +54,7 @@ Iceburg CRM is a metadriven CRM that allows you to quickly prototype any CRM.  T
 ## Created With
 
 Iceburg CRM is created with:
-- [Vue 3](https://vuejs.org/) for the frotend
+- [Vue 3](https://vuejs.org/) for the frotnend
 - [Laravel 9](https://laravel.com/) for the backend
 - [Tailwinds](https://tailwindui.com/) with the DaisyUI plugin
 - [Inertia](https://inertiajs.com/) for routing
