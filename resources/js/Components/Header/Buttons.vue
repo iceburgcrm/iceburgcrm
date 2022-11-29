@@ -8,21 +8,18 @@
 
 
         <div class="btn-group">
-        <a v-if="props.permissions.write && props.allowed.includes('add') && props.module.admin != 1" class="p-2 w-16 text-xs btn  btn-secondary text-secondary-content rounded-box shadow" :href="`/module/${props.module.name}/add`" method="get" as="button">
+        <a v-if="props.permissions.write && props.allowed.includes('add') && props.module.admin != 1" class="p-2 w-20 text-xs btn  btn-outline  btn-accent text-accent-content rounded-box shadow" :href="`/module/${props.module.name}/add`" method="get" as="button">
             Add
         </a>
-        <a v-if="props.permissions.write && props.allowed.includes('edit')" class="p-2 w-16 text-xs btn  btn-secondary text-secondary-content rounded-box shadow" :href="`/module/${props.module.name}/edit/${props.record.id}`" method="get" role="button">
+        <a v-if="props.permissions.write && props.allowed.includes('edit')" class="p-2 w-20 text-xs btn  btn-outline  btn-warning text-warning-content rounded-box shadow" :href="`/module/${props.module.name}/edit/${props.record.id}`" method="get" role="button">
             Edit
         </a>
-        <a v-if="props.permissions.write && props.allowed.includes('delete')" @click.prevent="deleteRecord(props.record.id,'module')" class="p-2 w-24 btn  btn-error text-error-content rounded-box shadow" href="" method="get" role="button">
+        <a v-if="props.permissions.write && props.allowed.includes('delete')" @click.prevent="deleteRecord(props.record.id,'module')" class="p-2 w-20 text-xs btn  btn-outline  btn-error text-errror-content rounded-box shadow" href="" method="get" role="button">
             Delete
         </a>
             <a v-if="props.permissions.write && props.allowed.includes('delete_subpanel')" @click.prevent="deleteRecord(props.record.id,'relationship')" class="p-2 w-24 btn  btn-error text-error-content rounded-box shadow" href="" method="get" role="button">
                 Delete
             </a>
-        </div>
-        <div class="btn-group">
-
             <a v-if="props.permissions.import && props.allowed.includes('import')" class="p-2 w-20 text-xs btn  btn-outline  btn-secondary text-secondary-content rounded-box shadow" :href="`/import?from_module_id=${$page.props.module.id}`" method="get" as="button">
                 Import
             </a>

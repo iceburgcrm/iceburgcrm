@@ -463,50 +463,6 @@ class ModuleSubpanelSeeder extends Seeder
         ]);
 
 
-
-
-
-        $id=ModuleSubpanel::insertGetId([
-            'name' => 'modules_fields',
-            'label' => 'Fields',
-            'relationship_id' => Relationship::where('name', 'accounts_contacts')->first()->id,
-            'module_id' => Module::where('name', 'modules')->first()->id,
-        ]);
-        SubpanelField::insert([
-            'subpanel_id' => $id,
-            'field_id' => Field::where('module_id',
-                Module::where('name', 'fields')->first()->id
-            )
-                ->where('name', 'label')->first()->id
-        ]);
-
-
-
-        $id=ModuleSubpanel::insertGetId([
-            'name' => 'modules_subpanels',
-            'label' => 'Fields',
-            'relationship_id' => Relationship::where('name', 'modules_subpanels')->value('id'),
-            'module_id' => Module::where('name', 'LIKE', 'modules')->value('id'),
-        ]);
-        SubpanelField::insert([
-            'subpanel_id' => $id,
-            'field_id' => Field::where('module_id',
-                Module::where('name', 'module_subpanels')->value('id')
-            )
-                ->where('name', 'label')->value('id')
-        ]);
-
-
-        $id=ModuleSubpanel::insertGetId([
-            'name' => 'modules_datalets',
-            'label' => 'Fields',
-            'relationship_id' => Relationship::where('name', 'modules_datalets')->value('id'),
-            'module_id' => Module::where('name', 'modules')->value('id'),
-        ]);
-
-
-
-
         Log::info("ModuleSubpanel Seeding Complete");
     }
 }
