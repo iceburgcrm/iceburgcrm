@@ -187,7 +187,7 @@ If you are interested in becoming a sponsor and getting direct email support. pl
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within Iceburg CRM, please send an e-mail to [taylor@laravel.com](mailto:security@iceburg.ca). 
+If you discover a security vulnerability within Iceburg CRM, please send an e-mail to [security@iceburg.ca](mailto:security@iceburg.ca). 
 
 
 ## License
