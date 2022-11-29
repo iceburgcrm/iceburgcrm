@@ -25,7 +25,7 @@
                                         </path>
                                     </svg>
                                 </button>
-                                <input type="text" class=" text-sm px-4 py-2 w-80" v-model="search_text" placeholder="Search...">
+                                <input type="text" class=" text-sm px-4 py-2 w-40" v-model="search_text" placeholder="Search...">
                                 <select class=" text-sm" v-model="search_field">
                                     <option value="">Select Column</option>
                                     <option  v-for="(field, index) in fields" :value="field.field.module_id + '__' + field.field.name">{{field.field.name}}</option>
