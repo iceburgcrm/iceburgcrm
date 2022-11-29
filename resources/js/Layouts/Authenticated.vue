@@ -10,31 +10,17 @@
                     </label>
                     <ul tabindex="0" class=" text-base-content bg-base-100 dropdown-content menu p-2 shadow rounded-box w-52">
                         <li style="font-weight: bolder;"><a href="/dashboard">Dashboard</a></li>
+                        <li style="font-weight: bolder;"><a href="/modules">All Modules</a></li>
                         <ul class="p-2  bg-base-100" v-for="module_category in $page.props.auth.modules">
-                            <li class="semi-bold">{{module_category.label}} <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
+                            <li v-if="module_category.id < 5" class="semi-bold">{{module_category.label}} <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
                             </li>
-                            <li v-for="single_module in module_category.modules">
+                            <li v-if="module_category.id < 5"  v-for="single_module in module_category.modules">
                                 <a class="text-base-content font-semibold border-solid border-secondary link link-secondary hover:text-secondary" :href="`/module/${single_module.name}`">
                                     <BaseIcon :name="single_module.icon" /> {{single_module.label}}
                                 </a>
 
                             </li>
                         </ul>
-
-                            <!--<a href="/dashboard">{{module_category.label}}
-
-                                <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
-                            </a>
-                            <ul class="p-2  bg-base-100">
-                                <li v-for="single_module in module_category.modules">
-                                    <a class="text-base-content font-semibold border-solid border-secondary link link-secondary hover:text-secondary" :href="`/module/${single_module.name}`">
-                                        <BaseIcon :name="single_module.icon" /> {{single_module.label}}
-                                    </a>
-
-                                </li>
-                            </ul>
-                            -->
-
                     </ul>
                 </div>
                 <a class="btn btn-ghost normal-case text-xl">{{$page.props.auth.system_settings.title ? $page.props.auth.system_settings.title : ''}}</a>
@@ -165,3 +151,4 @@ import BaseIcon from "@/Icons/BaseIcon";
 const showingNavigationDropdown = ref(false);
 
 </script>
+
