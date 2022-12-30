@@ -85,8 +85,8 @@
                             <ul class="steps steps-vertical w-full">
                                 <li :class="item.className" v-for="item in $page.props.workflow">
                                 <span v-if="item.from_data">
-                                    <a v-if="!item.current" class="underline" :href="`/module/${item.from_data.module_name}/view/${item.from_data.link_id}`">{{item.from_data.module_label}} - [{{item.from_data.created_at}}]</a>
-                                    <span class="font-bold" v-else>{{item.from_data.module_label}} - [{{item.primary_module.created_at}}]</span>
+                                    <a v-if="!item.current" class="underline" :href="`/module/${item.from_data.module_name}/view/${item.from_data.link_id}`">{{item.from_data.module_label}}</a>
+                                    <span class="font-bold" v-else>{{item.from_data.module_label}}</span>
                                 </span>
                                 <span v-else>
                                     {{item.primary_module.label}}
