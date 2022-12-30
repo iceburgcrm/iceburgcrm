@@ -13,11 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('module_convertables', function (Blueprint $table) {
+        Schema::create('work_flow_data', function (Blueprint $table) {
             $table->id();
-            $table->integer('primary_module_id');
-            $table->integer('module_id');
-            $table->integer('level');
+            $table->integer('from_id')->default(0);
+            $table->integer('from_module_id')->default(0);
+            $table->integer('to_id')->default(0);
+            $table->integer('to_module_id')->default(0);
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_convertables');
+        Schema::dropIfExists('work_flow_data');
     }
 };

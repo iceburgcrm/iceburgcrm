@@ -10,6 +10,10 @@ class ModuleConvertable extends Model
     use HasFactory;
 
     public function module(){
-        return $this->hasMany(Module::class, 'id', 'module_id');
+        return $this->hasOne(Module::class, 'id', 'module_id');
+    }
+
+    public function primary_module(){
+        return $this->hasOne(Module::class, 'id', 'primary_module_id');
     }
 }

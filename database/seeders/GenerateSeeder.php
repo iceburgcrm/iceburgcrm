@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 
+use App\Models\ModuleConvertable;
+use App\Models\WorkFlowData;
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -24,6 +26,7 @@ class GenerateSeeder extends Seeder
      */
     public function run()
     {
+        $seedAmount=50;
         Log::info("Generating users");
         $this->AddUsers();
         $this->AddSettings();
@@ -37,7 +40,7 @@ class GenerateSeeder extends Seeder
 
         Log::info("Generating module");
         $module = new Module;
-        $module->generate(50);
+        $module->generate($seedAmount);
 
 
         Log::info("Generating static lists");
@@ -62,6 +65,60 @@ class GenerateSeeder extends Seeder
             });
 
         $this->addModulesAndRoles();
+        $this->sampleMedia();
+    }
+
+
+
+    private function sampleMedia()
+    {
+        $file=file_get_contents('http://demo.iceburg.ca/seed/video/christmasornaments.mp4');
+        if($file){
+            //  'creative' => 'data:video/mp4;base64,'.base64_encode($file),
+            DB::table('campaigns')->insert(
+                ['name' => 'Christmas Ad Campaign',
+                    'description' => 'Christmas Ad Campaign',
+                    'budget' => '10000',
+                    'forecast' => '8000',
+                    'impressions' => 15346,
+                    'currency' => 1,
+                    'creative' => 'data:video/mp4;base64,'.base64_encode($file),
+                    'campaign_type' => 1,
+                    'assigned_to' => 1,
+                    'slug' => 'dsfsdfsdfs',
+                    'status' => 4,
+                    'soft_delete' => 0,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]
+            );
+        }
+
+        $data['created_at']=date('Y-m-d H:i:s', strtotime("-" . rand(1, 31) . " DAY"));
+        $data['updated_at']=$data['created_at'];
+
+
+        $file=file_get_contents('http://demo.iceburg.ca/seed/recording/sample.ogg');
+        //           'audio_recording' => 'data:audio/ogg;base64,'.base64_encode($file),
+        if($file){
+            DB::table('meetings')->insert(
+                ['name' => 'Client Meeting',
+                    'description' => 'This is a typical service call',
+                    'start_date' => strtotime('NOW'),
+                    'end_date' => strtotime('NOW'),
+                    'location' => 'Office',
+                    'audio_recording' => 'data:audio/ogg;base64,'.base64_encode($file),
+                    'types' => 1,
+                    'assigned_to' => 1,
+                    'slug' => 'dsfsdfsdfss',
+                    'status' => 4,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]
+            );
+        }
+
+        Log::info("Finished Seeding sample media");
     }
 
     private function addModulesAndRoles()
@@ -82,18 +139,21 @@ class GenerateSeeder extends Seeder
 
     private function addDataletTypes()
     {
+        DataletType::truncate();
         DataletType::insert([
             ['id' => 1, 'name' => 'Doughnut Chart'],
             ['id' => 2, 'name' => 'Line Chart'],
             ['id' => 3, 'name' => 'Bar Graph'],
             ['id' => 4, 'name' => 'Pie Chart'],
             ['id' => 5, 'name' => 'Area Chart'],
+            ['id' => 6, 'name' => 'Latest Campaign'],
+            ['id' => 7, 'name' => 'Latest Meetings'],
         ]);
     }
 
     private function addDataLets()
     {
-
+        Datalet::truncate();
         Datalet::insert([
 
             ['type'=>1,
@@ -143,41 +203,47 @@ class GenerateSeeder extends Seeder
     private function AddUsers()
     {
         User::truncate();
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
         $userId=DB::table('users')->insertGetId([
             'name' => 'Admin',
             'email' => 'admin@iceburg.ca',
+            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
             'password' => bcrypt('admin'),
             'role_id' => 1
         ]);
 
-
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
         $userId=DB::table('users')->insertGetId([
             'name' => 'User',
             'email' => 'user@iceburg.ca',
+            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
             'password' => bcrypt('user'),
             'role_id' => 2
         ]);
 
-
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
         $userId=DB::table('users')->insertGetId([
             'name' => 'Sales',
             'email' => 'sales@iceburg.ca',
+            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
             'password' => bcrypt('sales'),
             'role_id' => 3
         ]);
 
-
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
         $userId=DB::table('users')->insertGetId([
             'name' => 'Accounting',
             'email' => 'accounting@iceburg.ca',
+            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
             'password' => bcrypt('accounting'),
             'role_id' => 4
         ]);
 
-
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
         $userId=DB::table('users')->insertGetId([
             'name' => 'Marketing',
             'email' => 'marketing@iceburg.ca',
+            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
             'password' => bcrypt('marketing'),
             'role_id' => 5
         ]);

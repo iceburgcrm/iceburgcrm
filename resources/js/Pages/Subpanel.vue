@@ -1,6 +1,6 @@
 <template>
     <Alert :message="alert_data.alert_text" :is_successful="alert_data.success_alert" :is_error="alert_data.error_alert" />
-    <div class="pt-5 pb-5 max-w-full sm:px-3 lg:px-4 bg-base-200 text-base-content rounded  shadow-sm" >
+    <div class="w-full pb-5 sm:px-3 lg:px-4 bg-base-200 text-base-content rounded  shadow-sm pt-5" >
         <div class="card shadow-xl bg-base-100 text-base-content  border-gray-200">
             <div class="card-body">
                 <h2 class="card-title"><a :id="label">{{label}}</a></h2>
@@ -46,7 +46,7 @@
                             <tr>
                                 <th class="w-50"> </th>
                                 <th v-for="field in fields">
-                                    {{field.label ? field.label : field.field.label}}
+                                    {{field.field.module.name}}.{{field.label ? field.label : field.field.label}}
                                 </th>
                             </tr>
                             </thead>
@@ -123,7 +123,6 @@ const get_subpanel_data = function (){
     axios.get(`/data/subpanel/${props.id}?`+ Object.keys(options).map(key => key + '=' + options[key])
         .join('&'))
         .then(response => {
-
             fields.value=response.data.fields;
             data.value=response.data.data.data;
             label.value=response.data.label;
@@ -154,7 +153,7 @@ const deleteRecord = async function (record_id) {
             setTimeout(() => {
                 alert_data.error_alert=null;
                 alert_data.alert_text='';
-            }, 50000);
+            }, 5000);
         });
     }
 };

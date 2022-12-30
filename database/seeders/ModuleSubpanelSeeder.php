@@ -37,6 +37,13 @@ class ModuleSubpanelSeeder extends Seeder
             'field_id' => Field::where('module_id',
                 Module::where('name', 'contacts')->first()->id
             )
+                ->where('name', 'profile_pic')->first()->id
+        ]);
+        SubpanelField::insert([
+            'subpanel_id' => $id,
+            'field_id' => Field::where('module_id',
+                Module::where('name', 'contacts')->first()->id
+            )
                 ->where('name', 'first_name')->first()->id
         ]);
         SubpanelField::insert([
@@ -57,23 +64,23 @@ class ModuleSubpanelSeeder extends Seeder
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
-                Module::where('name', 'contacts')->first()->id
+                Module::where('name', 'leads')->first()->id
             )
             ->where('name', 'first_name')->first()->id
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
-                Module::where('name', 'contacts')->first()->id
+                Module::where('name', 'leads')->first()->id
             )
                 ->where('name', 'last_name')->first()->id
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
-                Module::where('name', 'contacts')->first()->id
+                Module::where('name', 'opportunities')->first()->id
             )
-                ->where('name', 'description')->first()->id
+                ->where('name', 'name')->first()->id
         ]);
 
 

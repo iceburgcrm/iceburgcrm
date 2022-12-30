@@ -137,6 +137,9 @@ class ModuleSubpanel extends Model
             if(!empty($relationshipModule->module->id)) {
                 if(!empty($newRecords[$relationshipModule->module->id]))
                 {
+                    $newRecords[$relationshipModule->module->id]['from_id']=$newRecords['from_id'];
+                    $newRecords[$relationshipModule->module->id]['from_module']=$newRecords['from_module'];
+
                     $selectedRecords[$relationshipModule->module->id] = Module::saveRecord($relationshipModule->module->id, $newRecords[$relationshipModule->module->id]);
                 }
             }
@@ -188,6 +191,12 @@ class ModuleSubpanel extends Model
                 $subpanelId = $value;
             } elseif (str_contains($key, 'record_id')) {
                 $recordId = $value;
+            }
+            elseif (str_contains($key, 'from_id')) {
+                $newRecords[$key] = $value;
+            }
+            elseif (str_contains($key, 'from_module')) {
+                $newRecords[$key] = $value;
             }
         }
 

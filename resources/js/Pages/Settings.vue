@@ -134,7 +134,7 @@ const save = function ()
             timer = setTimeout(() => {
                 alert.error_alert=0;
                 alert.alert_text="error";
-            }, 50000);
+            }, 5000);
         }
     })
     .catch(error => {
@@ -144,7 +144,7 @@ const save = function ()
         timer = setTimeout(() => {
             alert.error_alert=0;
             alert.alert_text="error";
-            }, 50000);
+            }, 5000);
     });
 }
 </script>

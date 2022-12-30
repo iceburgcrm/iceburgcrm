@@ -121,12 +121,12 @@ const set_permission = function (permission_id, permission_can, type)
      }).then(response => {
          get_permissions();
         }).catch(function (error) {
-            alert_data.error_alert=1;
-            alert_data.alert_text=error.text;
+            alert.error_alert=1;
+            alert.alert_text=error.text;
             setTimeout(() => {
                 alert.error_alert=null;
                 alert.alert_text='';
-            }, 50000);
+            }, 5000);
     });
 
 }

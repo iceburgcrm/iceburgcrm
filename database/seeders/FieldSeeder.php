@@ -259,6 +259,14 @@ class FieldSeeder extends Seeder
         ], $order++));
 
         Field::insert(Field::getField([
+            'name'          => 'profile_pic',
+            'label'         => 'Image',
+            'module_id'     => $moduleId,
+            'input_type'    => 'image',
+            'data_type'     => 'MEDIUMTEXT',
+        ], $order++));
+
+        Field::insert(Field::getField([
             'name'          => 'email',
             'label'         => 'Email',
             'module_id'     => $moduleId,
@@ -277,6 +285,8 @@ class FieldSeeder extends Seeder
             'related_value_id'=> 'name',
             'data_type' => 'Integer',
         ], $order++));
+
+
 
     }
 
@@ -481,6 +491,14 @@ class FieldSeeder extends Seeder
             'module_id'     => $moduleId,
             'field_length'  => 100,
         ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'flag',
+            'label'         => 'Flag',
+            'module_id'     => $moduleId,
+            'input_type'    => 'image',
+            'data_type'     => 'MEDIUMTEXT',
+        ], $order++));
     }
 
     public function Currency()
@@ -557,6 +575,14 @@ class FieldSeeder extends Seeder
         $moduleId=Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
+            'name'          => 'company_logo',
+            'label'         => 'Company Logo',
+            'module_id'     => $moduleId,
+            'input_type'    => 'image',
+            'data_type'     => 'MEDIUMTEXT',
+        ], $order++));
+
+        Field::insert(Field::getField([
             'name'          => 'name',
             'label'         => 'Name',
             'module_id'     => $moduleId,
@@ -579,6 +605,13 @@ class FieldSeeder extends Seeder
             'required'      => 1,
             'module_id'     => $moduleId,
             'field_length'  => 64,
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'color',
+            'label'         => 'Brand Color',
+            'module_id'     => $moduleId,
+            'input_type'    => 'color'
         ], $order++));
 
         Field::insert(Field::getField([
@@ -702,6 +735,13 @@ class FieldSeeder extends Seeder
         $order=0;
         $moduleId=Module::getId(__FUNCTION__);
 
+        Field::insert(Field::getField([
+            'name'          => 'profile_pic',
+            'label'         => 'Image',
+            'module_id'     => $moduleId,
+            'input_type'    => 'image',
+            'data_type'     => 'MEDIUMTEXT',
+        ], $order++));
 
         Field::insert(Field::getField([
             'name'          => 'first_name',
@@ -1654,7 +1694,7 @@ class FieldSeeder extends Seeder
             'label' => 'Location',
             'module_id' => $moduleId,
             'field_length' => 64,
-            'input_type' => 'text',
+            'input_type' => 'city',
         ], $order++));
 
         Field::insert(Field::getField([
@@ -1662,7 +1702,7 @@ class FieldSeeder extends Seeder
             'label' => 'Phone',
             'module_id' => $moduleId,
             'field_length' => 64,
-            'input_type' => 'text',
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
@@ -1670,7 +1710,7 @@ class FieldSeeder extends Seeder
             'label' => 'Link',
             'module_id' => $moduleId,
             'field_length' => 64,
-            'input_type' => 'email',
+            'input_type' => 'url',
         ], $order++));
 
         Field::insert(Field::getField([
@@ -1678,7 +1718,34 @@ class FieldSeeder extends Seeder
             'label' => 'Meeting Password',
             'module_id' => $moduleId,
             'field_length' => 64,
-            'input_type' => 'email',
+            'input_type' => 'password',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'video_recording',
+            'label'         => 'Video Recording',
+            'module_id'     => $moduleId,
+            'input_type'    => 'video',
+            'data_type'     => 'MEDIUMTEXT',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'audio_recording',
+            'label'         => 'Audio Recording',
+            'module_id'     => $moduleId,
+            'input_type'    => 'audio',
+            'data_type'     => 'MEDIUMTEXT',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name' => 'contract',
+            'label' => 'Contact',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
+            'data_type' => 'integer',
+            'related_field_id' => 'id',
+            'related_value_id' => 'last_name',
+            'related_module_id' => Module::getId('contacts'),
         ], $order++));
 
 
@@ -1750,12 +1817,7 @@ class FieldSeeder extends Seeder
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        Field::insert(Field::getField([
-            'name' => 'file_location',
-            'label' => 'Location',
-            'module_id' => $moduleId,
-            'input_type' => 'file',
-        ], $order++));
+
     }
 
 
@@ -1943,6 +2005,14 @@ class FieldSeeder extends Seeder
             'related_field_id' => 'id',
             'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'creative',
+            'label'         => 'Creative',
+            'module_id'     => $moduleId,
+            'input_type'    => 'video',
+            'data_type'     => 'MEDIUMTEXT',
         ], $order++));
 
 

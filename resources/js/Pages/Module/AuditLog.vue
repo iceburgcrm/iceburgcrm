@@ -46,13 +46,14 @@
 
                 </div>
 
-                <table class="bg-base-200 text-base-content table table-zebra table-normal lg:table-normal w-full border-secondary border-solid">
+                <table class="bg-base-200 text-base-content table table-zebra w-full border-secondary">
                     <thead>
                     <th>ID</th>
                     <th>Type</th>
                     <th>User</th>
                     <th>Date</th>
                     </thead>
+                    <tbody>
                     <tr v-for="record in display_logs">
                         <td>
                             {{record.id}}
@@ -64,15 +65,17 @@
                           {{record.user.name}}
                         </td>
                         <td>
-                            {{record.created_at}}
+                            {{moment(record.created_at).format('MMMM Do YYYY, h:mm:ss a')}}
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
     </BreezeAuthenticatedLayout>
 </template>
 <script setup>
+import moment from 'moment';
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import {Head, usePage} from '@inertiajs/inertia-vue3';
 import BreadCrumbs from "@/Components/BreadCrumbs";

@@ -52,6 +52,7 @@
                                         v-bind:record="$page.props.record"
                                         v-bind:field="field"
                                         v-bind:remove_links="1"
+                                        v-bind:field_data="$page.props.field_data[field.name]"
                                     />
                                 </div>
                             </div>
@@ -72,6 +73,29 @@
                         Next
                     </a>
                 </label>
+            </div>
+        </div>
+
+        <div v-if="$page.props.workflow.length > 0" class="pt-5 pb-5 max-w-full sm:px-3 lg:px-4 bg-base-200 text-base-content rounded  shadow-sm m-5" >
+            <div class="card shadow-xl bg-base-100 text-base-content  border-gray-200">
+                <div class="card-body">
+                    <h2 class="card-title mb-5"><a :id="label">Workflow</a></h2>
+                    <div class="grid grid-flow-row">
+                        <div class="align-center">
+                            <ul class="steps steps-vertical w-full">
+                                <li :class="item.className" v-for="item in $page.props.workflow">
+                                <span v-if="item.from_data">
+                                    <a v-if="!item.current" class="underline" :href="`/module/${item.from_data.module_name}/view/${item.from_data.link_id}`">{{item.from_data.module_label}} - [{{item.from_data.created_at}}]</a>
+                                    <span class="font-bold" v-else>{{item.from_data.module_label}} - [{{item.primary_module.created_at}}]</span>
+                                </span>
+                                <span v-else>
+                                    {{item.primary_module.label}}
+                                </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="max-w-full grid col-auto">

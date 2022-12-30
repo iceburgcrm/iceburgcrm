@@ -3,6 +3,8 @@
 namespace App\Seeder;
 
 use App\Models\Field;
+use App\Models\WorkFlowData;
+use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Support\Facades\DB as DB;
 
@@ -16,10 +18,6 @@ class FieldSeeder {
     public function seed($seed) : void
     {
         $faker = Factory::create();
-
-        $this->createDiskSeed(20, 'image');
-        $this->createDiskSeed(20, 'video');
-        $this->createDiskSeed(20, 'file');
 
         for($x=0;$x<$seed;$x++) {
 
@@ -55,9 +53,41 @@ class FieldSeeder {
                             $data[$field->name] = (bool) rand(0, 1);
                             break;
                         case 'file':
+                            $data[$field->name] = '';
+                            $file=file_get_contents('http://demo.iceburg.ca/seed/pdf/sample.pdf');
+                            if($file){
+                                $data[$field->name] = 'data:application/pdf;base64,'.base64_encode($file);
+                            }
+                            break;
                         case 'video':
+                            $data[$field->name] = '';
+                            break;
+                        case 'audio':
+                            $data[$field->name] = '';
+                            break;
                         case 'image':
-                            $data[$field->name] = rand(1, 20);
+                            $data[$field->name] = '';
+                            if($field->name == 'flag' && isset($data['code']))
+                            {
+                                $image=file_get_contents('http://demo.iceburg.ca/seed/flags/' . $data['code'] . '.png');
+                                if($image){
+                                    $data[$field->name] = 'data:image/png;base64,'.base64_encode($image);
+                                }
+                            }
+                            elseif($field->name == 'profile_pic')
+                            {
+                                $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
+                                if ($image) {
+                                    $data[$field->name] = 'data:image/jpg;base64,' . base64_encode($image);
+                                }
+                            }
+                            elseif($field->name == 'company_logo')
+                            {
+                                $image = file_get_contents('http://demo.iceburg.ca/seed/company_logos/' . rand(1,23) . '.png');
+                                if ($image) {
+                                    $data[$field->name] = 'data:image/jpg;base64,' . base64_encode($image);
+                                }
+                            }
                             break;
                         case 'password':
                             $data[$field->name] = $faker->password();
@@ -69,7 +99,7 @@ class FieldSeeder {
                             $data[$field->name] = $faker->url();
                             break;
                         case 'date':
-                            $data[$field->name] = rand(147446502, 1667446502);
+                            $data[$field->name] = rand(strtotime('-7 day'), strtotime('now'));
                             break;
                         case 'currency':
                             $data[$field->name] = $faker->randomFloat(2, 1, 100);
@@ -103,12 +133,17 @@ class FieldSeeder {
             });
             $data['created_at']=date('Y-m-d H:i:s', strtotime("-" . rand(1, 31) . " DAY"));
             $data['updated_at']=$data['created_at'];
-            DB::table($this->module->name)->insert($data);
+            $id=DB::table($this->module->name)->insertGetId($data);
+            WorkFlowData::insert([
+                'from_id' => 0,
+                'from_module_id' => 0,
+                'to_id' => $id,
+                'to_module_id' => $this->module->id,
+                'created_at' => Carbon::now(),
+                'updated_at'=> Carbon::now(),
+            ]);
         }
     }
 
-    private function createDiskSeed($amount=20, $type='') : void {
-
-    }
 
 }

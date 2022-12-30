@@ -102,6 +102,7 @@ const relationship_id = ref('');
 const record = ref(usePage().props.value.record);
 
 const module_fields = ref([]);
+const from_id = ref(usePage().props.value.from_id);
 const from_module = ref(usePage().props.value.from_module);
 
 
@@ -140,6 +141,8 @@ let forward_to='';
 const subpanel_name = usePage().props.value.subpanel.name;
 
 const save_record = function () {
+    fieldValueData['from_id'] = from_id.value;
+    fieldValueData['from_module'] = from_module.value.id;
     fieldValueData['save_type'] = 'subpanel';
     fieldValueData['subpanel_id'] = usePage().props.value.subpanel.id;
     fieldValueData['module_records'] = module_records.value;
@@ -151,10 +154,10 @@ const save_record = function () {
     axios.post('/data/subpanel/save', fieldValueData).then(response => {
         if(response.data)
         {
-            forward_to='/module/' + usePage().props.value.from_module.name + '/view/' + response.data;
+            forward_to='/module/' + from_module.value.name + '/view/' + response.data;
             if(usePage().props.value.from_id > 0)
             {
-                forward_to='/module/' + usePage().props.value.from_module.name + '/view/' + usePage().props.value.from_id + "#" + subpanel_name;
+                forward_to='/module/' + from_module.value.name + '/view/' + from_id.value + "#" + subpanel_name;
             }
             window.location = forward_to;
         }
@@ -166,7 +169,7 @@ const save_record = function () {
             setTimeout(() => {
                 alert.error_alert=null;
                 alert.alert_text='';
-            }, 50000);
+            }, 5000);
         });
 }
 

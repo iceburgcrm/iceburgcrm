@@ -10,8 +10,10 @@ use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema as Schema;
 use Faker\Factory;
+use App\Models\WorkFlowData;
 use App\Models\Field;
 use App\Models\Setting;
+use App\Models\Datalet;
 use App\Seeder\FieldSeeder;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -42,7 +44,7 @@ class Module extends Model
     }
 
     public function convertedmodules(){
-        return $this->hasMany(ModuleConvertable::class, 'primary_module_id', 'id')
+        return $this->hasOne(ModuleConvertable::class, 'primary_module_id', 'id')
             ->with('module');
     }
 
@@ -93,6 +95,7 @@ class Module extends Model
                     }
                 }
             });
+        return true;
     }
 
     public static function getRelatedModuleList($moduleId, $related_field_id, $related_value_id)
@@ -349,6 +352,14 @@ class Module extends Model
                 $value['updated_at']=Carbon::now();
                 $value['slug']=$faker->regexify('[A-Za-z0-9]{20}');
                 $id = DB::table($module->name)->insertGetId($value);
+                WorkFlowData::insert([
+                   'from_id' => isset($request['from_id']) ? $request['from_id'] : 0,
+                   'from_module_id' => isset($request['from_module']) ? $request['from_module'] : 0,
+                    'to_id' => $id,
+                    'to_module_id' => $module->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at'=> Carbon::now(),
+                ]);
             }
 
             $modules[]=$key;

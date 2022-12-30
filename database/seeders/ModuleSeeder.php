@@ -29,23 +29,41 @@ class ModuleSeeder extends Seeder
     private function seedConvertedModules(){
         ModuleConvertable::insert([
            'primary_module_id' => Module::where('name', 'leads')->first()->id,
-           'module_id' => Module::where('name', 'contacts')->first()->id
+           'module_id' => Module::where('name', 'contacts')->first()->id,
+            'level' => 1,
         ]);
 
-        ModuleConvertable::insert([
-            'primary_module_id' => Module::where('name', 'leads')->first()->id,
-            'module_id' => Module::where('name', 'accounts')->first()->id
-        ]);
 
         ModuleConvertable::insert([
             'primary_module_id' => Module::where('name', 'contacts')->first()->id,
-            'module_id' => Module::where('name', 'accounts')->first()->id
+            'module_id' => Module::where('name', 'accounts')->first()->id,
+            'level' => 2,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'accounts')->first()->id,
+            'module_id' => Module::where('name', 'quotes')->first()->id,
+            'level' => 3,
         ]);
 
         ModuleConvertable::insert([
             'primary_module_id' => Module::where('name', 'quotes')->first()->id,
-            'module_id' => Module::where('name', 'opportunities')->first()->id
+            'module_id' => Module::where('name', 'opportunities')->first()->id,
+            'level' => 4,
         ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'opportunities')->first()->id,
+            'module_id' => Module::where('name', 'contracts')->first()->id,
+            'level' => 5,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'contracts')->first()->id,
+            'module_id' => 0,
+            'level' => 6,
+        ]);
+
     }
 
     private function seedModuleGroups(){

@@ -11,8 +11,8 @@ class Search extends Model
     use HasFactory;
 
     private static $excludeFieldTypes = [
-        'Search' => ['password', 'file', 'video', 'image'],
-        'OrderBy' => ['password', 'file', 'video', 'image', 'related'],
+        'Search' => ['password', 'file', 'image', 'audio', 'video'],
+        'OrderBy' => ['password', 'image', 'audio', 'video'],
         'Display' => ['password'],
         'All' => []
     ];
@@ -32,7 +32,7 @@ class Search extends Model
 
         foreach ($request as $key => $value) {
             $pieces = explode('__', $key);
-            if (isset($pieces[0]) && intval($pieces[0]) > 0 && $value != '') {
+            if (isset($pieces[0]) && intval($pieces[0]) > 0 && ($value != '' && $value != 'undefined')) {
                 $field = Field::where('module_id', intval($pieces[0]))
                     ->where('name', 'like', $pieces[1])
                     ->with('module')
@@ -43,7 +43,6 @@ class Search extends Model
                 }
                 $results->where($field->module->name . "." . $pieces[1], $operator, $value);
             }
-
         }
 
         if (!isset($request['order_by']) || empty($request['order_by'])) {
