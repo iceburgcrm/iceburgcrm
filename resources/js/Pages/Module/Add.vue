@@ -74,6 +74,9 @@ const search_type = ref('module');
 const record = ref(usePage().props.value.record);
 const convert_from_record = ref(usePage().props.value.convert_from_record);
 
+const from_id = ref(usePage().props.value.from_id);
+const from_module = ref(usePage().props.value.from_module);
+
 const default_values = ref('');
 let fieldValueData = {};
 const search_fields = ref(reactive(usePage().props.value.fields));
@@ -88,6 +91,8 @@ onMounted(() => {
 });
 
 const save_record = function () {
+    fieldValueData['from_id'] = from_id.value ? from_id.value : 0;
+    fieldValueData['from_module'] = from_module.value ? from_module.value.id : 0;
     fieldValueData['search_type'] = search_type.value;
     fieldValueData['module_id'] = module_id.value;
     fieldValueData['relationship_id'] = relationship_id.value;
@@ -109,7 +114,7 @@ const save_record = function () {
             setTimeout(() => {
                 alert.error_alert=null;
                 alert.alert_text='';
-            }, 50000);
+            }, 5000);
         });
 }
 

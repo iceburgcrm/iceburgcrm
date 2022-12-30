@@ -258,7 +258,7 @@ onMounted(() => {
                         setTimeout(() => {
                             alert_data.success_alert.value=null;
                             alert_data.alert_text.value='';
-                        }, 50000);
+                        }, 5000);
                         action_menu.value='';
                         selected_records.value=[];
                         getSearchData();
@@ -268,7 +268,7 @@ onMounted(() => {
                         setTimeout(() => {
                             alert_data.error_alert=null;
                             alert_data.alert_text='';
-                        }, 50000);
+                        }, 5000);
                     }) };
 
 

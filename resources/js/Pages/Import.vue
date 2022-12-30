@@ -22,7 +22,7 @@
                     <div class="p-5  grid grid-row-2 bg-base-100 text-base-content">
 
                             <div class="grid h-20 w-full card bg-base-300 rounded-box place-items-center">
-                                <label for="search" class="block text-sm font-medium leading-5 select-secondary">
+                                <label for="search" class="block text-sm font-medium leading-5 select-secondary input-secondary text-secondary-content">
                                     Select a File
                                 </label>
                                 <input class="input file input-secondary rounded" type="file" id="file-input" @change="onFileChanged($event)" name="file" />
@@ -141,7 +141,7 @@ async function upload() {
                     setTimeout(() => {
                         data.error_alert=null;
                         data.alert_text='';
-                    }, 50000)});
+                    }, 5000)});
 
     }
 };

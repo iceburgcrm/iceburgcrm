@@ -32,6 +32,7 @@
         "daisyui": "^2.17.0",
         "laravel-vue-pagination": "^3.0.0",
         "maska": "^1.5.0",
+        "moment": "^2.29.4",
         "v-calendar": "^3.0.0-alpha.8",
         "v-pagination-3": "^0.1.7",
         "vue-autosuggest": "^2.2.0",

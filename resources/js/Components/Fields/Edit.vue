@@ -10,7 +10,7 @@
             </span>
         </label>
         <div v-if="props.field.input_type === 'tel'" class="rounded">
-            <input size="40" placeholder="+1 (999) 999-9999" v-maska="['+1 (###) ##-####', '+1 (###) ###-####']" :name="current_field.module_id + '_' + current_field.name" type="text" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
+            <input size="30" placeholder="+1 (999) 999-9999" v-maska="['+1 (###) ##-####', '+1 (###) ###-####']" :name="current_field.module_id + '_' + current_field.name" type="text" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
 
         <div v-else-if="props.field.input_type === 'currency'" class="rounded">
@@ -22,20 +22,20 @@
         <div v-else-if="props.field.input_type === 'password'" class="rounded">
             <input :name="current_field.module_id + '_' + current_field.name" type="password" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
-        <div v-else-if="props.field.input_type === 'image' || props.field.input_type === 'video' || props.field.input_type === 'file'" class="rounded">
+        <div v-else-if="props.field.input_type === 'image' || props.field.input_type === 'video' || props.field.input_type === 'audio' || props.field.input_type === 'file'"  class="rounded">
             <input :name="current_field.module_id + '_' + current_field.name" type="file" class="input-secondary rounded sm:text-sm sm:leading-5" @change="onFileChanged($event)" />
         </div>
         <div v-else-if="props.field.input_type === 'number'" class="rounded">
             <input size="3" placeholder="" :name="current_field.module_id + '_' + current_field.name" type="number" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
         <div v-else-if="props.field.input_type === 'email'" class="rounded">
-            <input size="40" placeholder="email@email.com" :name="current_field.module_id + '_' + current_field.name" type="email" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
+            <input size="30" placeholder="email@email.com" :name="current_field.module_id + '_' + current_field.name" type="email" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
         <div v-else-if="props.field.input_type === 'url'" class="rounded">
-            <input size="40" placeholder="https://" :name="current_field.module_id + '_' + current_field.name" type="text" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
+            <input size="30" placeholder="https://" :name="current_field.module_id + '_' + current_field.name" type="text" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
         <div v-else-if="props.field.input_type === 'zip'" class="">
-            <input size="40" placeholder="" v-maska="" :name="current_field.module_id + '_' + current_field.name" type="text" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
+            <input size="30" placeholder="" v-maska="" :name="current_field.module_id + '_' + current_field.name" type="text" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
         <div v-else-if="props.field.input_type === 'date'" class="input-secondary rounded sm:text-sm sm:leading-5">
             <div class="w-1/2">
@@ -48,11 +48,11 @@
             </select>
        </div>
         <div v-else-if="current_field.input_type === 'address'" class="rounded">
-           <textarea rows="3" cols="40" v-model="display_value" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary rounded sm:text-sm sm:leading-5">
+           <textarea rows="3" cols="30" v-model="display_value" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary rounded sm:text-sm sm:leading-5">
             </textarea>
         </div>
         <div v-else-if="current_field.input_type === 'textarea'" class="rounded">
-           <textarea rows="6" cols="40" v-model="display_value" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary rounded sm:text-sm sm:leading-5">
+           <textarea rows="6" cols="30" v-model="display_value" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary rounded sm:text-sm sm:leading-5">
             </textarea>
         </div>
         <div v-else-if="props.field.input_type === 'color'" class="rounded">
@@ -61,7 +61,7 @@
         <div v-else-if="current_field.input_type === 'radio'" class="rounded outline-primary"><input :name="current_field.module_id + '_' + current_field.name" type="text" class="form-input sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
         <div v-else>
-            <input size="40" class="input-secondary rounded sm:text-sm sm:leading-5" :name="current_field.module_id + '__' + current_field.name" type="text" v-model="display_value" />
+            <input size="30" class="input-secondary rounded sm:text-sm sm:leading-5" :name="current_field.module_id + '__' + current_field.name" type="text" v-model="display_value" />
         </div>
     </div>
 </template>
@@ -82,6 +82,7 @@ const props = defineProps({
     record: [Object, null],
 });
 let display_value = ref(props.default_value);
+
 const current_field = ref(props.field);
 const emit = defineEmits(['newFieldValue']);
 
@@ -97,6 +98,12 @@ const onFileChanged = function($event) {
     const target = $event.target;
     if (target && target.files) {
         file.value = target.files[0];
+        const field = props.field.module_id + "__" + props.field.name;
+        let rawImg;
+        reader.onloadend = () => {
+            rawImg = reader.result;
+            emit('newFieldValue', {value: rawImg, field_name: field});
+        }
     }
 }
 
@@ -122,6 +129,11 @@ if(props.field !==  null && props.field !== undefined) {
 }
 
 onMounted(() => {
+    let initial_value=display_value.value;
+    if(display_value.value == undefined){
+        const initial_value='';
+    }
+    emit('newFieldValue', {value: initial_value, field_name: props.field.module_id + "__" + props.field.name});
     watch(display_value, (val) => {
         const field = props.field.module_id + "__" + props.field.name;
         emit('newFieldValue', {value: val, field_name: field});

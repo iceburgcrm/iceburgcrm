@@ -116,6 +116,26 @@ class Datalet extends Model
                         ],
                     ];
                     break;
+                case 6:
+                    $returnData = [
+                        'data' => [
+                            DB::table('campaigns')
+                                ->where('status', '>', 0)
+                                ->orderBy('updated_at', 'desc')
+                                ->first(),
+                        ],
+                    ];
+                    dd($returnData);
+                    break;
+                case 7:
+                    $returnData = [
+                        'data' => [
+                            DB::table('meetings')
+                                ->where('status', '>', 0)
+                                ->orderBy('updated_at', 'desc')
+                        ],
+                    ];
+                    break;
                 default:
                     break;
             }

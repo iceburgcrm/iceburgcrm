@@ -21,7 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RelationshipSeeder::class);
         $this->call(GenerateSeeder::class);
         $this->call(ModuleSubpanelSeeder::class);
-        $this->call(ModuleSubpanelGeneratorSeeder::class);
         Log::info("Complete");
 
     }

@@ -8,22 +8,24 @@
 
 
         <div class="btn-group">
-        <a v-if="props.permissions.write && props.allowed.includes('add') && props.module.admin != 1" class="p-2 w-20 text-xs btn  btn-outline  btn-accent text-accent-content rounded-box shadow" :href="`/module/${props.module.name}/add`" method="get" as="button">
+        <a v-if="props.permissions.write && props.allowed.includes('add') && props.module.admin != 1" class="p-2 w-20 text-xs btn   btn-primary text-primary-content rounded shadow" :href="`/module/${props.module.name}/add`" method="get" as="button">
             Add
         </a>
-        <a v-if="props.permissions.write && props.allowed.includes('edit')" class="p-2 w-20 text-xs btn  btn-outline  btn-warning text-warning-content rounded-box shadow" :href="`/module/${props.module.name}/edit/${props.record.id}`" method="get" role="button">
+        <a v-if="props.permissions.write && props.allowed.includes('edit')" class="p-2 w-20 text-xs btn  btn-warning text-warning-content rounded shadow" :href="`/module/${props.module.name}/edit/${props.record.id}`" method="get" role="button">
             Edit
         </a>
-        <a v-if="props.permissions.write && props.allowed.includes('delete')" @click.prevent="deleteRecord(props.record.id,'module')" class="p-2 w-20 text-xs btn  btn-outline  btn-error text-errror-content rounded-box shadow" href="" method="get" role="button">
+        <a v-if="props.permissions.write && props.allowed.includes('delete')" @click.prevent="deleteRecord(props.record.id,'module')" class="p-2 w-20 text-xs btn   btn-error text-errror-content rounded shadow" href="" method="get" role="button">
             Delete
         </a>
             <a v-if="props.permissions.write && props.allowed.includes('delete_subpanel')" @click.prevent="deleteRecord(props.record.id,'relationship')" class="p-2 w-24 btn  btn-error text-error-content rounded-box shadow" href="" method="get" role="button">
                 Delete
             </a>
-            <a v-if="props.permissions.import && props.allowed.includes('import')" class="p-2 w-20 text-xs btn  btn-outline  btn-secondary text-secondary-content rounded-box shadow" :href="`/import?from_module_id=${$page.props.module.id}`" method="get" as="button">
+        </div>
+        <div class="btn-group">
+            <a v-if="props.permissions.import && props.allowed.includes('import')" class="p-2 w-20 text-xs btn   btn-outline btn-secondary text-secondary-content rounded-box shadow" :href="`/import?from_module_id=${$page.props.module.id}`" method="get" as="button">
                 Import
             </a>
-            <select v-if="props.permissions.export && props.allowed.includes('export')" class="p-2 w-20 text-xs btn btn-outline text-left  btn-secondary text-secondary-content rounded-box shadow" v-model="download_menu">
+            <select v-if="props.permissions.export && props.allowed.includes('export')" class="p-2 w-20 text-xs btn text-left  btn-outline btn-secondary text-secondary-content rounded-box shadow" v-model="download_menu">
                 <option value="">Export</option>
                 <option value="xlsx">Export Excel(XLSX)</option>
                 <option value="xls">Export Excel Compatible (XLS)</option>
@@ -32,16 +34,19 @@
                 <option value="ods">Export ODS</option>
                 <option value="html">Export HTML</option>
             </select>
-
         </div>
-        <select class="p-2 w-20 text-xs btn p-2 w-20 text-xs btn btn-outline text-left  btn-secondary text-secondary-content rounded-box shadow" v-if="props.permissions.write && props.allowed.includes('convert_to')" v-model="convert_module_id">
-            <option value="">Convert</option>
-            <option v-for="module in props.module.convertedmodules" :value="module.module[0].id">{{module.module[0].label}}</option>
-        </select>
 
-        <a v-if="props.permissions.read && props.allowed.includes('audit_log')" class="p-2 w-20 text-xs btn  btn-outline  btn-secondary text-secondary-content rounded-box shadow" :href="`/audit_log/${$page.props.module.id}`" method="get" as="button">
+        <div class="btn-group">
+        <a v-if="props.allowed.includes('convert_to') && props.module.convertedmodules && props.module.convertedmodules.module" class="p-2 w-20 text-xs btn  btn-outline btn-primary text-primary-content rounded-box shadow" :href="`/module/${props.module.convertedmodules.module.name}/add?from_id=${props.record.id}&from_module=${props.module.id}`" method="get" as="button">
+            Convert
+        </a>
+
+        <a v-if="props.permissions.read && props.allowed.includes('audit_log')" class="p-2 w-20 text-xs btn  btn-outline btn-primary text-primary-content rounded-box
+        shadow" :href="`/audit_log/${$page.props.module.id}`" method="get" as="button">
             Audit Log
         </a>
+        </div>
+
         <Alert />
     </div>
 </template>
@@ -108,7 +113,7 @@ onMounted(() => {
                         setTimeout(() => {
                             alert_data.success_alert.value=null;
                             alert_data.alert_text.value='';
-                        }, 50000);
+                        }, 5000);
 
                     }).catch(function (error) {
                     alert_data.error_alert=1;
@@ -116,7 +121,7 @@ onMounted(() => {
                     setTimeout(() => {
                         alert_data.error_alert=null;
                         alert_data.alert_text='';
-                    }, 50000);
+                    }, 5000);
             });
             }
 

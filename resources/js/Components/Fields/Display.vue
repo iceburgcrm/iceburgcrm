@@ -1,18 +1,24 @@
 <template>
-    <a class="underline decoration-base-content text-sm" v-if="field_type === 'related'"  alt="data_value" :href="`/module/${module_name}/view/${props.data_value}`">
+    <a class="underline decoration-base-content text-sm" v-if="field_type === 'related'"  alt="data_value" :href="`/module/${props.field.related_module.name}/view/${props.data_value}`">
         {{ display_value }}
     </a>
     <span class="grid grid-auto place-items-center" v-else-if="field_type == 'image'">
-        <img width="50" height="50" class="mt-7" :src="`${display_value}.jpg`" />
+        <img v-if="display_value != '' && display_value != null" class=" w-1/4" :src="`${display_value}`" />
+
+    </span>
+    <span v-else-if="field_type == 'audio'">
+        <audio v-if="display_value != '' && display_value != null" controls :src="`${display_value}`" />
     </span>
     <span v-else-if="field_type == 'file'">
-        <a class="text-sm" href="">Link to file</a>
+        <a v-if="display_value != '' && display_value != null" class="text-sm" :href="`${display_value}`" target="_blank">Download</a>
     </span>
     <span v-else-if="field_type == 'video'">
-        <video width="100" height="100" controls>
-          <source :src="`${display_value}.mp4`" type="video/mp4">
+        <span v-if="display_value != '' && display_value != null">
+        <video controls>
+          <source :src="`${display_value}`">
           Your browser does not support the video tag.
         </video>
+        </span>
     </span>
     <span v-else-if="field_type == 'color'">
         <div class="w-10 h-1" :style="`background-color:${display_value}`"></div>
