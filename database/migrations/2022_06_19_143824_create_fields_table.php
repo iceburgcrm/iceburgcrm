@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('fields', function (Blueprint $table) {
+        Schema::create('ice_fields', function (Blueprint $table) {
             $table->string('name', 245);
             $table->string('label', 245);
             $table->integer('module_id');
@@ -43,6 +43,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fields');
+        Schema::dropIfExists('ice_fields');
     }
 };

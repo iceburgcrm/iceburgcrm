@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 class   Field extends Model
 {
     use HasFactory;
+    protected $table = 'ice_fields';
 
     protected $guarded = ['id'];
 

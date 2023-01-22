@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 
+use App\Models\Search;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -81,8 +82,10 @@ class SearchTest extends TestCase
                 $count=Field::where('module_id', $module->id)->count();
                 if($count > 0)
                 {
+
                     $record=(array) Module::getRecord($module->id, rand(1,2));
                     $fields=Field::where('module_id', $module->id)
+                        ->whereNotIn('input_type', Search::$excludeFieldTypes['Search'])
                         ->inRandomOrder()
                         ->take(2)
                         ->pluck('name');

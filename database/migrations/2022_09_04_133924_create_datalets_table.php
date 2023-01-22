@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('datalets', function (Blueprint $table) {
+        Schema::create('ice_datalets', function (Blueprint $table) {
             $table->id();
             $table->string('name')->default('');
             $table->string('label')->default('');
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('datalets');
+        Schema::dropIfExists('ice_datalets');
     }
 };

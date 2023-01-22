@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('relationships', function (Blueprint $table) {
+        Schema::create('ice_relationships', function (Blueprint $table) {
             $table->id();
             $table->string('name', 245);
             $table->string('modules');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('relationships');
+        Schema::dropIfExists('ice_relationships');
     }
 };

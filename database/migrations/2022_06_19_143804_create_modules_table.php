@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('ice_modules', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100)->default('');
             $table->string('label')->default('');
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('ice_modules');
     }
 };

@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('work_flow_data', function (Blueprint $table) {
+        Schema::create('ice_work_flow_data', function (Blueprint $table) {
             $table->id();
             $table->integer('from_id')->default(0);
             $table->integer('from_module_id')->default(0);
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('work_flow_data');
+        Schema::dropIfExists('ice_work_flow_data');
     }
 };

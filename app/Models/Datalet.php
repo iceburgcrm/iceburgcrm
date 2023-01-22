@@ -13,6 +13,7 @@ use DB;
 class Datalet extends Model
 {
     use HasFactory;
+    protected $table = 'ice_datalets';
 
     public function type()
     {

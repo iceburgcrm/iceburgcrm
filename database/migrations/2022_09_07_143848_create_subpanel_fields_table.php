@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('subpanel_fields', function (Blueprint $table) {
+        Schema::create('ice_subpanel_fields', function (Blueprint $table) {
             $table->id();
             $table->integer('field_id');
             $table->integer('subpanel_id');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subpanel_fields');
+        Schema::dropIfExists('ice_subpanel_fields');
     }
 };

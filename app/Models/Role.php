@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
+    protected $table = 'ice_roles';
 
     public function module() : Collection
     {

@@ -12,6 +12,7 @@ use App\Models\Logs;
 class Permission extends Model
 {
     use HasFactory;
+    protected $table = 'ice_permissions';
     public static $types = ['read', 'write', 'import', 'export'];
 
     public function modules()

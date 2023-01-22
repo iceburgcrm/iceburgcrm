@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Logs extends Model
 {
     use HasFactory;
+    protected $table = 'ice_logs';
 
     public function module()
     {

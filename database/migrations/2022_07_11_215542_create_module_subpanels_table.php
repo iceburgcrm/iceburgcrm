@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('module_subpanels', function (Blueprint $table) {
+        Schema::create('ice_module_subpanels', function (Blueprint $table) {
             $table->id();
             $table->string('subpanel_filter')->nullable();
             $table->string('name', 245);
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_subpanels');
+        Schema::dropIfExists('ice_module_subpanels');
     }
 };

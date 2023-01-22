@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('datalet_types', function (Blueprint $table) {
+        Schema::create('ice_datalet_types', function (Blueprint $table) {
             $table->id();
             $table->string('name')->default('');
             $table->timestamps();
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('datalet_types');
+        Schema::dropIfExists('ice_datalet_types');
     }
 };

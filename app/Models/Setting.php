@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB as DB;
 class Setting extends Model
 {
     use HasFactory;
+    protected $table = 'ice_settings';
 
     public static function getSetting($key)
     {

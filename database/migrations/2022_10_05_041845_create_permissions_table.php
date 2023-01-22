@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('ice_permissions', function (Blueprint $table) {
             $table->id();
             $table->integer('module_id')->default(0);
             $table->integer('role_id')->default(0);
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('ice_permissions');
     }
 };

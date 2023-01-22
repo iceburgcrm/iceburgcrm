@@ -34,7 +34,7 @@ class FieldSeeder extends Seeder
 
     }
 
-    public function Modules()
+    public function Ice_Modules()
     {
         $order=0;
         $moduleId=Module::getId(__FUNCTION__);
@@ -73,7 +73,7 @@ class FieldSeeder extends Seeder
         ], $order++));
 
 
-        $related_module_id=Module::getId('modules');
+        $related_module_id=Module::getId('ice_modules');
         Field::insert(Field::getField([
             'name'          => 'parent_id',
             'label'         => 'Parent Module',
@@ -81,7 +81,7 @@ class FieldSeeder extends Seeder
             'input_type'    => 'related',
             'related_module_id' => $related_module_id,
             'related_field_id'=> 'id',
-            'related_value_id'=> 'label',
+            'related_value_id'=> 'name',
             'data_type' => 'Integer',
         ], $order++));
 
@@ -102,7 +102,7 @@ class FieldSeeder extends Seeder
         ], $order++));
     }
 
-    public function Fields()
+    public function Ice_Fields()
     {
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
@@ -139,7 +139,7 @@ class FieldSeeder extends Seeder
             'input_type'    => 'text',
         ], $order++));
 
-        $related_module_id=Module::getId('modules');
+        $related_module_id=Module::getId('ice_modules');
         Field::insert(Field::getField([
             'name'          => 'module_id',
             'label'         => 'Module',
@@ -147,7 +147,7 @@ class FieldSeeder extends Seeder
             'input_type'    => 'related',
             'related_module_id' => $related_module_id,
             'related_field_id'=> 'id',
-            'related_value_id'=> 'label',
+            'related_value_id'=> 'name',
             'data_type' => 'Integer',
         ], $order++));
 
@@ -161,7 +161,7 @@ class FieldSeeder extends Seeder
 
     }
 
-    public function Module_Subpanels()
+    public function Ice_Module_Subpanels()
     {
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
@@ -183,7 +183,7 @@ class FieldSeeder extends Seeder
             'input_type'    => 'text',
         ], $order++));
 
-        $related_module_id=Module::getId('modules');
+        $related_module_id=Module::getId('ice_modules');
         Field::insert(Field::getField([
             'name'          => 'module_id',
             'label'         => 'Module',
@@ -191,7 +191,7 @@ class FieldSeeder extends Seeder
             'input_type'    => 'related',
             'related_module_id' => $related_module_id,
             'related_field_id'=> 'id',
-            'related_value_id'=> 'label',
+            'related_value_id'=> 'name',
             'data_type' => 'Integer',
         ], $order++));
 
@@ -220,7 +220,7 @@ class FieldSeeder extends Seeder
 
     }
 
-    public function Datalets()
+    public function Ice_Datalets()
     {
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
@@ -245,7 +245,7 @@ class FieldSeeder extends Seeder
     }
 
 
-    public function Users()
+    public function Ice_Users()
     {
         $order=0;
         $moduleId=Module::getId(__FUNCTION__);
@@ -274,7 +274,7 @@ class FieldSeeder extends Seeder
             'input_type' => 'email'
         ], $order++));
 
-        $related_module_id=Module::getId('roles');
+        $related_module_id=Module::getId('ice_roles');
         Field::insert(Field::getField([
             'name'          => 'role_id',
             'label'         => 'User Role',
@@ -290,7 +290,7 @@ class FieldSeeder extends Seeder
 
     }
 
-    public function Roles()
+    public function Ice_Roles()
     {
         $order=0;
 
@@ -555,7 +555,7 @@ class FieldSeeder extends Seeder
         ], $order++));
     }
 
-    public function Themes()
+    public function Ice_Themes()
     {
         $order=0;
         $moduleId=Module::getId(__FUNCTION__);
@@ -716,7 +716,7 @@ class FieldSeeder extends Seeder
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -865,7 +865,7 @@ class FieldSeeder extends Seeder
             'data_type' => 'boolean',
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -976,7 +976,7 @@ class FieldSeeder extends Seeder
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -1150,7 +1150,7 @@ class FieldSeeder extends Seeder
             'field_length'  => 128,
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -1589,7 +1589,7 @@ class FieldSeeder extends Seeder
             'data_type' => 'boolean',
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -1771,7 +1771,7 @@ class FieldSeeder extends Seeder
             'related_module_id' => Module::getId('meeting_status'),
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -1805,7 +1805,7 @@ class FieldSeeder extends Seeder
             'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id=Module::getId('users');
+        $related_module_id=Module::getId('ice_users');
         Field::insert(Field::getField([
             'name'          => 'assigned_to',
             'label'         => 'Assigned To',
@@ -1843,7 +1843,7 @@ class FieldSeeder extends Seeder
             'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',
@@ -1921,7 +1921,7 @@ class FieldSeeder extends Seeder
                 'input_type' => 'textarea',
             ], $order++));
 
-            $related_module_id = Module::getId('users');
+            $related_module_id = Module::getId('ice_users');
             Field::insert(Field::getField([
                 'name' => 'assigned_to',
                 'label' => 'Assigned To',
@@ -2040,7 +2040,7 @@ class FieldSeeder extends Seeder
             'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',
@@ -2129,7 +2129,7 @@ class FieldSeeder extends Seeder
             'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',
@@ -2247,7 +2247,7 @@ class FieldSeeder extends Seeder
             'field_length' => 128,
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',
@@ -2458,7 +2458,7 @@ class FieldSeeder extends Seeder
             'field_length' => 128,
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',
@@ -2734,7 +2734,7 @@ class FieldSeeder extends Seeder
             'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',
@@ -2806,7 +2806,7 @@ class FieldSeeder extends Seeder
             'field_length' => 128,
         ], $order++));
 
-        $related_module_id = Module::getId('users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
             'name' => 'assigned_to',
             'label' => 'Assigned To',

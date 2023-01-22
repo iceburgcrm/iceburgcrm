@@ -61,6 +61,8 @@ class SubpanelTest extends TestCase
             "2__last_name" => "Streich",
             "2__phone" => "+1 (336) 430-6537",
             "module_id_1" => "2",
+            "from_id" => 0,
+            "from_module" => 0,
             "module_id_2" => "17",
             "module_records" => [1=>"2"],
             "save_type" => "subpanel",

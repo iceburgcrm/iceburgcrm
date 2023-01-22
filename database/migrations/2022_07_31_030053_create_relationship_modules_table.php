@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('relationship_modules', function (Blueprint $table) {
+        Schema::create('ice_relationship_modules', function (Blueprint $table) {
             $table->id();
             $table->integer('module_id');
             $table->integer('relationship_id');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('relationship_modules');
+        Schema::dropIfExists('ice_relationship_modules');
     }
 };

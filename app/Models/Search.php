@@ -10,7 +10,7 @@ class Search extends Model
 {
     use HasFactory;
 
-    private static $excludeFieldTypes = [
+    public static $excludeFieldTypes = [
         'Search' => ['password', 'file', 'image', 'audio', 'video'],
         'OrderBy' => ['password', 'image', 'audio', 'video'],
         'Display' => ['password'],
@@ -20,7 +20,6 @@ class Search extends Model
 
     public static function getData($request, $replaceIds = false)
     {
-
         $request = self::initializeSearch($request);
 
         if ($request['search_type'] == "relationship") {
@@ -32,6 +31,7 @@ class Search extends Model
 
         foreach ($request as $key => $value) {
             $pieces = explode('__', $key);
+
             if (isset($pieces[0]) && intval($pieces[0]) > 0 && ($value != '' && $value != 'undefined')) {
                 $field = Field::where('module_id', intval($pieces[0]))
                     ->where('name', 'like', $pieces[1])
@@ -41,10 +41,22 @@ class Search extends Model
                 if ($field->data_type == 'string') {
                     $operator = 'LIKE';
                 }
+                if ($field->input_type == 'checkbox') {
+                    if($value == "true")
+                    {
+                        $value=1;
+                    }
+                    else $value=0;
+                }
+                //print_r($field->module->name . "." . $pieces[1]);
+                //print_r($value);
                 $results->where($field->module->name . "." . $pieces[1], $operator, $value);
-            }
-        }
 
+            }
+
+        }
+        //dd($results->toSql());
+       // exit;
         if (!isset($request['order_by']) || empty($request['order_by'])) {
             $request['order_by'] = $order_by_field;
         }
