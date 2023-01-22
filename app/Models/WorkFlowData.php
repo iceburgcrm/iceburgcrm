@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class WorkFlowData extends Model
 {
     use HasFactory;
+    protected $table = 'ice_work_flow_data';
 
     public function from_step(){
         return $this->hasOne(ModuleConvertable::class, 'primary_module_id', 'from_module_id');

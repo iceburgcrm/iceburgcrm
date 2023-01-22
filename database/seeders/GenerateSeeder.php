@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 
 use App\Models\ModuleConvertable;
+use App\Models\Setting;
 use App\Models\WorkFlowData;
 use Faker\Factory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -123,7 +124,7 @@ class GenerateSeeder extends Seeder
 
     private function addModulesAndRoles()
     {
-        $module = Module::where('name', 'roles')->first();
+        $module = Module::where('name', 'ice_roles')->first();
         $records=DB::table($module->name)->get();
         Permission::truncate();
         foreach($records as $record)
@@ -187,7 +188,7 @@ class GenerateSeeder extends Seeder
 
     private function addWorkflowActions()
     {
-        WorkflowAction::insert(
+        WorkflowAction::insert (
             [
                 ['name' => 'Insert new Module Record'],
                 ['name' => 'Insert new Relationship Record'],
@@ -204,7 +205,7 @@ class GenerateSeeder extends Seeder
     {
         User::truncate();
         $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('users')->insertGetId([
+        $userId=DB::table('ice_users')->insertGetId([
             'name' => 'Admin',
             'email' => 'admin@iceburg.ca',
             'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
@@ -213,7 +214,7 @@ class GenerateSeeder extends Seeder
         ]);
 
         $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('users')->insertGetId([
+        $userId=DB::table('ice_users')->insertGetId([
             'name' => 'User',
             'email' => 'user@iceburg.ca',
             'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
@@ -222,7 +223,7 @@ class GenerateSeeder extends Seeder
         ]);
 
         $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('users')->insertGetId([
+        $userId=DB::table('ice_users')->insertGetId([
             'name' => 'Sales',
             'email' => 'sales@iceburg.ca',
             'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
@@ -231,7 +232,7 @@ class GenerateSeeder extends Seeder
         ]);
 
         $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('users')->insertGetId([
+        $userId=DB::table('ice_users')->insertGetId([
             'name' => 'Accounting',
             'email' => 'accounting@iceburg.ca',
             'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
@@ -240,7 +241,7 @@ class GenerateSeeder extends Seeder
         ]);
 
         $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('users')->insertGetId([
+        $userId=DB::table('ice_users')->insertGetId([
             'name' => 'Marketing',
             'email' => 'marketing@iceburg.ca',
             'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
@@ -252,32 +253,32 @@ class GenerateSeeder extends Seeder
     private function AddSettings()
     {
         Log::info("Generating Settings");
-        DB::table('settings')->insert([
+        Setting::insert([
             'name' => 'theme',
             'value' => 'light'
         ]);
 
-        DB::table('settings')->insert([
+        Setting::insert([
             'name' => 'search_per_page',
             'value' => '10'
         ]);
 
-        DB::table('settings')->insert([
+        Setting::insert([
             'name' => 'submodule_search_per_page',
             'value' => '10'
         ]);
 
-        DB::table('settings')->insert([
+        Setting::insert([
             'name' => 'title',
             'value' => 'Iceburg CRM'
         ]);
 
-        DB::table('settings')->insert([
+        Setting::insert([
             'name' => 'description',
             'value' => 'Open Source, data driven, extendable, unlimited relationships, convertable modules, 29 default themes, light/dark themes'
         ]);
 
-        DB::table('settings')->insert([
+        Setting::insert([
             'name' => 'max_export_records',
             'value' => 10000
         ]);
@@ -324,7 +325,7 @@ class GenerateSeeder extends Seeder
         ];
     }
 
-    private function Roles()
+    private function Ice_Roles()
     {
         return [
             ['id' => 1, 'name' => 'Admin'],
@@ -447,7 +448,7 @@ class GenerateSeeder extends Seeder
         ];
     }
 
-    private function Themes()
+    private function Ice_Themes()
     {
         return [
             ['name' => "light"],

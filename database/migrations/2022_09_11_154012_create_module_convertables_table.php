@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('module_convertables', function (Blueprint $table) {
+        Schema::create('ice_module_convertables', function (Blueprint $table) {
             $table->id();
             $table->integer('primary_module_id');
             $table->integer('module_id');
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_convertables');
+        Schema::dropIfExists('ice_module_convertables');
     }
 };

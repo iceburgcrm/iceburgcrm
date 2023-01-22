@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ModuleGroup extends Model
 {
     use HasFactory;
+    protected $table = 'ice_module_groups';
 
     public function modules()
     {

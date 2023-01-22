@@ -1,5 +1,5 @@
 <template>
-    <div class=" sm:px-3 lg:px-4 text-sm breadcrumbs">
+    <div class=" sm:px-3 lg:px-4 ml-2 text-sm breadcrumbs">
         <ul>
             <li v-for="level in props.levels">
                 <a v-if="level.url" valign="baseline" :href="level.url">

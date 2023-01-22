@@ -65,10 +65,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+     //    'users' => [
+     //        'driver' => 'database',
+      //       'table' => 'ice_users',
+      //   ],
     ],
 
     /*
@@ -89,7 +89,7 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
+            'table' => 'ice_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],

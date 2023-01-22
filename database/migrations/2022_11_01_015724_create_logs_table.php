@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('ice_logs', function (Blueprint $table) {
             $table->id();
             $table->integer('module_id')->default(0);
             $table->string('type', 16)->default('');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::dropIfExists('ice_logs');
     }
 };

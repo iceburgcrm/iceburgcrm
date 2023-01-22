@@ -208,6 +208,7 @@ Route::get('/data/datalet', function (Request $request) {
     ->name('dashlet');
 
 Route::get('/data/search_data', function (Request $request) {
+   // dd('1');
     return response()->json(Search::getData($request->all())->toArray());
 })->middleware(['auth', 'verified'])->name('search_data');
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Schema as Schema;
 class Relationship extends Model
 {
     use HasFactory;
+    protected $table = 'ice_relationships';
 
     /*
     public function fields()

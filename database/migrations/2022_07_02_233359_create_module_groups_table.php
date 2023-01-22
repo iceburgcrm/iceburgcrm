@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('module_groups', function (Blueprint $table) {
+        Schema::create('ice_module_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name', 245);
             $table->string('label', 245)->nullable();
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('module_groups');
+        Schema::dropIfExists('ice_module_groups');
     }
 };

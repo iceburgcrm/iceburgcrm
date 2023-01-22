@@ -11,7 +11,7 @@ use App\Models\SubpanelField;
 
 class ModuleSubpanel extends Model
 {
-    protected $table = 'module_subpanels';
+    protected $table = 'ice_module_subpanels';
     use HasFactory;
 
     public function module()

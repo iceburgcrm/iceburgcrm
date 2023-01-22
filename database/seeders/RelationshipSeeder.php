@@ -115,7 +115,7 @@ class RelationshipSeeder extends Seeder
         Relationship::insert([
             'name' => 'user_meetings',
             'modules' => implode(",", [
-                Module::where('name', 'users')->first()->id,
+                Module::where('name', 'ice_users')->first()->id,
                 Module::where('name', 'meetings')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
@@ -133,7 +133,7 @@ class RelationshipSeeder extends Seeder
         Relationship::insert([
             'name' => 'users_tasks',
             'modules' => implode(",", [
-                Module::where('name', 'users')->first()->id,
+                Module::where('name', 'ice_users')->first()->id,
                 Module::where('name', 'tasks')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
@@ -142,7 +142,7 @@ class RelationshipSeeder extends Seeder
         Relationship::insert([
             'name' => 'users_tasks',
             'modules' => implode(",", [
-                Module::where('name', 'users')->first()->id,
+                Module::where('name', 'ice_users')->first()->id,
                 Module::where('name', 'tasks')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
@@ -233,7 +233,7 @@ class RelationshipSeeder extends Seeder
             'name' => 'documents_users',
             'modules' => implode(",", [
                 Module::where('name', 'documents')->first()->id,
-                Module::where('name', 'users')->first()->id,
+                Module::where('name', 'ice_users')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
         ]);
@@ -306,7 +306,7 @@ class RelationshipSeeder extends Seeder
             'name' => 'notes_users',
             'modules' => implode(",", [
                 Module::where('name', 'notes')->first()->id,
-                Module::where('name', 'users')->first()->id,
+                Module::where('name', 'ice_users')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
         ]);
@@ -380,7 +380,7 @@ class RelationshipSeeder extends Seeder
             'modules' => implode(",", [
                 Module::where('name', 'accounts')->first()->id,
                 Module::where('name', 'invoices')->first()->id,
-                Module::where('name', 'users')->first()->id,
+                Module::where('name', 'ice_users')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
         ]);
@@ -388,8 +388,8 @@ class RelationshipSeeder extends Seeder
         Relationship::insert([
             'name' => 'modules_fields',
             'modules' => implode(",", [
-                Module::where('name', 'modules')->first()->id,
-                Module::where('name', 'fields')->first()->id,
+                Module::where('name', 'ice_modules')->first()->id,
+                Module::where('name', 'ice_fields')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
         ]);
@@ -397,8 +397,8 @@ class RelationshipSeeder extends Seeder
         Relationship::insert([
             'name' => 'modules_subpanels',
             'modules' => implode(",", [
-                Module::where('name', 'modules')->first()->id,
-                Module::where('name', 'module_subpanels')->first()->id,
+                Module::where('name', 'ice_modules')->first()->id,
+                Module::where('name', 'ice_module_subpanels')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
         ]);
@@ -406,8 +406,8 @@ class RelationshipSeeder extends Seeder
         Relationship::insert([
             'name' => 'modules_datalets',
             'modules' => implode(",", [
-                Module::where('name', 'modules')->first()->id,
-                Module::where('name', 'datalets')->first()->id,
+                Module::where('name', 'ice_modules')->first()->id,
+                Module::where('name', 'ice_datalets')->first()->id,
             ]),
             'related_field_types' => 'integer,integer',
         ]);

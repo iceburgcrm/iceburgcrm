@@ -87,7 +87,7 @@
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium hover:text-accent text-base-content grid-row-1" href="/admin/roles" method="get" as="button">
+                                    <a class="font-medium hover:text-accent text-base-content grid-row-1" href="/module/ice_roles" method="get" as="button">
                                         Roles
                                     </a>
                                 </li>
@@ -97,27 +97,27 @@
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-mediumhover:text-accent ml-2 text-base-content grid-row-1"  href="/module/modules" method="get" as="button">
+                                    <a class="font-mediumhover:text-accent ml-2 text-base-content grid-row-1"  href="/module/ice_modules" method="get" as="button">
                                         Modules
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1"  href="/module/fields" method="get" as="button">
+                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1"  href="/module/ice_fields" method="get" as="button">
                                         Fields
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1" href="module_subpanels" method="get" as="button">
+                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1" href="/module/ice_module_subpanels" method="get" as="button">
                                         Subpanels
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2   hover:text-accent text-base-content grid-row-1" href="/module/datalets" method="get" as="button">
+                                    <a class="font-medium ml-2   hover:text-accent text-base-content grid-row-1" href="/module/ice_datalets" method="get" as="button">
                                         Datalets
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content font-bold grid-row-1" href="/module/users" method="get" as="button">
+                                    <a class="font-medium ml-2  hover:text-accent text-base-content font-bold grid-row-1" href="/module/ice_users" method="get" as="button">
                                         Users
                                     </a>
                                 </li>

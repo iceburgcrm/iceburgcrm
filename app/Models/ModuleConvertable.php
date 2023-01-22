@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ModuleConvertable extends Model
 {
     use HasFactory;
+    protected $table = 'ice_module_convertables';
 
     public function module(){
         return $this->hasOne(Module::class, 'id', 'module_id');

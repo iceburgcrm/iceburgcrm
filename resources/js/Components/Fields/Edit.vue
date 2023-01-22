@@ -17,7 +17,7 @@
             <input type="number" min="0.00" step="0.01" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />
         </div>
         <div v-else-if="props.field.input_type === 'checkbox'" class="rounded">
-            <input type="checkbox"  placeholder="" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary checkbox  rounded sm:text-sm sm:leading-5" v-model="display_value" />
+            <input type="checkbox"  placeholder="" :name="current_field.module_id + '_' + current_field.name"  class="input-secondary checkbox  rounded sm:text-sm sm:leading-5" v-model="display_value" value="1" />
         </div>
         <div v-else-if="props.field.input_type === 'password'" class="rounded">
             <input :name="current_field.module_id + '_' + current_field.name" type="password" class="input-secondary rounded sm:text-sm sm:leading-5" v-model="display_value" />

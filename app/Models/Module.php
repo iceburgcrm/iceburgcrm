@@ -22,6 +22,7 @@ use Illuminate\Validation\ValidationException;
 class Module extends Model
 {
     use HasFactory;
+    protected $table = 'ice_modules';
 
     public static function getId(String $name){
         return self::where('name', 'like', strtolower($name))

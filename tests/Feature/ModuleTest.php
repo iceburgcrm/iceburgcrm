@@ -142,7 +142,7 @@ class ModuleTest extends TestCase
     public function test_can_add_a_module_record_with_all_fields()
     {
         Module::where('status', 1)
-            ->where('name', 'not like', 'users')
+            ->where('name', 'not like', 'ice_users')
             ->where('admin', 0)
             ->get()
             ->each(function ($module) {

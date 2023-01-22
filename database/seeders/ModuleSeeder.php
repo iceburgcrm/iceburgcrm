@@ -357,7 +357,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'users',
+            'name' => 'ice_users',
             'label' => 'Users',
             'description' => 'Users',
             'view_order' => $order++,
@@ -381,7 +381,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'roles',
+            'name' => 'ice_roles',
             'label' => 'Roles',
             'description' => 'Roles',
             'view_order' => $order++,
@@ -392,13 +392,14 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'themes',
+            'name' => 'ice_themes',
             'label' => 'Themes',
             'description' => 'Themes',
             'view_order' => $order++,
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'status' => 1
+            'status' => 1,
+            'create_table' => 1,
         ]);
 
         Module::insert([
@@ -690,7 +691,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'modules',
+            'name' => 'ice_modules',
             'label' => 'Modules',
             'description' => 'System Modules',
             'view_order' => $order++,
@@ -702,7 +703,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'fields',
+            'name' => 'ice_fields',
             'label' => 'Fields',
             'description' => 'System Fields',
             'view_order' => $order++,
@@ -714,7 +715,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'module_subpanels',
+            'name' => 'ice_module_subpanels',
             'label' => 'Subpanels',
             'description' => 'System Subpanel',
             'view_order' => $order++,
@@ -726,7 +727,7 @@ class ModuleSeeder extends Seeder
         ]);
 
         Module::insert([
-            'name' => 'datalets',
+            'name' => 'ice_datalets',
             'label' => 'Datalets',
             'description' => 'System Datalets',
             'view_order' => $order++,
