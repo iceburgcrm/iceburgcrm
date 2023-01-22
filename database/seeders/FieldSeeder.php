@@ -267,6 +267,14 @@ class FieldSeeder extends Seeder
         ], $order++));
 
         Field::insert(Field::getField([
+            'name'          => 'password',
+            'label'         => 'Password',
+            'module_id'     => $moduleId,
+            'field_length'  => 64,
+            'input_type' => 'password'
+        ], $order++));
+
+        Field::insert(Field::getField([
             'name'          => 'email',
             'label'         => 'Email',
             'module_id'     => $moduleId,
