@@ -410,7 +410,7 @@ class ModuleSeeder extends Seeder
             'icon' => 'CurrencyPoundIcon',
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'create_table' => 1,
+            'create_table' => 0,
             'status' => 1
         ]);
 

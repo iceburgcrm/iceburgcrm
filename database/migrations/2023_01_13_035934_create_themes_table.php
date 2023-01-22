@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('themes');
+        Schema::dropIfExists('ice_themes');
     }
 };
