@@ -195,7 +195,6 @@ Route::any('/data/import', function (Request $request) {
 Route::any('/data/builder/{id}/type/{type}', function (Request $request, $id, $type) {
     if(Auth::user()->role != 'Admin')
         return response()->json(['error' => 'No Access'], 422);
-
     $data=CRMBuilder::process($id, $type, $request);
 
     return response()->json($data);
@@ -208,7 +207,6 @@ Route::get('/data/datalet', function (Request $request) {
     ->name('dashlet');
 
 Route::get('/data/search_data', function (Request $request) {
-   // dd('1');
     return response()->json(Search::getData($request->all())->toArray());
 })->middleware(['auth', 'verified'])->name('search_data');
 
