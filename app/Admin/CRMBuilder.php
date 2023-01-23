@@ -5,6 +5,7 @@ use App\Models\Field;
 use App\Models\Module;
 use App\Models\ModuleSubpanel;
 use App\Models\Datalet;
+use App\Models\Permission;
 use App\Models\Relationship;
 use App\Models\Relationships;
 use App\Models\SubpanelField;
@@ -121,17 +122,22 @@ class CRMBuilder
                 $data = ['status' => $status];
                 break;
             case 'add_module':
-                $status = Module::insert([['name' => $request->name,
+                $moduleId = Module::insertGetId(['name' => $request->name,
                     'label' => ucwords(
                         strtolower(
                             str_replace('_', ' ', $request->name)
                         )
                     ),
                     'module_group_id' => 6,
-                    'status' => 0,
+                    'status' => 1,
                     'create_table' => 1,
                     'icon' => 'CircleStackIcon'
-                ]]);
+                ]);
+
+                $status=Permission::insert([
+                        'role_id' => 1,
+                        'module_id' => $moduleId
+                ]);
                 $data = ['status' => $status];
                 break;
             case 'add_datalet':
