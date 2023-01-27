@@ -20,7 +20,7 @@ class Setting extends Model
 
     public static function getThemes()
     {
-        return DB::table('themes')->get();
+        return DB::table('ice_themes')->get();
 
     }
 
