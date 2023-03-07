@@ -35,13 +35,35 @@ class Datalet extends Model
         return $this->hasOne(Relationship::class, 'id', 'relationship_id');
     }
 
-    public static function getData($id=0)
+    public static function getDataAllActiveData(){
+        $data=[];
+
+        foreach(Datalet::where('role_id', 0)->orWhere('role_id', Auth::user()->role_id)
+                    ->with('type')
+                    ->with('module')
+                    ->with('field')
+                    ->with('relationship')
+                    ->orderBy('display_order')
+                    ->get()
+                as $datalet){
+            $data[]=
+                [
+                  'datalet' => $datalet,
+                  'data' => $datalet->getData()
+                ];
+            // data' => Datalet::getData($datalet->id)
+        }
+
+        return $data;
+    }
+
+    public function getData()
     {
+        $datalet=$this;
         $returnData=[];
-        if(intval($id) > 0)
-        {
-            $datalet=Datalet::where('id', $id)->first();
-            switch($datalet->id)
+
+           // $datalet=Datalet::where('id', $id)->first();
+            switch($datalet->type)
             {
                 case 1:
                     $returnData = [
@@ -118,29 +140,51 @@ class Datalet extends Model
                     ];
                     break;
                 case 6:
-                    $returnData = [
-                        'data' => [
-                            DB::table('campaigns')
-                                ->where('status', '>', 0)
-                                ->orderBy('updated_at', 'desc')
-                                ->first(),
-                        ],
-                    ];
-                    dd($returnData);
+                    $meeting=DB::table('meetings')
+                        ->where('status', '>', 0)
+                        ->orderBy('updated_at', 'desc')
+                        ->first();
+                    $meeting->type=DB::table('meeting_types')->where('id', $meeting->types)->value('name');
+                    $returnData = [$meeting];
                     break;
                 case 7:
                     $returnData = [
-                        'data' => [
-                            DB::table('meetings')
-                                ->where('status', '>', 0)
-                                ->orderBy('updated_at', 'desc')
+                        'modules' => Module::all()->count(),
+                        'fields' => Field::all()->count(),
+                        'subpanels' => ModuleSubpanel::all()->count(),
+                        'relationships' => Relationship::all()->count(),
+                    ];
+                    break;
+                case 8:
+                    $returnData = [
+                        [
+                            'name' => ucfirst(Module::where('id', 1)->value('name')),
+                            'value'=> DB::table(Module::where('id', 1)->value('name'))
+                            ->count(),
+                            'class' => 'success'
                         ],
+                        ['name' => ucfirst(Module::where('id', 2)->value('name')),
+                            'value'=> DB::table(Module::where('id', 2)->value('name'))
+                                ->count(),
+                            'class' => 'primary'],
+                        ['name' => ucfirst(Module::where('id', 3)->value('name')),
+                            'value'=> DB::table(Module::where('id', 3)->value('name'))
+                                ->count(),
+                            'class' => 'secondary'],
+                        ['name' => ucfirst(Module::where('id', 4)->value('name')),
+                            'value'=> DB::table(Module::where('id', 4)->value('name'))
+                                ->count(),
+                            'class' => 'accident'],
+                        ['name' => ucfirst(Module::where('id', 5)->value('name')),
+                            'value'=> DB::table(Module::where('id', 5)->value('name'))
+                                ->count(),
+                            'class' => 'warning'],
                     ];
                     break;
                 default:
                     break;
             }
-        }
+       // dd($returnData);
         return $returnData;
     }
 }

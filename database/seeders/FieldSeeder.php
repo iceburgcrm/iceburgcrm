@@ -1636,6 +1636,44 @@ class FieldSeeder extends Seeder
 
     }
 
+    public function Ice_Relationships(){
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
+
+        Field::insert(Field::getField([
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name' => 'modules',
+            'label' => 'Module List',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
+        ], $order++));
+
+
+        Field::insert(Field::getField([
+            'name' => 'related_field_types',
+            'label' => 'Related Field Types',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'status',
+            'label'         => 'Status',
+            'module_id'     => $moduleId,
+            'input_type'    => 'checkbox',
+            'data_type'     => 'boolean',
+        ], $order++));
+    }
+
     public function Meetings()
     {
         $order = 0;

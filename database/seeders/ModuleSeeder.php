@@ -410,7 +410,7 @@ class ModuleSeeder extends Seeder
             'icon' => 'CurrencyPoundIcon',
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'create_table' => 0,
+            'create_table' => 1,
             'status' => 1
         ]);
 
@@ -706,6 +706,18 @@ class ModuleSeeder extends Seeder
             'name' => 'ice_fields',
             'label' => 'Fields',
             'description' => 'System Fields',
+            'view_order' => $order++,
+            'module_group_id' => 6,
+            'faker_seed' => 0,
+            'create_table' => 0,
+            'admin' => 1,
+            'status' => 1
+        ]);
+
+        Module::insert([
+            'name' => 'ice_relationships',
+            'label' => 'Relationships',
+            'description' => 'Relationships',
             'view_order' => $order++,
             'module_group_id' => 6,
             'faker_seed' => 0,

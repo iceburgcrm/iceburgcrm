@@ -56,7 +56,7 @@ Iceburg CRM is a metadata driven CRM that allows you to quickly prototype any CR
 
 Iceburg CRM is created with:
 - [Vue 3](https://vuejs.org/) for the frontend
-- [Laravel 9](https://laravel.com/) for the backend
+- [Laravel 10](https://laravel.com/) for the backend
 - [Tailwinds](https://tailwindui.com/) with the DaisyUI plugin
 - [Inertia](https://inertiajs.com/) for routing
 - [heroicons](https://heroicons.com)
@@ -96,11 +96,6 @@ Open permissions on the storage and
 ```php
 sudo chown -R www-data:www-data /path/to/your/project/public
 sudo chown -R www-data:www-data /path/to/your/project/storage
-
-or 
-
-sudo chmod 777 storage
-sudo chmod 777 public
 ```
 
 Migrate
@@ -136,10 +131,12 @@ sudo chmod 777 storage
 - Groups
 - Quotes
 
+### Number of Relationships: 282
+
 ### Number of Relationships: 43
 
 
-### Number of Subpanels: 27
+### Number of Subpanels: 24
 
 
 ### 5 Datalets
@@ -193,9 +190,3 @@ If you discover a security vulnerability within Iceburg CRM, please send an e-ma
 ## License
 
 The Iceburg CRM is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-
-## Community Discussion
-
-Join our [reddit group](https://reddit.com/r/iceburgcrm/)
-
