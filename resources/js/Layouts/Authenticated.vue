@@ -112,6 +112,11 @@
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
+                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1" href="/module/ice_relationships" method="get" as="button">
+                                        Relationships
+                                    </a>
+                                </li>
+                                <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-medium ml-2   hover:text-accent text-base-content grid-row-1" href="/module/ice_datalets" method="get" as="button">
                                         Datalets
                                     </a>

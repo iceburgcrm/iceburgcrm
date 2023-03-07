@@ -300,13 +300,7 @@ Route::get('/module/{module_name}', function ($moduleName = null) {
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard', [
-        'datalets' => Datalet::where('role_id', 0)->orWhere('role_id', Auth::user()->role_id)
-            ->with('type')
-            ->with('module')
-            ->with('field')
-            ->with('relationship')
-            ->orderBy('display_order')
-            ->get(),
+        'datalets' => Datalet::getDataAllActiveData(),
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 

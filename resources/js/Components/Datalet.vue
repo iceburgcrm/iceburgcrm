@@ -1,25 +1,29 @@
 <template>
     <div v-if="props.datalet.type.id === 1" class="col-span-12">
-        <Doughnut :data="data" :datalet="props.datalet"  />
+        <Doughnut :data="props.data" :datalet="props.datalet"  />
     </div>
     <div v-if="props.datalet.type.id === 2" class="col-span-12">
-        <Bubble :data="data" :datalet="props.datalet"  />
+        <Bubble :data="props.data" :datalet="props.datalet"  />
     </div>
     <div v-if="props.datalet.type.id === 3" class="col-span-12">
-        <Bar :data="data" :datalet="props.datalet"  />
+        <Bar :data="props.data" :datalet="props.datalet"  />
     </div>
     <div v-if="props.datalet.type.id === 4" class="col-span-12">
-        <Pie :data="data" :datalet="props.datalet"  />
+        <Pie :data="props.data" :datalet="props.datalet"  />
     </div>
     <div v-if="props.datalet.type.id === 5" class="col-span-12">
-        <Area :data="data" :datalet="props.datalet"  />
+        <Area :data="props.data" :datalet="props.datalet"  />
     </div>
     <div v-if="props.datalet.type.id === 6" class="col-span-12">
-        <Campaign :data="data" :datalet="props.datalet"  />
+        <Meetings :data="props.data" :datalet="props.datalet"  />
     </div>
     <div v-if="props.datalet.type.id === 7" class="col-span-12">
-        <Meetings :data="data" :datalet="props.datalet"  />
+        <CrmStats :data="props.data" :datalet="props.datalet"  />
     </div>
+    <div v-if="props.datalet.type.id === 8" class="col-span-12">
+        <Summary :data="props.data" :datalet="props.datalet"  />
+    </div>
+
 </template>
 <script setup>
 
@@ -31,13 +35,15 @@ import Bar from '@/Components/Datalets/Bar'
 import Bubble from '@/Components/Datalets/Bubble'
 import Pie from '@/Components/Datalets/Pie'
 import Area from '@/Components/Datalets/Area'
-import Campaign from '@/Components/Datalets/Campaign'
 import Meetings from '@/Components/Datalets/Meetings'
+import Summary from '@/Components/Datalets/Summary.vue'
+import CrmStats from '@/Components/Datalets/CrmStats.vue'
 
 const props = defineProps({
-   datalet: [Object, null]
+   datalet: [Object, null],
+    data: [Object, null]
 });
-
+/*
 const data = ref([]);
 const id = ref(Math.floor(Math.random() * 100000))
 
@@ -50,5 +56,5 @@ onMounted(() => {
             id.value = Math.random() * 100000;
         });
 });
-
+*/
 </script>

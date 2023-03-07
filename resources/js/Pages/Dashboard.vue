@@ -13,7 +13,7 @@
                     <div class="bg-base-200 border-b border-neutral">
                         <div class="grid grid-col-flow gap-5">
                             <div v-for="datalet in $page.props.datalets">
-                                <Datalet v-if="datalet.active == 1" :datalet="datalet" />
+                                <Datalet v-if="datalet.datalet.active == 1" :data="datalet.data" :datalet="datalet.datalet" />
                             </div>
                         </div>
 
