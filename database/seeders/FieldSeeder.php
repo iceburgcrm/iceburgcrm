@@ -233,6 +233,63 @@ class FieldSeeder extends Seeder
             'input_type'    => 'text',
         ], $order++));
 
+        Field::insert(Field::getField([
+            'name'          => 'label',
+            'label'         => 'Label',
+            'module_id'     => $moduleId,
+            'field_length'  => 64,
+            'read_only'     => 1,
+            'input_type'    => 'text',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'type',
+            'label'         => 'Type',
+            'module_id'     => $moduleId,
+            'input_type'    => 'number',
+            'data_type' => 'integer',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'field_id',
+            'label'         => 'Field ID',
+            'module_id'     => $moduleId,
+            'input_type'    => 'number',
+            'data_type' => 'integer',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'module_id',
+            'label'         => 'Module ID',
+            'module_id'     => $moduleId,
+            'input_type'    => 'number',
+            'data_type' => 'integer',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'relationship_id',
+            'label'         => 'Relationship ID',
+            'module_id'     => $moduleId,
+            'input_type'    => 'number',
+            'data_type' => 'integer',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'display_order',
+            'label'         => 'Display Order',
+            'module_id'     => $moduleId,
+            'input_type'    => 'number',
+            'data_type' => 'integer',
+        ], $order++));
+
+        Field::insert(Field::getField([
+            'name'          => 'type',
+            'label'         => 'Type',
+            'module_id'     => $moduleId,
+            'input_type'    => 'number',
+            'data_type' => 'integer',
+        ], $order++));
+
 
         Field::insert(Field::getField([
             'name'          => 'active',
