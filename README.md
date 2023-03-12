@@ -22,7 +22,7 @@ Screenshots:
 </a>
 </p>
 
-[Iceburg CRM](https://www.iceburg.ca)
+[Project Home Page - iceburg.ca](https://www.iceburg.ca)
 
 [Demo](http://demo.iceburg.ca)
 
@@ -34,6 +34,18 @@ Default usernames and passwords
 - sales@iceburg.ca:sales
 - accounting@iceburg.ca:accounting
 - marketing@iceburg.ca:marketing
+
+
+<br />
+
+### Playground
+- Connect any MySQL database and create a CRM from it.  
+- Upload your MySQL dump file and create a CRM.  
+- Create your own IceburgCRM without hosting
+- Host your CRM
+
+[IceburgCRM.com](https://www.iceburgcrm.com)
+
 
 
 ## About Iceburg CRM
