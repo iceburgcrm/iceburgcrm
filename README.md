@@ -119,7 +119,7 @@ php artisan db:seed
 
 Deploy
 ```php
-sudo chmod 777 storage
+sudo chmod 775 storage -R
 ```
 
 ## Default Iceburg CRM
