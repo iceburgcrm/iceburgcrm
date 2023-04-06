@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use app\models\Module;
+use app\models\ModuleSubpanel;
+use Exception;
+use Illuminate\Support\Facades\DB as DB;
 
 class Admin
 {
@@ -20,7 +23,7 @@ class Admin
                     ->first();
                 break;
             case 'subpanel':
-                $data=Subpanel::where('id', $request->id)
+                $data=ModuleSubpanel::where('id', $request->id)
                     ->with('relationship.relationshipmodule.module.fields.module')
                     ->with('module')
                     ->first();
@@ -29,5 +32,19 @@ class Admin
                 break;
         }
         return $data;
+    }
+
+    public function resetCRM()
+    {
+        try {
+            Module::where('faker_seed', 0)->get()->each(function ($module) {
+                DB::table($module->name)->truncate();
+            });
+        }
+        catch (Exception $e)
+        {
+          return false;
+        }
+        return true;
     }
 }

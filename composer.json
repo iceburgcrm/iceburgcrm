@@ -29,6 +29,8 @@
         "maatwebsite/excel": "^3.1",
         "phpoffice/phpspreadsheet": "^1.9",
         "psr/simple-cache": "^2.0",
+        "sammyjo20/saloon-http-sender": "^0.3.2",
+        "sammyjo20/saloon-laravel": "^2.0",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {

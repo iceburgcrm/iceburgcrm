@@ -1,11 +1,9 @@
 <?php
 
 use App\Models\Permission;
-use App\Models\Role;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\WorkFlowData;
-use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,10 +17,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\UserSetting;
 use App\Models\Logs;
 use App\Models\Datalet;
-use App\Exports\GenericExport;
-use App\Imports\GenericImport;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Database\Eloquent\Collection;
+
 
 
 /*
@@ -36,6 +31,33 @@ use Illuminate\Database\Eloquent\Collection;
 |
 */
 
+Route::get('/calendar', function () {
+
+    $outMeetings=[];
+    DB::table('meetings')->orderBy('start_date')->where('assigned_to', auth()->user()->id)->each(function ($meeting) use (&$outMeetings){
+        $outMeetings[]=[
+            'title' => $meeting->name,
+            'time' => (object) [
+                'start' => date('Y-m-d H:i', $meeting->start_date),
+                'end' => date('Y-m-d H:i', $meeting->end_date)
+            ],
+            'color' =>  "yellow",
+            'id' => $meeting->id,
+            'isEditable' => false,
+            'description' => $meeting->description
+        ];
+    });
+
+
+
+    return Inertia::render('Calendar', [
+        'events' => $outMeetings,
+        'breadcrumbs' => Setting::getBreadCrumbs(
+            ['name' => 'Calendar', 'url'=>'', 'svg' => 'settings']
+        )
+    ]);
+})->middleware(['auth', 'verified'])->name('module')
+    ->name('calendar');
 
 Route::get('/audit_log/{moduleId}', function ($moduleId= '', $id = 0) {
 
@@ -317,14 +339,6 @@ Route::get('/import', function (Request $request) {
     ]);
 })->middleware(['auth', 'verified'])->name('import');
 
-Route::get('/admin/modules', function () {
-    return Inertia::render('Admin/Modules', [
-        'themes' => Module::where('status', 1)->get(),
-        'breadcrumbs' => Setting::getBreadCrumbs(
-            ['name' => 'Admin', 'url'=>'/admin', 'svg' => 'settings'],
-            ['name' => 'Modules', 'url'=>'', 'svg' => 'settings']),
-    ]);
-})->middleware(['auth', 'verified'])->name('admin_modules');
 
 Route::get('/admin', function () {
     return Inertia::render('Admin/Index', [
@@ -332,70 +346,6 @@ Route::get('/admin', function () {
         'breadcrumbs' => Setting::getBreadCrumbs(['name' => 'Import', 'link'=>'', 'svg' => 'settings'])
     ]);
 })->middleware(['auth', 'verified'])->name('admin');
-
-Route::get('/admin/permissions', function () {
-    if(Auth::user()->role != 'Admin')
-        return redirect('dashboard')->withErrors(['No Access']);
-
-    return Inertia::render('Admin/Permissions', [
-        'permissions' => Permission::with('modules')->with('roles')->get(),
-        'roles' => Role::all(),
-        'modules' => Module::where('status', 1)->get(),
-        'breadcrumbs' => Setting::getBreadCrumbs(
-            ['name' => 'Admin', 'url'=>'/admin', 'svg' => 'settings'],
-            ['name' => 'Permissions', 'url'=>'', 'svg' => 'settings']),
-    ]);
-})->middleware(['auth', 'verified'])->name('permissions');
-
-Route::get('/admin/workflow', function () {
-    if(Auth::user()->role != 'Admin')
-        return redirect('dashboard')->withErrors(['No Access']);
-
-    return Inertia::render('Admin/Workflow', [
-        'permissions' => Permission::with('modules')->with('roles')->get(),
-        'roles' => Role::all(),
-        'modules' => Module::where('status', 1)->get(),
-        'breadcrumbs' => Setting::getBreadCrumbs(
-            ['name' => 'Admin', 'url'=>'/admin', 'svg' => 'settings'],
-            ['name' => 'Permissions', 'url'=>'', 'svg' => 'settings']),
-    ]);
-})->middleware(['auth', 'verified'])->name('permissions');
-
-Route::get('/admin/subpanels', function () {
-    if(Auth::user()->role != 'Admin')
-        return redirect('dashboard')->withErrors(['No Access']);
-
-    return Inertia::render('Admin/Subpanels', [
-        'subpanels' => ModuleSubpanel::where('status', 1)->get(),
-        'breadcrumbs' => Setting::getBreadCrumbs(
-            ['name' => 'Admin', 'url'=>'/admin', 'svg' => 'settings'],
-            ['name' => 'Subpanels', 'url'=>'', 'svg' => 'settings']),
-    ]);
-})->middleware(['auth', 'verified'])->name('admin_subpanels');
-
-Route::get('/admin/datalets', function () {
-    if(Auth::user()->role != 'Admin')
-        return redirect('dashboard')->withErrors(['No Access']);
-
-    return Inertia::render('Admin/Datalets', [
-        'subpanels' => Dashlet::where('status', 1)->get(),
-        'breadcrumbs' => Setting::getBreadCrumbs(
-            ['name' => 'Admin', 'url'=>'/admin', 'svg' => 'settings'],
-            ['name' => 'Datalets', 'url'=>'', 'svg' => 'settings']),
-    ]);
-})->middleware(['auth', 'verified'])->name('admin_datalets');
-
-Route::get('/admin/builder', function () {
-    if(Auth::user()->role != 'Admin')
-        return redirect('dashboard')->withErrors(['No Access']);
-
-    return Inertia::render('Admin/Builder', [
-        'modules' => Module::all(),
-        'datalets' => Datalet::get()->toArray(),
-        'relationships' => Relationship::get()->toArray(),
-        'breadcrumbs' => Setting::getBreadCrumbs(['name' => 'Builder', 'link'=>'', 'svg' => 'settings'])
-    ]);
-})->middleware(['auth', 'verified'])->name('builder');
 
 Route::get('/settings', function () {
     if(Auth::user()->role != 'Admin')
@@ -410,13 +360,12 @@ Route::get('/settings', function () {
 
 Route::get('/modules', function () {
 
-
     return Inertia::render('Modules', [
         'modules' => $modules=Module::where('status', 1)->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(['name' => 'Modules', 'link'=>'', 'svg' => 'settings'])
 
     ]);
-})->middleware(['auth', 'verified'])->name('rall_modules');
+})->middleware(['auth', 'verified'])->name('all_modules');
 
 Route::get('/role_permission', function () {
     if(Auth::user()->role != 'Admin')

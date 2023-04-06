@@ -131,6 +131,23 @@ class FieldSeeder {
                     }
                 }
             });
+            if(isset($data['start_date']) && isset($data['end_date']))
+            {
+                $data['start_date']=rand(strtotime('now'), strtotime('-7 day'));
+                if($this->module->name == 'meetings'){
+                    $data['start_date']=rand(strtotime('now'), strtotime('+7 day'));
+                    $data['end_date']=$data['start_date']+(60*30*(rand(1, 6)));
+                }
+                elseif($this->module->name == 'contracts'){
+                    $data['start_date']=rand(strtotime('-60 day'), strtotime('+60 day'));
+                    $data['end_date']=$data['start_date']+(86400*30*(rand(1, 6)));
+                }
+                elseif($this->module->name == 'projects'){
+                    $data['start_date']=rand(strtotime('-7 day'), strtotime('+30 day'));
+                    $data['end_date']=$data['start_date']+(86400*(rand(1, 30)));
+                }
+            }
+
             $data['created_at']=date('Y-m-d H:i:s', strtotime("-" . rand(1, 31) . " DAY"));
             $data['updated_at']=$data['created_at'];
             $id=DB::table($this->module->name)->insertGetId($data);
@@ -144,6 +161,4 @@ class FieldSeeder {
             ]);
         }
     }
-
-
 }

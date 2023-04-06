@@ -1,6 +1,10 @@
 <?php
+
+use App\Http\Integrations\ApiCall;
+use App\Http\Integrations\Generic\GenericAPI;
+use App\Http\Integrations\Generic\Requests\ApiRequest;
+use App\Models\Admin;
 use App\Models\Permission;
-use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Module;
@@ -16,22 +20,15 @@ use App\Exports\GenericExport;
 use App\Imports\GenericImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Database\Eloquent\Collection;
-use App\Admin\CRMBuilder;
 
-Route::get('/data/datalet', function (Request $request) {
+Route::get('datalet', function (Request $request) {
     return response()->json(Datalet::getData($request->id));
 })->middleware(['auth', 'verified'])->name('data')
     ->name('dashlet');
 
-Route::get('/admin/data/module', function ($request) {
-    if(Auth::user()->role != 'Admin')
-        return response()->json(['error' => 'No Access'], 422);
 
-    return response()->json(Admin::getData($request));
-})->middleware(['auth', 'verified'])
-    ->name('relationship_fields');
 
-Route::post('/data/delete/{base_id}/type/{type}', function (Request $request, $baseId, $type='module') {
+Route::post('delete/{base_id}/type/{type}', function (Request $request, $baseId, $type='module') {
     $moduleId=$baseId;
     if($type == "relationship"){
         $moduleId=RelationshipModule::where('relationship_id', $baseId)->value('module_id');
@@ -58,7 +55,7 @@ Route::post('/data/delete/{base_id}/type/{type}', function (Request $request, $b
 })->middleware(['auth', 'verified'])
     ->name('get_record');
 
-Route::get('/data/module/{module_id}/record/{record_id}', function ($moduleId=0, $recordId=0) {
+Route::get('module/{module_id}/record/{record_id}', function ($moduleId=0, $recordId=0) {
     if(!Permission::checkPermission($moduleId))
         return response()->json(['error' => 'No Access'], 422);
 
@@ -68,7 +65,7 @@ Route::get('/data/module/{module_id}/record/{record_id}', function ($moduleId=0,
 })->middleware(['auth', 'verified'])
     ->name('get_record');
 
-Route::get('/data/search_fields/{value}/search_type/{type}', function ($moduleID = '', $type = 'relationship') {
+Route::get('search_fields/{value}/search_type/{type}', function ($moduleID = '', $type = 'relationship') {
 
     $module=Module::where('id', $moduleID)->firstOrFail();
     $fields=Search::getFields($module->id, $type);
@@ -79,7 +76,7 @@ Route::get('/data/search_fields/{value}/search_type/{type}', function ($moduleID
 
 
 
-Route::any('/data/download/{module_id}/{type}', function (Request $request, $moduleId=1, $type='xlsx') {
+Route::any('download/{module_id}/{type}', function (Request $request, $moduleId=1, $type='xlsx') {
     if(!Permission::checkPermission($moduleId, 'export'))
         return response()->json(['error' => 'No Access'], 422);
     $data=new Collection(
@@ -89,28 +86,8 @@ Route::any('/data/download/{module_id}/{type}', function (Request $request, $mod
 })->middleware(['auth', 'verified'])
     ->name('record_save');
 
-Route::any('/data/permissions', function () {
-    if(Auth::user()->role != 'Admin')
-        return response()->json(['error' => 'No Access'], 422);
-    return response()->json(
-        Permission::with('modules')->with('roles')->get()
-    );
-})->middleware(['auth', 'verified'])
-    ->name('permissions_data');
 
-Route::any('/data/permissions/save', function (Request $request) {
-    if(Auth::user()->role != 'Admin')
-        return response()->json(['error' => 'No Access'], 422);
-    return response()->json(
-        Permission::where('id', $request->input('id',0))->
-        update([
-            'can_' . $request->input('type', 'read') => $request->current_state === 0 ? 1 : 0
-        ])
-    );
-})->middleware(['auth', 'verified'])
-    ->name('permission_save');
-
-Route::any('/data/save', function (Request $request) {
+Route::any('save', function (Request $request) {
     $data=$request->all();
     if(!Permission::checkPermission($data['module_id'], 'write'))
         return response()->json(['error' => 'No Access'], 422);
@@ -119,7 +96,7 @@ Route::any('/data/save', function (Request $request) {
 })->middleware(['auth', 'verified'])
     ->name('module_record_save');
 
-Route::any('/data/subpanel/save', function (Request $request) {
+Route::any('subpanel/save', function (Request $request) {
     [$subpanelId, $selectedRecords, $newRecords, $recordId] = ModuleSubpanel::parseRequest($request);
     $subpanel=ModuleSubpanel::find($subpanelId);
     if(!Permission::checkPermission($subpanel->module_id, 'write'))
@@ -138,7 +115,7 @@ Route::any('/data/subpanel/save', function (Request $request) {
     ->name('module_record_save');
 
 
-Route::any('/data/import', function (Request $request) {
+Route::any('import', function (Request $request) {
 
     $temp_file=request()->file('input_file')->store('temp');
     $fields=[];
@@ -191,34 +168,18 @@ Route::any('/data/import', function (Request $request) {
 })->middleware(['auth', 'verified'])
     ->name('module_record_import');
 
-
-Route::any('/data/builder/{id}/type/{type}', function (Request $request, $id, $type) {
-    if(Auth::user()->role != 'Admin')
-        return response()->json(['error' => 'No Access'], 422);
-    $data=CRMBuilder::process($id, $type, $request);
-
-    return response()->json($data);
-})->middleware(['auth', 'verified'])->name('data')
-    ->name('builder_data');
-
-Route::get('/data/datalet', function (Request $request) {
+Route::get('datalet', function (Request $request) {
     return response()->json(Datalet::getData($request->id));
 })->middleware(['auth', 'verified'])->name('data')
     ->name('dashlet');
 
-Route::get('/data/search_data', function (Request $request) {
+Route::get('search_data', function (Request $request) {
     return response()->json(Search::getData($request->all())->toArray());
 })->middleware(['auth', 'verified'])->name('search_data');
 
-Route::post('/data/settings', function (Request $request) {
 
-    if(Auth::user()->role != 'Admin')
-        return response()->json(['error' => 'No Access'], 422);
 
-    return response()->json(Setting::saveSettings($request->all()));
-})->middleware(['auth', 'verified'])->name('settings_save');
-
-Route::get('/data/subpanel/{subpanel_id}', function (Request $request, $id=0) {
+Route::get('subpanel/{subpanel_id}', function (Request $request, $id=0) {
     $subpanel = ModuleSubpanel::getSubpanelData($id, $request->all());
     return response()->json($subpanel);
 })->middleware(['auth', 'verified'])->name('data')
@@ -226,7 +187,7 @@ Route::get('/data/subpanel/{subpanel_id}', function (Request $request, $id=0) {
 
 
 
-Route::get('/data/related_fields/field_id/{field_id}', function ($fieldId = 0) {
+Route::get('related_fields/field_id/{field_id}', function ($fieldId = 0) {
 
     $field=Field::find($fieldId);
     $relatedModule=Module::find($field->related_module_id);
@@ -240,7 +201,7 @@ Route::get('/data/related_fields/field_id/{field_id}', function ($fieldId = 0) {
 })->middleware(['auth', 'verified'])->name('data')
     ->name('data_related');
 
-Route::get('/data/related_field_name/field_id/{field_id}/value/{value}', function (Request $request, $fieldId = 0, $value = 0) {
+Route::get('related_field_name/field_id/{field_id}/value/{value}', function (Request $request, $fieldId = 0, $value = 0) {
     $field=Field::find($fieldId);
     $relatedModule=Module::find($field->related_module_id);
 
