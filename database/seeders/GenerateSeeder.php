@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 
+use App\Models\Connector;
+use App\Models\Endpoint;
 use App\Models\ModuleConvertable;
 use App\Models\Setting;
 use App\Models\WorkFlowData;
@@ -29,8 +31,11 @@ class GenerateSeeder extends Seeder
     {
         $seedAmount=50;
         Log::info("Generating users");
-        $this->AddUsers();
-        $this->AddSettings();
+        $this->addUsers();
+        $this->addSettings();
+
+        Log::info("Generating connectors");
+        $this->addConnectors();
 
         Log::info("Add Workflow Actions");
        // $this->addWorkflowActions();
@@ -212,7 +217,7 @@ class GenerateSeeder extends Seeder
         );
     }
 
-    private function AddUsers()
+    private function addUsers()
     {
         User::truncate();
         $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
@@ -261,7 +266,7 @@ class GenerateSeeder extends Seeder
         ]);
     }
 
-    private function AddSettings()
+    private function addSettings()
     {
         Log::info("Generating Settings");
         Setting::insert([
@@ -294,8 +299,27 @@ class GenerateSeeder extends Seeder
             'value' => 10000
         ]);
 
+        Setting::insert([
+            'name' => 'welcome_popup',
+            'value' => true
+        ]);
 
 
+
+    }
+
+    private function addConnectors()
+    {
+        $connectorId=Connector::insertGetId([
+            'name' => 'joke of the day',
+            'base_url'=> 'https://official-joke-api.appspot.com'
+        ]);
+
+        Endpoint::insert([
+           'connector_id' => $connectorId,
+           'endpoint' => '/random_joke',
+            'class_name' => 'jokes'
+        ]);
     }
 
     private function Account_Status()

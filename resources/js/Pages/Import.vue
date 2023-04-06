@@ -25,7 +25,7 @@
                                 <label for="search" class="block text-sm font-medium leading-5 select-secondary input-secondary text-secondary-content">
                                     Select a File
                                 </label>
-                                <input class="input file input-secondary rounded" type="file" id="file-input" @change="onFileChanged($event)" name="file" />
+                                <input class="file-input file-input-bordered file-input-secondary w-full max-w-xs" type="file" id="file-input" @change="onFileChanged($event)" name="file" />
                             </div>
                    </div>
 
