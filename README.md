@@ -62,7 +62,7 @@ Iceburg CRM is a metadata driven CRM that allows you to quickly prototype any CR
 - [25 different input types, <b>Laravel</b> field validation, <b>Maska</b> field masking]
 - [26 themes with light and dark themes available]
 - [Module based Role permissions (read, write, import, export)]
-- [Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
+- [Calendar, Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
 
 
 ## Created With
