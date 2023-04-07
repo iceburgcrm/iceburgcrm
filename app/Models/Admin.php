@@ -34,12 +34,15 @@ class Admin
         return $data;
     }
 
-    public function resetCRM()
+    public static function resetCRM()
     {
         try {
-            Module::where('faker_seed', 0)->get()->each(function ($module) {
-                DB::table($module->name)->truncate();
-            });
+            Module::where('faker_seed', 1)
+                ->where('admin', '!=', 1)
+                ->get()->each(function ($module) {
+                    DB::table($module->name)->truncate();
+                 }
+            );
         }
         catch (Exception $e)
         {
