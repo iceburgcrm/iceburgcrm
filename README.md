@@ -24,7 +24,7 @@ Screenshots:
 
 [Project Home Page - iceburg.ca](https://www.iceburg.ca)
 
-[Demo](http://demo.iceburg.ca)
+[Demo](https://demo.iceburg.ca)
 
 
 Default usernames and passwords
