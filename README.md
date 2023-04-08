@@ -36,8 +36,6 @@ Default usernames and passwords
 - marketing@iceburg.ca:marketing
 
 
-<br />
-
 ### Playground
 - Connect any MySQL database and create a CRM from it.  
 - Upload your MySQL dump file and create a CRM.  
