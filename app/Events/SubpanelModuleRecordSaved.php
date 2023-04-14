@@ -2,20 +2,21 @@
 
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class SubpanelModuleRecordSaved
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    private Array $modules;
-    private Array $relationship;
+
+    private array $modules;
+
+    private array $relationship;
+
     private String $record_id;
+
     /**
      * Create a new event instance.
      *
@@ -23,9 +24,9 @@ class SubpanelModuleRecordSaved
      */
     public function __construct($modules, $relationship, $record_id)
     {
-        $this->modules=$modules;
-        $this->relationship=$relationship;
-        $this->record_id=$record_id;
+        $this->modules = $modules;
+        $this->relationship = $relationship;
+        $this->record_id = $record_id;
     }
 
     /**

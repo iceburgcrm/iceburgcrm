@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Connector extends Model
 {
     use HasFactory;
+
     protected $table = 'ice_connectors';
 
     protected $casts = [

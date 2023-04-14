@@ -12,10 +12,9 @@ class Admin
     public function getData($request)
     {
         $data = [];
-        switch($request->type)
-        {
+        switch ($request->type) {
             case 'module':
-                $data=Module::where('id', $request->id)
+                $data = Module::where('id', $request->id)
                     ->with('fields')
                     ->with('groups')
                     ->with('convertedmodules')
@@ -23,7 +22,7 @@ class Admin
                     ->first();
                 break;
             case 'subpanel':
-                $data=ModuleSubpanel::where('id', $request->id)
+                $data = ModuleSubpanel::where('id', $request->id)
                     ->with('relationship.relationshipmodule.module.fields.module')
                     ->with('module')
                     ->first();
@@ -31,6 +30,7 @@ class Admin
             default:
                 break;
         }
+
         return $data;
     }
 
@@ -43,11 +43,10 @@ class Admin
                     DB::table($module->name)->truncate();
                  }
             );
-        }
-        catch (Exception $e)
-        {
+        } catch (Exception $e) {
           return false;
         }
+
         return true;
     }
 }

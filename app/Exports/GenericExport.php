@@ -8,9 +8,12 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 class GenericExport implements FromCollection
 {
     private Collection $data;
-    function __construct(Collection $data) {
-        $this->data=$data;
+
+    public function __construct(Collection $data)
+    {
+        $this->data = $data;
     }
+
     /**
      * @return \Illuminate\Support\Collection
      */

@@ -1,16 +1,15 @@
 <?php
+
 namespace App\Admin;
 
+use App\Models\Datalet;
 use App\Models\Field;
 use App\Models\Module;
 use App\Models\ModuleSubpanel;
-use App\Models\Datalet;
 use App\Models\Permission;
 use App\Models\Relationship;
-use App\Models\Relationships;
 use App\Models\SubpanelField;
 use Illuminate\Support\Facades\Log;
-
 
 class CRMBuilder
 {
@@ -22,43 +21,43 @@ class CRMBuilder
     public static function process($id, $type, $request)
     {
         $data = [];
-        $status=0;
+        $status = 0;
         switch ($type) {
             case 'get_modules':
                 $data = [
-                    'modules' => Module::get()->toArray()
+                    'modules' => Module::get()->toArray(),
                 ];
                 break;
             case 'get_datalets':
                 $data = [
-                    'datalets' => Datalet::get()->toArray()
+                    'datalets' => Datalet::get()->toArray(),
                 ];
                 break;
             case 'get_relationships':
                 $data = [
-                    'relationships' => Relationship::get()->toArray()
+                    'relationships' => Relationship::get()->toArray(),
                 ];
                 break;
             case 'select_subpanel_fields':
-                $subpanel=ModuleSubpanel::where('id', $id)
+                $subpanel = ModuleSubpanel::where('id', $id)
                     ->with('relationship')
                     ->first();
 
-                $modules=explode(",",$subpanel->relationship->modules);
-                $data=Field::whereIn('module_id', $modules)
+                $modules = explode(',', $subpanel->relationship->modules);
+                $data = Field::whereIn('module_id', $modules)
                     ->with('module')
                     ->get();
                 break;
             case 'select_module':
                 $module = Module::find($id);
 
-                $relationships=[];
-                Relationship::where('modules', 'LIKE', '%' . $id . '%')
+                $relationships = [];
+                Relationship::where('modules', 'LIKE', '%'.$id.'%')
                     ->get()
-                    ->each(function ($relationship) use (&$relationships, $id){
-                        $modules=explode(',', $relationship->modules);
-                        if(in_array($id, $modules)){
-                            $relationships[]=$relationship->toArray();
+                    ->each(function ($relationship) use (&$relationships, $id) {
+                        $modules = explode(',', $relationship->modules);
+                        if (in_array($id, $modules)) {
+                            $relationships[] = $relationship->toArray();
                         }
                     });
 
@@ -68,27 +67,24 @@ class CRMBuilder
                     'subpanels' => ModuleSubpanel::where('module_id', $id)
                         ->with('subpanelfields')->with('relationship')
                         ->get(),
-                    'relationships' => $relationships
+                    'relationships' => $relationships,
                 ];
                 break;
             case 'regenerate':
                 $module = new Module;
-                if($request->module_id == 0)
-                {
-                    Log::info("Regenerating all modules");
+                if ($request->module_id == 0) {
+                    Log::info('Regenerating all modules');
                     $status = $module->generate($request->seed);
                     $status = 1;
-                }
-                elseif($request->module_id > 0)
-                {
+                } elseif ($request->module_id > 0) {
                     $status = $module->generate($request->seed, $request->module_id);
                 }
                 $data = ['status' => $status];
                 break;
             case 'add_subpanel_field':
-                $status=SubpanelField::insert([
-                   'field_id' => $request->subpanel_field_id,
-                   'subpanel_id' => $request->subpanel_id
+                $status = SubpanelField::insert([
+                    'field_id' => $request->subpanel_field_id,
+                    'subpanel_id' => $request->subpanel_id,
                 ]);
                 $data = ['status' => $status];
                 break;
@@ -113,7 +109,7 @@ class CRMBuilder
                     'data_type' => 'string',
                     'field_length' => 64,
                     'status' => 0,
-                    'module_id' => $id
+                    'module_id' => $id,
                 ]]);
                 $data = ['status' => $status];
                 break;
@@ -131,12 +127,12 @@ class CRMBuilder
                     'module_group_id' => 6,
                     'status' => 1,
                     'create_table' => 1,
-                    'icon' => 'CircleStackIcon'
+                    'icon' => 'CircleStackIcon',
                 ]);
 
-                $status=Permission::insert([
-                        'role_id' => 1,
-                        'module_id' => $moduleId
+                $status = Permission::insert([
+                    'role_id' => 1,
+                    'module_id' => $moduleId,
                 ]);
                 $data = ['status' => $status];
                 break;
@@ -151,32 +147,23 @@ class CRMBuilder
                 $data = ['status' => $status];
                 break;
             case 'delete':
-                if($request->type == 'module')
-                {
+                if ($request->type == 'module') {
                     Module::where('id', $request->delete_id)->delete();
                     Field::where('module_id', $request->delete_id)->delete();
                     ModuleSubpanel::where('module_id', $request->delete_id)->delete();
-                    $status=1;
+                    $status = 1;
                     $data = ['status' => $status];
-                }
-                elseif($request->type == 'field')
-                {
-                    $status=Field::where('id', $request->delete_id)->delete();
+                } elseif ($request->type == 'field') {
+                    $status = Field::where('id', $request->delete_id)->delete();
                     $data = ['status' => $status];
-                }
-                elseif($request->type == 'subpanel')
-                {
+                } elseif ($request->type == 'subpanel') {
                     ModuleSubpanel::where('id', $request->delete_id)->delete();
                     $data = ['status' => $status];
-                }
-                elseif($request->type == 'relationship')
-                {
-                    $status=Relationship::where('id', $request->delete_id)->delete();
+                } elseif ($request->type == 'relationship') {
+                    $status = Relationship::where('id', $request->delete_id)->delete();
                     $data = ['status' => $status];
-                }
-                elseif($request->type == 'datalet')
-                {
-                    $status=Datalet::where('id', $request->delete_id)->delete();
+                } elseif ($request->type == 'datalet') {
+                    $status = Datalet::where('id', $request->delete_id)->delete();
                 }
                 $data = ['status' => $status];
                 break;
@@ -220,6 +207,7 @@ class CRMBuilder
             default:
                 break;
         }
+
         return $data;
 
     }

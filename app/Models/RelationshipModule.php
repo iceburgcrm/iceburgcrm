@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RelationshipModule extends Model
 {
     use HasFactory;
+
     protected $table = 'ice_relationship_modules';
 
     public function relationship()

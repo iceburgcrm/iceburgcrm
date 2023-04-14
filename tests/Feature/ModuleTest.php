@@ -3,11 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Field;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use App\Models\Module;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class ModuleTest extends TestCase
 {
@@ -37,7 +36,7 @@ class ModuleTest extends TestCase
     public function test_module_search_pages_are_reachable()
     {
         Module::where('status', 1)->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->get('/module/' . $module->name);
+            $response = $this->actingAs($this->user)->get('/module/'.$module->name);
             $response->assertStatus(200);
         });
     }
@@ -45,7 +44,7 @@ class ModuleTest extends TestCase
     public function test_module_detail_pages_are_reachable()
     {
         Module::where('status', 1)->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->get('/module/' . $module->name . '/view/1');
+            $response = $this->actingAs($this->user)->get('/module/'.$module->name.'/view/1');
             $response->assertStatus(200);
         });
     }
@@ -53,7 +52,7 @@ class ModuleTest extends TestCase
     public function test_module_add_pages_are_reachable()
     {
         Module::where('status', 1)->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->get('/module/' . $module->name . '/add');
+            $response = $this->actingAs($this->user)->get('/module/'.$module->name.'/add');
             $response->assertStatus(200);
         });
     }
@@ -61,7 +60,7 @@ class ModuleTest extends TestCase
     public function test_module_edit_pages_are_reachable()
     {
         Module::where('status', 1)->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->get('/module/' . $module->name . '/edit/1');
+            $response = $this->actingAs($this->user)->get('/module/'.$module->name.'/edit/1');
             $response->assertStatus(200);
         });
     }
@@ -90,7 +89,7 @@ class ModuleTest extends TestCase
     public function test_can_export_modules()
     {
         Module::where('status', 1)->with('fields')->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->post('/data/download/' . $module->id . '/csv', []);
+            $response = $this->actingAs($this->user)->post('/data/download/'.$module->id.'/csv', []);
             $response->assertStatus(200)
                 ->assertDownload();
         });
@@ -99,15 +98,15 @@ class ModuleTest extends TestCase
     public function test_can_delete_a_module_records()
     {
         $module = Module::find(1);
-        $record=(array) Module::getRecord($module->id, 1);
+        $record = (array) Module::getRecord($module->id, 1);
         $this->assertNotNull($record);
 
         $response = $this->actingAs($this->user)
             ->json('POST', 'data/delete/1/type/module',
                 [
-                    1
+                    1,
                 ]);
-        $record=(array) Module::getRecord($module->id, 1);
+        $record = (array) Module::getRecord($module->id, 1);
         $this->assertEmpty($record);
 
     }
@@ -115,26 +114,25 @@ class ModuleTest extends TestCase
     public function test_can_delete_many_module_records()
     {
         $module = Module::find(1);
-        $record=(array) Module::getRecord($module->id, 1);
+        $record = (array) Module::getRecord($module->id, 1);
         $this->assertNotNull($record);
 
         $response = $this->actingAs($this->user)
             ->json('POST', 'data/delete/1/type/module',
                 [
-                    1,2
+                    1, 2,
                 ]);
-        $record=(array) Module::getRecord($module->id, 1);
+        $record = (array) Module::getRecord($module->id, 1);
         $this->assertEmpty($record);
-        $record=(array) Module::getRecord($module->id, 2);
+        $record = (array) Module::getRecord($module->id, 2);
         $this->assertEmpty($record);
     }
-
 
     public function test_add_page_reachable()
     {
 
         $module = Module::where('status', 1)->first();
-        $response = $this->actingAs($this->user)->get('/module/' . $module->name . '/add');
+        $response = $this->actingAs($this->user)->get('/module/'.$module->name.'/add');
         $response->assertStatus(200);
 
     }
@@ -146,17 +144,15 @@ class ModuleTest extends TestCase
             ->where('admin', 0)
             ->get()
             ->each(function ($module) {
-                for($x=0; $x<(Field::where('module_id', $module->id)->count()+1); $x++)
-                {
+                for ($x = 0; $x < (Field::where('module_id', $module->id)->count() + 1); $x++) {
 
-                    $fields=Field::where('module_id', $module->id)
+                    $fields = Field::where('module_id', $module->id)
                         ->where('name', 'NOT LIKE', 'slug')->get();
-                    $data=[];
-                    $data['module_id']=$module->id;
-                    $data['search_type']='module';
-                    foreach($fields as $field)
-                    {
-                        $data[$module->id.'__'.$field->name]=rand(0, 99999);
+                    $data = [];
+                    $data['module_id'] = $module->id;
+                    $data['search_type'] = 'module';
+                    foreach ($fields as $field) {
+                        $data[$module->id.'__'.$field->name] = rand(0, 99999);
                     }
                     $response = $this->actingAs($this->user)
                         ->json('POST', '/data/save', $data);

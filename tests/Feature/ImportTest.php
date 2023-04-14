@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class ImportTest extends TestCase
@@ -19,6 +18,7 @@ class ImportTest extends TestCase
         $this->artisan('db:seed');
         $this->user = User::find(1);
     }
+
     /**
      * A basic feature test example.
      *

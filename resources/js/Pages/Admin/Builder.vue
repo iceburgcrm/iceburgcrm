@@ -57,63 +57,63 @@
                             </div>
                             <div class="mt-10">
                                 <label class="text-xl">Details</label>
-                                        <div class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
-                                            <input type="checkbox" class="peer" />
-                                            <div class="collapse-title bg-neutral text-neutral-content peer-checked:bg-base-200 peer-checked:text-base-content">
-                                                <label class="text-lg">Details</label>
-                                                </div>
-                                            <div class="collapse-content bg-neutral text-neutral-content peer-checked:bg-base-200 peer-checked:text-base-content">
-                                                <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('module', module.id)">Delete</button></div>
+                                <div class="collapse border border-base-300 bg-base-100 rounded-box">
+                                    <input type="checkbox" class="peer" />
+                                    <div class="collapse-title bg-neutral text-neutral-content peer-checked:bg-base-200 peer-checked:text-base-content">
+                                        <label class="text-lg">Details</label>
+                                    </div>
+                                    <div class="collapse-content bg-neutral text-neutral-content peer-checked:bg-base-200 peer-checked:text-base-content">
+                                        <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('module', module.id)">Delete</button></div>
 
-                                                <p class="grid grid-flow-col col-auto" v-for="(value,key) in module">
+                                        <p class="grid grid-flow-col col-auto" v-for="(value,key) in module">
+                                        <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
+                                            <label class="label">
+                                                <span class="label-text text-lg">{{key.toUpperCase()}}</span> </label>
+                                            <p class="font-light">{{help['module'][key]}}</p>
+                                            <input type="text" :id="'data' + key+'_'+'module'+'_'+module.id" @change="save_value(key,'module', module.id)" placeholder="" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                        </div>
+                                        </p>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+                            <div class="mt-5">
+                                <label class="text-xl">Fields</label>
+                                <ul>
+                                    <li v-for="field in fields" class="w-full">
+                                        <div class="collapse border border-base-300 bg-base-100 rounded-box">
+                                            <input type="checkbox" class="peer" />
+                                            <div class="collapse-title bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
+                                                <label class="text-lg">{{field.label}} </label>
+                                            </div>
+                                            <div class="collapse-content bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
+                                                <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('field', field.id)">Delete</button></div>
+                                                <p class="grid grid-flow-col col-auto" v-for="(value,key) in field">
+
                                                 <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
                                                     <label class="label">
-                                                        <span class="label-text text-lg">{{key.toUpperCase()}}</span> </label>
-                                                        <p class="font-light">{{help['module'][key]}}</p>
-                                                        <input type="text" :id="'data' + key+'_'+'module'+'_'+module.id" @change="save_value(key,'module', module.id)" placeholder="" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                                        <span class="label-text">{{key.toUpperCase()}}</span>
+                                                    </label>
+                                                    <p class="font-light">{{help['field'][key]}}</p>
+                                                    <input type="text" placeholder="" :id="'data' + key+'_'+'field'+'_'+field.id" @change="save_value(key, 'field', field.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
                                                 </div>
+
                                                 </p>
                                             </div>
                                         </div>
 
 
-
+                                    </li>
+                                </ul>
                             </div>
-                                <div class="mt-5">
-                                    <label class="text-xl">Fields</label>
-                                    <ul>
-                                        <li v-for="field in fields" class="w-full">
-                                            <div class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
-                                                <input type="checkbox" class="peer" />
-                                                <div class="collapse-title bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
-                                                    <label class="text-lg">{{field.label}} </label>
-                                                </div>
-                                                <div class="collapse-content bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
-                                                    <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('field', field.id)">Delete</button></div>
-                                                    <p class="grid grid-flow-col col-auto" v-for="(value,key) in field">
+                            <div class="mt-5">
+                                <label class="text-xl">Subpanels</label>
 
-                                                        <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
-                                                            <label class="label">
-                                                                <span class="label-text">{{key.toUpperCase()}}</span>
-                                                            </label>
-                                                            <p class="font-light">{{help['field'][key]}}</p>
-                                                            <input type="text" placeholder="" :id="'data' + key+'_'+'field'+'_'+field.id" @change="save_value(key, 'field', field.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
-                                                        </div>
-
-                                                    </p>
-                                                </div>
-                                            </div>
-
-
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="mt-5">
-                                    <label class="text-xl">Subpanels</label>
-
-                                    <ul>
+                                <ul>
                                     <li v-for="subpanel in subpanels">
-                                        <div class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
+                                        <div class="collapse border border-base-300 bg-base-100 rounded-box">
                                             <input type="checkbox" class="peer" />
                                             <div class="collapse-title bg-secondary text-secondary-content peer-checked:bg-base-200 peer-checked:text-base-content">
                                                 <label class="text-lg">{{subpanel.label}}</label>
@@ -126,7 +126,7 @@
                                                     <label class="label">
                                                         <span class="label-text">{{key.toUpperCase()}}</span>
                                                     </label>
-                                                     <p class="font-light">{{help['subpanel'][key]}}</p>
+                                                    <p class="font-light">{{help['subpanel'][key]}}</p>
                                                     <div class="grid-flow-row" v-if="key === 'subpanelfields'">
 
                                                         <div class="" v-for="(subpanel_array_fields in value">
@@ -143,10 +143,10 @@
                                                                 </select>
                                                                 <button class="text-lg input-primary text-neutral mt-5 ml-5" value="Add a field" @click="add_subpanel_field(key, value.id, subpanel.id)">Add Field</button>
                                                             </span>
+                                                        </div>
                                                     </div>
+                                                    <div v-else-if="key === 'relationship'">
                                                     </div>
-                                                     <div v-else-if="key === 'relationship'">
-                                                     </div>
                                                     <input v-else type="text" placeholder="" :id="'data' + key+'_'+'subpanel'+'_'+subpanel.id" @change="save_value(key, 'subpanel', subpanel.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
                                                 </div>
                                                 </p>
@@ -155,8 +155,8 @@
 
 
                                     </li>
-                                    </ul>
-                                </div>
+                                </ul>
+                            </div>
                             </p>
                         </div>
                     </div>
@@ -165,40 +165,40 @@
             <div class="mt-5">
                 <div class="card w-full bg-base-100 shadow-xl">
                     <div class="card-body">
-                <label class="text-xl">Datalets</label>
-                <div class=" grid grid-flow-row">
-                    <label>Create a Datalet</label>
-                    <div><input placeholder="Enter a name" v-model="created_items['datalet']" type="text" class="text-xs rounded border-secondary">
-                        <button class="btn btn-secondary btn-outline btn-sm ml-1" @click="create_item('datalet')">Add</button>
-                    </div>
-                </div>
-                <ul>
-                    <li v-for="datalet in datalets" class="w-full">
-                        <div class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
-                             <input type="checkbox" class="peer" />
-                            <div class="collapse-title bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
-                                <label class="text-lg">{{datalet.label}}</label>
-                            </div>
-                            <div class="collapse-content bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
-                                <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('datalet', datalet.id)">Delete</button></div>
-
-                                <p class="grid grid-flow-col col-auto" v-for="(value,key) in datalet">
-
-                                <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
-                                    <label class="label">
-                                        <span class="label-text">{{key.toUpperCase()}}</span>
-                                    </label>
-                                    <p class="font-light">{{help['datalet'][key]}}</p>
-                                    <input type="text" placeholder="" :id="'data' + key+'_'+'datalet'+'_'+datalet.id" @change="save_value(key, 'datalet', datalet.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
-                                </div>
-
-                                </p>
+                        <label class="text-xl">Datalets</label>
+                        <div class=" grid grid-flow-row">
+                            <label>Create a Datalet</label>
+                            <div><input placeholder="Enter a name" v-model="created_items['datalet']" type="text" class="text-xs rounded border-secondary">
+                                <button class="btn btn-secondary btn-outline btn-sm ml-1" @click="create_item('datalet')">Add</button>
                             </div>
                         </div>
+                        <ul>
+                            <li v-for="datalet in datalets" class="w-full">
+                                <div class="collapse border border-base-300 bg-base-100 rounded-box">
+                                    <input type="checkbox" class="peer" />
+                                    <div class="collapse-title bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
+                                        <label class="text-lg">{{datalet.label}}</label>
+                                    </div>
+                                    <div class="collapse-content bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
+                                        <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('datalet', datalet.id)">Delete</button></div>
+
+                                        <p class="grid grid-flow-col col-auto" v-for="(value,key) in datalet">
+
+                                        <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
+                                            <label class="label">
+                                                <span class="label-text">{{key.toUpperCase()}}</span>
+                                            </label>
+                                            <p class="font-light">{{help['datalet'][key]}}</p>
+                                            <input type="text" placeholder="" :id="'data' + key+'_'+'datalet'+'_'+datalet.id" @change="save_value(key, 'datalet', datalet.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                        </div>
+
+                                        </p>
+                                    </div>
+                                </div>
 
 
-                    </li>
-                </ul>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -217,7 +217,7 @@
                         </div>
                         <ul>
                             <li v-for="relationship in relationships" class="w-full">
-                                <div class="collapse collapse-plus border border-base-300 bg-base-100 rounded-box">
+                                <div class="collapse border border-base-300 bg-base-100 rounded-box">
 
                                     <input type="checkbox" class="peer" />
                                     <div class="collapse-title bg-secondary text-secondary-content peer-checked:bg-base-200 peer-checked:text-base-content">
@@ -345,7 +345,7 @@ const create_item = function(name)
         axios.post('/data/builder/' + module_id.value + '/type/add_' + name, {
             'name': created_items.value[name],
             'relationship_modules': create_relationship_modules.value
-            }).then(response => {
+        }).then(response => {
 
             created_items.value[name]='';
             create_relationship_modules.value='';
@@ -409,7 +409,7 @@ const select_module = function () {
         fields.value=response.data.fields;
         subpanels.value=response.data.subpanels;
         module_relationships.value=response.data.relationships;
-       get_modules();
+        get_modules();
     });
 }
 const regenerate_module = function(m_id)

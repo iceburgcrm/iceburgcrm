@@ -2,17 +2,16 @@
 
 namespace App\Models;
 
+use Auth;
 use Carbon\Carbon;
+use DB;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Search;
-use App\Models\Field;
-use Auth;
-use DB;
 
 class Datalet extends Model
 {
     use HasFactory;
+
     protected $table = 'ice_datalets';
 
     public function type()
@@ -35,21 +34,22 @@ class Datalet extends Model
         return $this->hasOne(Relationship::class, 'id', 'relationship_id');
     }
 
-    public static function getDataAllActiveData(){
-        $data=[];
+    public static function getDataAllActiveData()
+    {
+        $data = [];
 
-        foreach(Datalet::where('role_id', 0)->orWhere('role_id', Auth::user()->role_id)
+        foreach (Datalet::where('role_id', 0)->orWhere('role_id', Auth::user()->role_id)
                     ->with('type')
                     ->with('module')
                     ->with('field')
                     ->with('relationship')
                     ->orderBy('display_order')
                     ->get()
-                as $datalet){
-            $data[]=
+                as $datalet) {
+            $data[] =
                 [
-                  'datalet' => $datalet,
-                  'data' => $datalet->getData()
+                    'datalet' => $datalet,
+                    'data' => $datalet->getData(),
                 ];
             // data' => Datalet::getData($datalet->id)
         }
@@ -59,20 +59,19 @@ class Datalet extends Model
 
     public function getData()
     {
-        $datalet=$this;
-        $returnData=[];
+        $datalet = $this;
+        $returnData = [];
 
            // $datalet=Datalet::where('id', $id)->first();
-            switch($datalet->type)
-            {
+            switch ($datalet->type) {
                 case 1:
                     $returnData = [
                         'labels' => ['Tax', 'Discount', 'Gross', 'Net'],
                         'data' => [
-                            round(DB::table('lineitems')->sum('taxes')/10, 2),
-                            round(DB::table('lineitems')->sum('discount')/5, 2),
+                            round(DB::table('lineitems')->sum('taxes') / 10, 2),
+                            round(DB::table('lineitems')->sum('discount') / 5, 2),
                             DB::table('lineitems')->sum('gross'),
-                            round(DB::table('lineitems')->sum('gross')/2, 2),
+                            round(DB::table('lineitems')->sum('gross') / 2, 2),
                         ],
                     ];
                     break;
@@ -140,11 +139,11 @@ class Datalet extends Model
                     ];
                     break;
                 case 6:
-                    $meeting=DB::table('meetings')
+                    $meeting = DB::table('meetings')
                         ->where('status', '>', 0)
                         ->orderBy('updated_at', 'desc')
                         ->first();
-                    $meeting->type=DB::table('meeting_types')->where('id', $meeting->types)->value('name');
+                    $meeting->type = DB::table('meeting_types')->where('id', $meeting->types)->value('name');
                     $returnData = [$meeting];
                     break;
                 case 7:
@@ -159,24 +158,24 @@ class Datalet extends Model
                     $returnData = [
                         [
                             'name' => ucfirst(Module::where('id', 1)->value('name')),
-                            'value'=> DB::table(Module::where('id', 1)->value('name'))
+                            'value' => DB::table(Module::where('id', 1)->value('name'))
                             ->count(),
-                            'class' => 'success'
+                            'class' => 'success',
                         ],
                         ['name' => ucfirst(Module::where('id', 2)->value('name')),
-                            'value'=> DB::table(Module::where('id', 2)->value('name'))
+                            'value' => DB::table(Module::where('id', 2)->value('name'))
                                 ->count(),
                             'class' => 'primary'],
                         ['name' => ucfirst(Module::where('id', 3)->value('name')),
-                            'value'=> DB::table(Module::where('id', 3)->value('name'))
+                            'value' => DB::table(Module::where('id', 3)->value('name'))
                                 ->count(),
                             'class' => 'secondary'],
                         ['name' => ucfirst(Module::where('id', 4)->value('name')),
-                            'value'=> DB::table(Module::where('id', 4)->value('name'))
+                            'value' => DB::table(Module::where('id', 4)->value('name'))
                                 ->count(),
                             'class' => 'accident'],
                         ['name' => ucfirst(Module::where('id', 5)->value('name')),
-                            'value'=> DB::table(Module::where('id', 5)->value('name'))
+                            'value' => DB::table(Module::where('id', 5)->value('name'))
                                 ->count(),
                             'class' => 'warning'],
                     ];
