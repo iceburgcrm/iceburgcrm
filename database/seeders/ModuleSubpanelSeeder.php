@@ -1,16 +1,16 @@
 <?php
+
 // add comments to the code
 
 namespace Database\Seeders;
 
+use App\Models\Field;
+use App\Models\Module;
+use App\Models\ModuleSubpanel;
+use App\Models\Relationship;
 use App\Models\SubpanelField;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
-use App\Models\ModuleSubpanel;
-use App\Models\Module;
-use App\Models\Field;
-use App\Models\Relationship;
 
 class ModuleSubpanelSeeder extends Seeder
 {
@@ -25,7 +25,7 @@ class ModuleSubpanelSeeder extends Seeder
         ModuleSubpanel::truncate();
         SubpanelField::truncate();
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_contacts',
             'label' => 'Contacts',
             'relationship_id' => Relationship::where('name', 'accounts_contacts')
@@ -37,24 +37,24 @@ class ModuleSubpanelSeeder extends Seeder
             'field_id' => Field::where('module_id',
                 Module::where('name', 'contacts')->first()->id
             )
-                ->where('name', 'profile_pic')->first()->id
+                ->where('name', 'profile_pic')->first()->id,
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'contacts')->first()->id
             )
-                ->where('name', 'first_name')->first()->id
+                ->where('name', 'first_name')->first()->id,
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'contacts')->first()->id
             )
-                ->where('name', 'last_name')->first()->id
+                ->where('name', 'last_name')->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'leads_accounts_opportunities',
             'label' => 'Leads and Opportunities',
             'relationship_id' => Relationship::where('name', 'leads_accounts_opportunities')->first()->id,
@@ -66,26 +66,24 @@ class ModuleSubpanelSeeder extends Seeder
             'field_id' => Field::where('module_id',
                 Module::where('name', 'leads')->first()->id
             )
-            ->where('name', 'first_name')->first()->id
+            ->where('name', 'first_name')->first()->id,
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'leads')->first()->id
             )
-                ->where('name', 'last_name')->first()->id
+                ->where('name', 'last_name')->first()->id,
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'opportunities')->first()->id
             )
-                ->where('name', 'name')->first()->id
+                ->where('name', 'name')->first()->id,
         ]);
 
-
-
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'contacts_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_contacts')
@@ -96,10 +94,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'contacts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_opportunities',
             'label' => 'Opportunities',
             'relationship_id' => Relationship::where('name', 'accounts_opportunities')
@@ -110,24 +108,24 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'opportunities')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'opportunities_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_opportunities')
                 ->orWhere('name', 'opportunities_accounts')->first()->id,
-           'module_id' => Module::where('name', 'opportunities')->first()->id,
+            'module_id' => Module::where('name', 'opportunities')->first()->id,
         ]);
         SubpanelField::insert([
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_cases',
             'label' => 'Cases',
             'relationship_id' => Relationship::where('name', 'accounts_cases')
@@ -138,10 +136,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'cases')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'cases_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_cases')
@@ -152,10 +150,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_meetings',
             'label' => 'Meetings',
             'relationship_id' => Relationship::where('name', 'accounts_meetings')
@@ -166,10 +164,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'meetings')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'meetings_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_meetings')
@@ -180,10 +178,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_notes',
             'label' => 'Notes',
             'relationship_id' => Relationship::where('name', 'accounts_notes')
@@ -194,10 +192,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'notes')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'notes_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_notes')
@@ -208,10 +206,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_documents',
             'label' => 'Documents',
             'relationship_id' => Relationship::where('name', 'accounts_documents')
@@ -222,10 +220,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'documents')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'documents_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_documents')
@@ -236,10 +234,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_notes',
             'label' => 'Notes',
             'relationship_id' => Relationship::where('name', 'accounts_notes')
@@ -250,10 +248,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'notes')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'notes_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_notes')
@@ -264,7 +262,7 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 /*
         $id=ModuleSubpanel::insertGetId([
@@ -324,7 +322,7 @@ class ModuleSubpanelSeeder extends Seeder
 
 */
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'projects_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'projects_accounts')
@@ -335,10 +333,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_projects',
             'label' => 'Projects',
             'relationship_id' => Relationship::where('name', 'projects_accounts')
@@ -349,7 +347,7 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'projects')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 /*
         $id=ModuleSubpanel::insertGetId([
@@ -371,7 +369,7 @@ class ModuleSubpanelSeeder extends Seeder
         ]);
 */
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'contracts_notes',
             'label' => 'Notes',
             'relationship_id' => Relationship::where('name', 'contracts_notes')
@@ -382,10 +380,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'notes')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'notes_contracts',
             'label' => 'Contracts',
             'relationship_id' => Relationship::where('name', 'contracts_notes')
@@ -396,10 +394,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'contracts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_invoices',
             'label' => 'Tasks',
             'relationship_id' => Relationship::where('name', 'accounts_invoices')
@@ -410,10 +408,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'invoices')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'invoices_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'accounts_invoices')
@@ -424,10 +422,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'opportunities_quotes',
             'label' => 'Quotes',
             'relationship_id' => Relationship::where('name', 'opportunities_quotes')
@@ -438,10 +436,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'quotes')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'groups_accounts',
             'label' => 'Accounts',
             'relationship_id' => Relationship::where('name', 'groups_accounts')
@@ -452,10 +450,10 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'accounts')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-        $id=ModuleSubpanel::insertGetId([
+        $id = ModuleSubpanel::insertGetId([
             'name' => 'accounts_groups',
             'label' => 'Groups',
             'relationship_id' => Relationship::where('name', 'groups_accounts')
@@ -466,11 +464,9 @@ class ModuleSubpanelSeeder extends Seeder
             'subpanel_id' => $id,
             'field_id' => Field::where('module_id',
                 Module::where('name', 'groups')->first()->id
-            )->first()->id
+            )->first()->id,
         ]);
 
-
-        Log::info("ModuleSubpanel Seeding Complete");
+        Log::info('ModuleSubpanel Seeding Complete');
     }
 }
-

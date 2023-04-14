@@ -21,6 +21,6 @@ class ModuleFactory extends Factory
             'table_name' => Str::random(10),
             'type' => 'default',
         ];
-                
+
     }
 }

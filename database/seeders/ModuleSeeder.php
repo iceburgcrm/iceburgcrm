@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Module;
+use App\Models\ModuleConvertable;
+use App\Models\ModuleGroup;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Log;
-use App\Models\Module;
-use App\Models\ModuleGroup;
-use App\Models\ModuleConvertable;
 
 class ModuleSeeder extends Seeder
 {
@@ -26,13 +25,13 @@ class ModuleSeeder extends Seeder
         $this->seedConvertedModules();
     }
 
-    private function seedConvertedModules(){
+    private function seedConvertedModules()
+    {
         ModuleConvertable::insert([
-           'primary_module_id' => Module::where('name', 'leads')->first()->id,
-           'module_id' => Module::where('name', 'contacts')->first()->id,
+            'primary_module_id' => Module::where('name', 'leads')->first()->id,
+            'module_id' => Module::where('name', 'contacts')->first()->id,
             'level' => 1,
         ]);
-
 
         ModuleConvertable::insert([
             'primary_module_id' => Module::where('name', 'contacts')->first()->id,
@@ -66,7 +65,8 @@ class ModuleSeeder extends Seeder
 
     }
 
-    private function seedModuleGroups(){
+    private function seedModuleGroups()
+    {
         ModuleGroup::insert([
             'id' => '1',
             'name' => 'companies',
@@ -108,7 +108,8 @@ class ModuleSeeder extends Seeder
         ]);
     }
 
-    private function seedModules(){
+    private function seedModules()
+    {
 
         $order = 0;
         Module::insert([
@@ -155,7 +156,7 @@ class ModuleSeeder extends Seeder
             'primary' => 1,
         ]);
 
-        $leadId=Module::insertGetId([
+        $leadId = Module::insertGetId([
             'name' => 'leads',
             'label' => 'Leads',
             'description' => 'Lead module',
@@ -165,7 +166,6 @@ class ModuleSeeder extends Seeder
             'status' => 1,
             'primary' => 1,
         ]);
-
 
         Module::insert([
             'name' => 'opportunities',
@@ -276,7 +276,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -287,7 +287,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -323,8 +323,7 @@ class ModuleSeeder extends Seeder
             'primary' => 1,
         ]);
 
-
-        $countriesId= Module::insertGetId([
+        $countriesId = Module::insertGetId([
             'name' => 'countries',
             'label' => 'Countries',
             'description' => 'Countries',
@@ -332,7 +331,7 @@ class ModuleSeeder extends Seeder
             'view_order' => $order++,
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -343,7 +342,7 @@ class ModuleSeeder extends Seeder
             'icon' => 'GlobeAmericasIcon',
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -353,7 +352,7 @@ class ModuleSeeder extends Seeder
             'view_order' => $order++,
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -369,7 +368,6 @@ class ModuleSeeder extends Seeder
             'primary' => 1,
         ]);
 
-
         Module::insert([
             'name' => 'contract_status',
             'label' => 'Contract Status',
@@ -377,7 +375,7 @@ class ModuleSeeder extends Seeder
             'view_order' => $order++,
             'module_group_id' => 6,
             'faker_seed' => 0,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -388,7 +386,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -411,7 +409,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -422,7 +420,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -433,7 +431,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -444,7 +442,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -455,7 +453,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -466,7 +464,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -477,7 +475,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -488,7 +486,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -499,7 +497,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -511,7 +509,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -522,7 +520,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -533,7 +531,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -545,7 +543,7 @@ class ModuleSeeder extends Seeder
             'view_order' => $order++,
             'status' => 1,
             'faker_seed' => 1,
-            'create_table' => 1
+            'create_table' => 1,
         ]);
 
         Module::insert([
@@ -556,7 +554,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -567,7 +565,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -578,7 +576,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -589,7 +587,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -600,7 +598,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -611,7 +609,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -622,7 +620,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -633,7 +631,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -644,7 +642,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -655,7 +653,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -666,7 +664,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -677,7 +675,7 @@ class ModuleSeeder extends Seeder
             'module_group_id' => 6,
             'faker_seed' => 0,
             'create_table' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -699,7 +697,7 @@ class ModuleSeeder extends Seeder
             'faker_seed' => 0,
             'create_table' => 0,
             'admin' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -711,7 +709,7 @@ class ModuleSeeder extends Seeder
             'faker_seed' => 0,
             'create_table' => 0,
             'admin' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -723,7 +721,7 @@ class ModuleSeeder extends Seeder
             'faker_seed' => 0,
             'create_table' => 0,
             'admin' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -735,7 +733,7 @@ class ModuleSeeder extends Seeder
             'faker_seed' => 0,
             'create_table' => 0,
             'admin' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
         Module::insert([
@@ -747,12 +745,9 @@ class ModuleSeeder extends Seeder
             'faker_seed' => 0,
             'create_table' => 0,
             'admin' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
 
-
-        Log::info("Modules Seeding Complete");
+        Log::info('Modules Seeding Complete');
     }
-
-
 }

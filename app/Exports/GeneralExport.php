@@ -8,12 +8,15 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 class GeneralExport implements FromCollection
 {
     private Collection $data;
-    function __construct(Collection $data) {
-        $this->data=$data;
+
+    public function __construct(Collection $data)
+    {
+        $this->data = $data;
     }
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return $this->data;

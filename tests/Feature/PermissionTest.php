@@ -2,17 +2,16 @@
 
 namespace Tests\Feature;
 
-use App\Models\Field;
 use App\Models\Module;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\Permission;
 
 class PermissionTest extends TestCase
 {
     use RefreshDatabase;
+
     public $user;
 
     public function setUp(): void
@@ -21,6 +20,7 @@ class PermissionTest extends TestCase
         $this->artisan('db:seed');
         $this->user = User::find(1);
     }
+
     /**
      * A basic feature test example.
      *
@@ -36,15 +36,14 @@ class PermissionTest extends TestCase
     public function test_can_set_can_read()
     {
         $original = [
-            'can_read' => Permission::where('id', 1)->value('can_read')
+            'can_read' => Permission::where('id', 1)->value('can_read'),
         ];
 
         $data = [
             'current_state' => $original['can_read'],
             'id' => 1,
-            'type' => "read"
+            'type' => 'read',
         ];
-
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/data/permissions/save', $data);
@@ -53,19 +52,17 @@ class PermissionTest extends TestCase
 
     }
 
-
     public function test_can_set_can_write()
     {
         $original = [
-            'can_write' => Permission::where('id', 1)->value('can_write')
+            'can_write' => Permission::where('id', 1)->value('can_write'),
         ];
 
         $data = [
             'current_state' => $original['can_write'],
             'id' => 1,
-            'type' => "write"
+            'type' => 'write',
         ];
-
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/data/permissions/save', $data);
@@ -77,15 +74,14 @@ class PermissionTest extends TestCase
     public function test_can_set_can_export()
     {
         $original = [
-            'can_export' => Permission::where('id', 1)->value('can_export')
+            'can_export' => Permission::where('id', 1)->value('can_export'),
         ];
 
         $data = [
             'current_state' => $original['can_export'],
             'id' => 1,
-            'type' => "export"
+            'type' => 'export',
         ];
-
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/data/permissions/save', $data);
@@ -97,15 +93,14 @@ class PermissionTest extends TestCase
     public function test_can_set_can_import()
     {
         $original = [
-            'can_import' => Permission::where('id', 1)->value('can_import')
+            'can_import' => Permission::where('id', 1)->value('can_import'),
         ];
 
         $data = [
             'current_state' => $original['can_import'],
             'id' => 1,
-            'type' => "import"
+            'type' => 'import',
         ];
-
 
         $response = $this->actingAs($this->user)
             ->json('POST', '/data/permissions/save', $data);
@@ -123,7 +118,7 @@ class PermissionTest extends TestCase
 
     public function test_regular_user_cannot_access_admin_area()
     {
-        $user=User::find(2);
+        $user = User::find(2);
         $response = $this->actingAs($user)->get('/admin/permissions');
         $response->assertStatus(302);
 
@@ -134,14 +129,14 @@ class PermissionTest extends TestCase
         $data = [
             'current_state' => 1,
             'id' => 1,
-            'type' => "read"
+            'type' => 'read',
         ];
 
         $this->actingAs($this->user)
             ->json('POST', '/data/permissions/save', $data);
 
         $module = Module::find(1);
-        $this->actingAs($this->user)->get('/module/' . $module->name)
+        $this->actingAs($this->user)->get('/module/'.$module->name)
                     ->assertStatus(302);
     }
 
@@ -150,7 +145,7 @@ class PermissionTest extends TestCase
         $data = [
             'current_state' => 1,
             'id' => 1,
-            'type' => "write"
+            'type' => 'write',
         ];
 
         $this->actingAs($this->user)
@@ -159,8 +154,7 @@ class PermissionTest extends TestCase
         $response = $this->actingAs($this->user)->get('/admin/permissions');
 
         $module = Module::find(1);
-        $this->actingAs($this->user)->get('/module/' . $module->name . "/edit/1")
+        $this->actingAs($this->user)->get('/module/'.$module->name.'/edit/1')
             ->assertStatus(302);
     }
-
 }

@@ -2,32 +2,27 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Log;
 use App\Models\Field;
 use App\Models\Module;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 
 class FieldSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run() : void
+    public function run(): void
     {
         Field::truncate();
 
-
-        Module::get()->each(function ($module){
-            if(method_exists($this, $module->name)){
-                Log::info("Pre" . $module->name . "Generated");
+        Module::get()->each(function ($module) {
+            if (method_exists($this, $module->name)) {
+                Log::info('Pre'.$module->name.'Generated');
                 $this->{$module->name}($module->id);
-                Log::info($module->name . "Generated");
-            }
-            else {
-                Log::info($module->name . "Not Generated");
+                Log::info($module->name.'Generated');
+            } else {
+                Log::info($module->name.'Not Generated');
             }
 
         });
@@ -36,68 +31,67 @@ class FieldSeeder extends Seeder
 
     public function Ice_Modules()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'read_only'     => 1,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'read_only' => 1,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'label',
-            'label'         => 'Label',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'label',
+            'label' => 'Label',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'description',
-            'label'         => 'Description',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'description',
+            'label' => 'Description',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
-            'data_type'     => 'boolean',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
+            'data_type' => 'boolean',
         ], $order++));
 
-
-        $related_module_id=Module::getId('ice_modules');
+        $related_module_id = Module::getId('ice_modules');
         Field::insert(Field::getField([
-            'name'          => 'parent_id',
-            'label'         => 'Parent Module',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'parent_id',
+            'label' => 'Parent Module',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'view_order',
-            'label'         => 'View Order',
-            'module_id'     => $moduleId,
-            'input_type'    => 'text',
+            'name' => 'view_order',
+            'label' => 'View Order',
+            'module_id' => $moduleId,
+            'input_type' => 'text',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'admin',
-            'label'         => 'Admin Module',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
+            'name' => 'admin',
+            'label' => 'Admin Module',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
             'data_type' => 'Boolean',
         ], $order++));
     }
@@ -107,56 +101,56 @@ class FieldSeeder extends Seeder
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'read_only'     => 1,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'read_only' => 1,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'label',
-            'label'         => 'Label',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'label',
+            'label' => 'Label',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'input_type',
-            'label'         => 'Input Type',
-            'module_id'     => $moduleId,
-            'field_length'  => 16,
-            'input_type'    => 'text',
+            'name' => 'input_type',
+            'label' => 'Input Type',
+            'module_id' => $moduleId,
+            'field_length' => 16,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'validation',
-            'label'         => 'Validation',
-            'module_id'     => $moduleId,
-            'field_length'  => 16,
-            'input_type'    => 'text',
+            'name' => 'validation',
+            'label' => 'Validation',
+            'module_id' => $moduleId,
+            'field_length' => 16,
+            'input_type' => 'text',
         ], $order++));
 
-        $related_module_id=Module::getId('ice_modules');
+        $related_module_id = Module::getId('ice_modules');
         Field::insert(Field::getField([
-            'name'          => 'module_id',
-            'label'         => 'Module',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'module_id',
+            'label' => 'Module',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
-            'data_type'     => 'boolean',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
+            'data_type' => 'boolean',
         ], $order++));
 
     }
@@ -166,57 +160,56 @@ class FieldSeeder extends Seeder
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'read_only'     => 1,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'read_only' => 1,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'label',
-            'label'         => 'Label',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'read_only'     => 1,
-            'input_type'    => 'text',
+            'name' => 'label',
+            'label' => 'Label',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'read_only' => 1,
+            'input_type' => 'text',
         ], $order++));
 
-        $related_module_id=Module::getId('ice_modules');
+        $related_module_id = Module::getId('ice_modules');
         Field::insert(Field::getField([
-            'name'          => 'module_id',
-            'label'         => 'Module',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'module_id',
+            'label' => 'Module',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'list_size',
-            'label'         => 'List Size',
-            'module_id'     => $moduleId,
-            'input_type'    => 'text',
+            'name' => 'list_size',
+            'label' => 'List Size',
+            'module_id' => $moduleId,
+            'input_type' => 'text',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'list_order_column',
-            'label'         => 'List Order Column',
-            'module_id'     => $moduleId,
-            'input_type'    => 'text',
+            'name' => 'list_order_column',
+            'label' => 'List Order Column',
+            'module_id' => $moduleId,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'list_order',
-            'label'         => 'List Order',
-            'module_id'     => $moduleId,
-            'input_type'    => 'text',
+            'name' => 'list_order',
+            'label' => 'List Order',
+            'module_id' => $moduleId,
+            'input_type' => 'text',
         ], $order++));
-
 
     }
 
@@ -225,571 +218,561 @@ class FieldSeeder extends Seeder
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'read_only'     => 1,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'read_only' => 1,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'label',
-            'label'         => 'Label',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'read_only'     => 1,
-            'input_type'    => 'text',
+            'name' => 'label',
+            'label' => 'Label',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'read_only' => 1,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'type',
-            'label'         => 'Type',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'type',
+            'label' => 'Type',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'field_id',
-            'label'         => 'Field ID',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'field_id',
+            'label' => 'Field ID',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'module_id',
-            'label'         => 'Module ID',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'module_id',
+            'label' => 'Module ID',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'relationship_id',
-            'label'         => 'Relationship ID',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'relationship_id',
+            'label' => 'Relationship ID',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'display_order',
-            'label'         => 'Display Order',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'display_order',
+            'label' => 'Display Order',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'type',
-            'label'         => 'Type',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'type',
+            'label' => 'Type',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
-
         Field::insert(Field::getField([
-            'name'          => 'active',
-            'label'         => 'Active',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
+            'name' => 'active',
+            'label' => 'Active',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
             'data_type' => 'Boolean',
         ], $order++));
 
     }
 
-
     public function Ice_Users()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'profile_pic',
-            'label'         => 'Image',
-            'module_id'     => $moduleId,
-            'input_type'    => 'image',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'profile_pic',
+            'label' => 'Image',
+            'module_id' => $moduleId,
+            'input_type' => 'image',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'password',
-            'label'         => 'Password',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type' => 'password'
+            'name' => 'password',
+            'label' => 'Password',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'password',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email',
-            'label'         => 'Email',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type' => 'email'
+            'name' => 'email',
+            'label' => 'Email',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'email',
         ], $order++));
 
-        $related_module_id=Module::getId('ice_roles');
+        $related_module_id = Module::getId('ice_roles');
         Field::insert(Field::getField([
-            'name'          => 'role_id',
-            'label'         => 'User Role',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'role_id',
+            'label' => 'User Role',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
-
-
 
     }
 
     public function Ice_Roles()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Task_Status()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Task_Types()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Case_Status()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Case_Priorities()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Project_Priorities()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Case_Types()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Project_Status()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Project_Types()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Quote_Status()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Task_Priorities()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Group_Types()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
     public function Products()
     {
-        $order=0;
+        $order = 0;
 
-        $moduleId=Module::getId(__FUNCTION__);
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'text',
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'text',
         ], $order++));
     }
 
-
     public function Countries()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'code',
-            'label'         => 'Code',
-            'module_id'     => $moduleId,
-            'field_length'  => 16,
+            'name' => 'code',
+            'label' => 'Code',
+            'module_id' => $moduleId,
+            'field_length' => 16,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'name',
-            'module_id'     => $moduleId,
-            'field_length'  => 100,
+            'name' => 'name',
+            'label' => 'name',
+            'module_id' => $moduleId,
+            'field_length' => 100,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'flag',
-            'label'         => 'Flag',
-            'module_id'     => $moduleId,
-            'input_type'    => 'image',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'flag',
+            'label' => 'Flag',
+            'module_id' => $moduleId,
+            'input_type' => 'image',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
     }
 
     public function Currency()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 32,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'code',
-            'label'         => 'Code',
-            'module_id'     => $moduleId,
-            'field_length'  => 3,
+            'name' => 'code',
+            'label' => 'Code',
+            'module_id' => $moduleId,
+            'field_length' => 3,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'symbol',
-            'label'         => 'Symbol',
-            'module_id'     => $moduleId,
-            'field_length'  => 3,
+            'name' => 'symbol',
+            'label' => 'Symbol',
+            'module_id' => $moduleId,
+            'field_length' => 3,
         ], $order++));
     }
 
     public function Contract_Status()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
-
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'name',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
+            'name' => 'name',
+            'label' => 'name',
+            'module_id' => $moduleId,
+            'field_length' => 32,
         ], $order++));
     }
 
     public function Account_Status()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
-
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'name',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
+            'name' => 'name',
+            'label' => 'name',
+            'module_id' => $moduleId,
+            'field_length' => 32,
         ], $order++));
     }
 
     public function Ice_Themes()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
-
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'name',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
+            'name' => 'name',
+            'label' => 'name',
+            'module_id' => $moduleId,
+            'field_length' => 32,
         ], $order++));
     }
 
     public function Accounts()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'company_logo',
-            'label'         => 'Company Logo',
-            'module_id'     => $moduleId,
-            'input_type'    => 'image',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'company_logo',
+            'label' => 'Company Logo',
+            'module_id' => $moduleId,
+            'input_type' => 'image',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'validation'    => 'required|max:200',
-            'field_length'  => 64,
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'validation' => 'required|max:200',
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'first_name',
-            'label'         => 'First Name',
-            'validation'    => 'required|max:50',
-            'required'      => 1,
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'first_name',
+            'label' => 'First Name',
+            'validation' => 'required|max:50',
+            'required' => 1,
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'last_name',
-            'label'         => 'Last Name',
-            'required'      => 1,
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'last_name',
+            'label' => 'Last Name',
+            'required' => 1,
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'color',
-            'label'         => 'Brand Color',
-            'module_id'     => $moduleId,
-            'input_type'    => 'color'
+            'name' => 'color',
+            'label' => 'Brand Color',
+            'module_id' => $moduleId,
+            'input_type' => 'color',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email',
-            'label'         => 'Email',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'email',
+            'name' => 'email',
+            'label' => 'Email',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'email',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'phone',
-            'label'         => 'Phone',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
+            'name' => 'phone',
+            'label' => 'Phone',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'fax',
-            'label'         => 'Fax',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
-        ], $order++));
-
-
-
-        Field::insert(Field::getField([
-            'name'          => 'website',
-            'label'         => 'Website',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'url',
+            'name' => 'fax',
+            'label' => 'Fax',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'address',
-            'label'         => 'Address',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'address',
+            'name' => 'website',
+            'label' => 'Website',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'url',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'city',
-            'label'         => 'City',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'city',
+            'name' => 'address',
+            'label' => 'Address',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'address',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'zip',
-            'label'         => 'Zip',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type' => 'zip'
+            'name' => 'city',
+            'label' => 'City',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'city',
         ], $order++));
 
-        $related_module_id=Module::getId('states');
         Field::insert(Field::getField([
-            'name'          => 'state',
-            'label'         => 'State',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'zip',
+            'label' => 'Zip',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'zip',
+        ], $order++));
+
+        $related_module_id = Module::getId('states');
+        Field::insert(Field::getField([
+            'name' => 'state',
+            'label' => 'State',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
 
-        $related_module_id=Module::getId('countries');
+        $related_module_id = Module::getId('countries');
         Field::insert(Field::getField([
-            'name'          => 'country',
-            'label'         => 'Country',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'country',
+            'label' => 'Country',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'description',
-            'label'         => 'Description',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'textarea',
+            'name' => 'description',
+            'label' => 'Description',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id=Module::getId('account_status');
+        $related_module_id = Module::getId('account_status');
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
@@ -797,148 +780,148 @@ class FieldSeeder extends Seeder
 
     public function Contacts()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'profile_pic',
-            'label'         => 'Image',
-            'module_id'     => $moduleId,
-            'input_type'    => 'image',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'profile_pic',
+            'label' => 'Image',
+            'module_id' => $moduleId,
+            'input_type' => 'image',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'first_name',
-            'label'         => 'First Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'first_name',
+            'label' => 'First Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'last_name',
-            'label'         => 'Last Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'last_name',
+            'label' => 'Last Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email',
-            'label'         => 'Email',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'email',
+            'name' => 'email',
+            'label' => 'Email',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'email',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'phone',
-            'label'         => 'Phone',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
+            'name' => 'phone',
+            'label' => 'Phone',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'fax',
-            'label'         => 'Fax',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
+            'name' => 'fax',
+            'label' => 'Fax',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'website',
-            'label'         => 'Website',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'url',
+            'name' => 'website',
+            'label' => 'Website',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'url',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'address',
-            'label'         => 'Address',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'address',
+            'name' => 'address',
+            'label' => 'Address',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'address',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'city',
-            'label'         => 'City',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'city',
+            'name' => 'city',
+            'label' => 'City',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'city',
         ], $order++));
 
-        $related_module_id=Module::getId('states');
+        $related_module_id = Module::getId('states');
         Field::insert(Field::getField([
-            'name'          => 'state',
-            'label'         => 'State',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'state',
+            'label' => 'State',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'zip',
-            'label'         => 'Zip',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type' => 'zip'
+            'name' => 'zip',
+            'label' => 'Zip',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'zip',
         ], $order++));
 
-        $related_module_id=Module::getId('countries');
+        $related_module_id = Module::getId('countries');
         Field::insert(Field::getField([
-            'name'          => 'country',
-            'label'         => 'Country',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'country',
+            'label' => 'Country',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'description',
-            'label'         => 'Description',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'textarea',
+            'name' => 'description',
+            'label' => 'Description',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id=Module::getId('contract_status');
+        $related_module_id = Module::getId('contract_status');
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email_receive',
-            'label'         => 'Email Opt Out',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
+            'name' => 'email_receive',
+            'label' => 'Email Opt Out',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
             'data_type' => 'boolean',
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
@@ -946,334 +929,327 @@ class FieldSeeder extends Seeder
 
     public function Contracts()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
-
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'description',
-            'label'         => 'Description',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'textarea',
+            'name' => 'description',
+            'label' => 'Description',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'textarea',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'discount',
-            'label'         => 'Discount',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'discount',
+            'label' => 'Discount',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'taxes',
-            'label'         => 'Taxes',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'taxes',
+            'label' => 'Taxes',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
-            'decimal_places' => 2,
-        ], $order++));
-
-
-        Field::insert(Field::getField([
-            'name'          => 'shipping',
-            'label'         => 'Shipping',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
-            'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'subtotal',
-            'label'         => 'Subtotal',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'shipping',
+            'label' => 'Shipping',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
-
         Field::insert(Field::getField([
-            'name'          => 'total',
-            'label'         => 'Total',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'subtotal',
+            'label' => 'Subtotal',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
-        $related_module_id=Module::getId('currency');
         Field::insert(Field::getField([
-            'name'          => 'currency',
-            'label'         => 'Currency',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'total',
+            'label' => 'Total',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
+            'data_type' => 'float',
+            'field_length' => 8,
+            'decimal_places' => 2,
+        ], $order++));
+
+        $related_module_id = Module::getId('currency');
+        Field::insert(Field::getField([
+            'name' => 'currency',
+            'label' => 'Currency',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('contacts');
+        $related_module_id = Module::getId('contacts');
         Field::insert(Field::getField([
-            'name'          => 'signed_by',
-            'label'         => 'Signed By',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'signed_by',
+            'label' => 'Signed By',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'last_name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'last_name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('contract_types');
+        $related_module_id = Module::getId('contract_types');
         Field::insert(Field::getField([
-            'name'          => 'contract_type',
-            'label'         => 'Contract Type',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'contract_type',
+            'label' => 'Contract Type',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'start_date',
-            'label'         => 'Start Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'start_date',
+            'label' => 'Start Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'end_date',
-            'label'         => 'End Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'end_date',
+            'label' => 'End Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
     }
 
     public function Lineitems()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
-
-        $related_module_id=Module::getId('products');
+        $related_module_id = Module::getId('products');
         Field::insert(Field::getField([
-            'name'          => 'product_id',
-            'label'         => 'Product',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'product_id',
+            'label' => 'Product',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'quantity',
-            'label'         => 'Quantity',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'quantity',
+            'label' => 'Quantity',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'price',
-            'label'         => 'Price',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'price',
+            'label' => 'Price',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'unit_price',
-            'label'         => 'Unit Price',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'unit_price',
+            'label' => 'Unit Price',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'cost',
-            'label'         => 'Cost',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'cost',
+            'label' => 'Cost',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'discount',
-            'label'         => 'Discount',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'discount',
+            'label' => 'Discount',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
-        $related_module_id=Module::getId('discount_types');
+        $related_module_id = Module::getId('discount_types');
         Field::insert(Field::getField([
-            'name'          => 'discount_type',
-            'label'         => 'Discount Type',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'discount_type',
+            'label' => 'Discount Type',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'taxes',
-            'label'         => 'Taxes',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'taxes',
+            'label' => 'Taxes',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'gross',
-            'label'         => 'Gross',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'gross',
+            'label' => 'Gross',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'net',
-            'label'         => 'Net',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'net',
+            'label' => 'Net',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
-
         Field::insert(Field::getField([
-            'name'          => 'description',
-            'label'         => 'Description',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'textarea',
+            'name' => 'description',
+            'label' => 'Description',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'textarea',
         ], $order++));
-
 
     }
 
     public function Opportunities()
     {
-        $order=0;
-        $moduleId=Module::getId(__FUNCTION__);
-
+        $order = 0;
+        $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'name',
-            'label'         => 'Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
+            'name' => 'name',
+            'label' => 'Name',
+            'module_id' => $moduleId,
+            'field_length' => 128,
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('opportunity_types');
+        $related_module_id = Module::getId('opportunity_types');
         Field::insert(Field::getField([
-            'name'          => 'type',
-            'label'         => 'Type',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'type',
+            'label' => 'Type',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'amount',
-            'label'         => 'Amount',
-            'module_id'     => $moduleId,
-            'input_type'    => 'currency',
+            'name' => 'amount',
+            'label' => 'Amount',
+            'module_id' => $moduleId,
+            'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'probability',
-            'label'         => 'Probability',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'probability',
+            'label' => 'Probability',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'close_date',
-            'label'         => 'Close Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'close_date',
+            'label' => 'Close Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
 
-        $related_module_id=Module::getId('opportunity_status');
+        $related_module_id = Module::getId('opportunity_status');
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 /*
@@ -1295,36 +1271,36 @@ class FieldSeeder extends Seeder
     public function Orders()
     {
         $moduleId = Module::getId(__FUNCTION__);
-        $order=0;
+        $order = 0;
 
         Field::insert(Field::getField([
-            'name'          => 'first_name',
-            'label'         => 'First Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'first_name',
+            'label' => 'First Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'last_name',
-            'label'         => 'Last Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'last_name',
+            'label' => 'Last Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email',
-            'label'         => 'Email',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'email',
+            'name' => 'email',
+            'label' => 'Email',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'email',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'phone',
-            'label'         => 'Phone',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
+            'name' => 'phone',
+            'label' => 'Phone',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         $related_module_id = Module::getId('quote_status');
@@ -1422,7 +1398,7 @@ class FieldSeeder extends Seeder
             'label' => 'Billing Zip',
             'module_id' => $moduleId,
             'field_length' => 32,
-            'input_type' => 'zip'
+            'input_type' => 'zip',
         ], $order++));
 
         $related_module_id = Module::getId('states');
@@ -1470,7 +1446,7 @@ class FieldSeeder extends Seeder
             'label' => 'Shipping Zip',
             'module_id' => $moduleId,
             'field_length' => 32,
-            'input_type' => 'zip'
+            'input_type' => 'zip',
         ], $order++));
 
         $related_module_id = Module::getId('states');
@@ -1497,32 +1473,30 @@ class FieldSeeder extends Seeder
             'related_module_id' => $related_module_id,
         ], $order++));
 
-
-        $related_module_id=Module::getId('products');
+        $related_module_id = Module::getId('products');
         Field::insert(Field::getField([
-            'name'          => 'product',
-            'label'         => 'Product',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'product',
+            'label' => 'Product',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
     }
 
-
     public function Sales()
     {
         $moduleId = Module::getId(__FUNCTION__);
-        $order=0;
+        $order = 0;
 
         Field::insert(Field::getField([
-            'name'          => 'total',
-            'label'         => 'Total',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
+            'name' => 'total',
+            'label' => 'Total',
+            'module_id' => $moduleId,
+            'field_length' => 32,
             'data_type' => 'Integer',
         ], $order++));
     }
@@ -1533,167 +1507,167 @@ class FieldSeeder extends Seeder
         $moduleId = Module::getId(__FUNCTION__);
 
         Field::insert(Field::getField([
-            'name'          => 'first_name',
-            'label'         => 'First Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'first_name',
+            'label' => 'First Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'last_name',
-            'label'         => 'Last Name',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
+            'name' => 'last_name',
+            'label' => 'Last Name',
+            'module_id' => $moduleId,
+            'field_length' => 64,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email',
-            'label'         => 'Email',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'email',
+            'name' => 'email',
+            'label' => 'Email',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'email',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'phone',
-            'label'         => 'Phone',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
+            'name' => 'phone',
+            'label' => 'Phone',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'fax',
-            'label'         => 'Fax',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type'    => 'tel',
+            'name' => 'fax',
+            'label' => 'Fax',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'tel',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'website',
-            'label'         => 'Website',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'url',
+            'name' => 'website',
+            'label' => 'Website',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'url',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'address',
-            'label'         => 'Address',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'address',
+            'name' => 'address',
+            'label' => 'Address',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'address',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'city',
-            'label'         => 'City',
-            'module_id'     => $moduleId,
-            'field_length'  => 64,
-            'input_type'    => 'city',
+            'name' => 'city',
+            'label' => 'City',
+            'module_id' => $moduleId,
+            'field_length' => 64,
+            'input_type' => 'city',
         ], $order++));
 
-        $related_module_id=Module::getId('states');
+        $related_module_id = Module::getId('states');
         Field::insert(Field::getField([
-            'name'          => 'state',
-            'label'         => 'State',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'state',
+            'label' => 'State',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'related_module_id' => $related_module_id,
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'data_type' => 'Integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'zip',
-            'label'         => 'Zip',
-            'module_id'     => $moduleId,
-            'field_length'  => 32,
-            'input_type' => 'zip'
+            'name' => 'zip',
+            'label' => 'Zip',
+            'module_id' => $moduleId,
+            'field_length' => 32,
+            'input_type' => 'zip',
         ], $order++));
 
-        $related_module_id=Module::getId('countries');
+        $related_module_id = Module::getId('countries');
         Field::insert(Field::getField([
-            'name'          => 'country',
-            'label'         => 'Country',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'country',
+            'label' => 'Country',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'description',
-            'label'         => 'Description',
-            'module_id'     => $moduleId,
-            'field_length'  => 128,
-            'input_type'    => 'textarea',
+            'name' => 'description',
+            'label' => 'Description',
+            'module_id' => $moduleId,
+            'field_length' => 128,
+            'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id=Module::getId('lead_status');
+        $related_module_id = Module::getId('lead_status');
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'email_receive',
-            'label'         => 'Email Opt Out',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
+            'name' => 'email_receive',
+            'label' => 'Email Opt Out',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
             'data_type' => 'boolean',
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('lead_types');
+        $related_module_id = Module::getId('lead_types');
         Field::insert(Field::getField([
-            'name'          => 'lead_type',
-            'label'         => 'Lead Type',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'lead_type',
+            'label' => 'Lead Type',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-        $related_module_id=Module::getId('lead_sources');
+        $related_module_id = Module::getId('lead_sources');
         Field::insert(Field::getField([
-            'name'          => 'lead_source',
-            'label'         => 'Lead Source',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'lead_source',
+            'label' => 'Lead Source',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
-
 
     }
 
-    public function Ice_Relationships(){
+    public function Ice_Relationships()
+    {
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
 
@@ -1713,7 +1687,6 @@ class FieldSeeder extends Seeder
             'input_type' => 'text',
         ], $order++));
 
-
         Field::insert(Field::getField([
             'name' => 'related_field_types',
             'label' => 'Related Field Types',
@@ -1723,11 +1696,11 @@ class FieldSeeder extends Seeder
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'status',
-            'label'         => 'Status',
-            'module_id'     => $moduleId,
-            'input_type'    => 'checkbox',
-            'data_type'     => 'boolean',
+            'name' => 'status',
+            'label' => 'Status',
+            'module_id' => $moduleId,
+            'input_type' => 'checkbox',
+            'data_type' => 'boolean',
         ], $order++));
     }
 
@@ -1825,19 +1798,19 @@ class FieldSeeder extends Seeder
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'video_recording',
-            'label'         => 'Video Recording',
-            'module_id'     => $moduleId,
-            'input_type'    => 'video',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'video_recording',
+            'label' => 'Video Recording',
+            'module_id' => $moduleId,
+            'input_type' => 'video',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'audio_recording',
-            'label'         => 'Audio Recording',
-            'module_id'     => $moduleId,
-            'input_type'    => 'audio',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'audio_recording',
+            'label' => 'Audio Recording',
+            'module_id' => $moduleId,
+            'input_type' => 'audio',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
 
         Field::insert(Field::getField([
@@ -1850,7 +1823,6 @@ class FieldSeeder extends Seeder
             'related_value_id' => 'last_name',
             'related_module_id' => Module::getId('contacts'),
         ], $order++));
-
 
         Field::insert(Field::getField([
             'name' => 'types',
@@ -1874,19 +1846,20 @@ class FieldSeeder extends Seeder
             'related_module_id' => Module::getId('meeting_status'),
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
     }
+
     public function Notes()
     {
         $order = 0;
@@ -1908,22 +1881,19 @@ class FieldSeeder extends Seeder
             'input_type' => 'textarea',
         ], $order++));
 
-        $related_module_id=Module::getId('ice_users');
+        $related_module_id = Module::getId('ice_users');
         Field::insert(Field::getField([
-            'name'          => 'assigned_to',
-            'label'         => 'Assigned To',
-            'module_id'     => $moduleId,
-            'input_type'    => 'related',
+            'name' => 'assigned_to',
+            'label' => 'Assigned To',
+            'module_id' => $moduleId,
+            'input_type' => 'related',
             'data_type' => 'integer',
-            'related_field_id'=> 'id',
-            'related_value_id'=> 'name',
+            'related_field_id' => 'id',
+            'related_value_id' => 'name',
             'related_module_id' => $related_module_id,
         ], $order++));
 
-
     }
-
-
 
     public function Tasks()
     {
@@ -2003,7 +1973,8 @@ class FieldSeeder extends Seeder
         ], $order++));
     }
 
-    public function Campaigns(){
+    public function Campaigns()
+    {
 
             $order = 0;
             $moduleId = Module::getId(__FUNCTION__);
@@ -2054,7 +2025,7 @@ class FieldSeeder extends Seeder
             'module_id' => $moduleId,
             'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
@@ -2064,7 +2035,7 @@ class FieldSeeder extends Seeder
             'module_id' => $moduleId,
             'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
@@ -2074,7 +2045,7 @@ class FieldSeeder extends Seeder
             'module_id' => $moduleId,
             'input_type' => 'currency',
             'data_type' => 'float',
-            'field_length'  => 8,
+            'field_length' => 8,
             'decimal_places' => 2,
         ], $order++));
 
@@ -2111,13 +2082,12 @@ class FieldSeeder extends Seeder
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'creative',
-            'label'         => 'Creative',
-            'module_id'     => $moduleId,
-            'input_type'    => 'video',
-            'data_type'     => 'MEDIUMTEXT',
+            'name' => 'creative',
+            'label' => 'Creative',
+            'module_id' => $moduleId,
+            'input_type' => 'video',
+            'data_type' => 'MEDIUMTEXT',
         ], $order++));
-
 
     }
 
@@ -2199,7 +2169,6 @@ class FieldSeeder extends Seeder
             'related_module_id' => $related_module_id,
         ], $order++));
 
-
         Field::insert(Field::getField([
             'name' => 'resolution',
             'label' => 'Resolution',
@@ -2207,7 +2176,6 @@ class FieldSeeder extends Seeder
             'field_length' => 190,
             'input_type' => 'textarea',
         ], $order++));
-
 
     }
 
@@ -2281,50 +2249,50 @@ class FieldSeeder extends Seeder
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'start_date',
-            'label'         => 'Start Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'start_date',
+            'label' => 'Start Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'end_date',
-            'label'         => 'End Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'end_date',
+            'label' => 'End Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'due_date',
-            'label'         => 'Due Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'due_date',
+            'label' => 'Due Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'completed_date',
-            'label'         => 'Completed Date',
-            'module_id'     => $moduleId,
-            'input_type'    => 'date',
+            'name' => 'completed_date',
+            'label' => 'Completed Date',
+            'module_id' => $moduleId,
+            'input_type' => 'date',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'estimated_hours',
-            'label'         => 'Estimated Hours',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'estimated_hours',
+            'label' => 'Estimated Hours',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
         Field::insert(Field::getField([
-            'name'          => 'actual_hours',
-            'label'         => 'Actual Hours',
-            'module_id'     => $moduleId,
-            'input_type'    => 'number',
+            'name' => 'actual_hours',
+            'label' => 'Actual Hours',
+            'module_id' => $moduleId,
+            'input_type' => 'number',
             'data_type' => 'integer',
         ], $order++));
 
@@ -2334,7 +2302,6 @@ class FieldSeeder extends Seeder
     {
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
-
 
         Field::insert(Field::getField([
             'name' => 'name',
@@ -2457,7 +2424,7 @@ class FieldSeeder extends Seeder
             'label' => 'Billing Zip',
             'module_id' => $moduleId,
             'field_length' => 32,
-            'input_type' => 'zip'
+            'input_type' => 'zip',
         ], $order++));
 
         $related_module_id = Module::getId('states');
@@ -2505,7 +2472,7 @@ class FieldSeeder extends Seeder
             'label' => 'Shipping Zip',
             'module_id' => $moduleId,
             'field_length' => 32,
-            'input_type' => 'zip'
+            'input_type' => 'zip',
         ], $order++));
 
         $related_module_id = Module::getId('states');
@@ -2545,7 +2512,6 @@ class FieldSeeder extends Seeder
     {
         $order = 0;
         $moduleId = Module::getId(__FUNCTION__);
-
 
         Field::insert(Field::getField([
             'name' => 'name',
@@ -2668,7 +2634,7 @@ class FieldSeeder extends Seeder
             'label' => 'Billing Zip',
             'module_id' => $moduleId,
             'field_length' => 32,
-            'input_type' => 'zip'
+            'input_type' => 'zip',
         ], $order++));
 
         $related_module_id = Module::getId('states');
@@ -2716,7 +2682,7 @@ class FieldSeeder extends Seeder
             'label' => 'Shipping Zip',
             'module_id' => $moduleId,
             'field_length' => 32,
-            'input_type' => 'zip'
+            'input_type' => 'zip',
         ], $order++));
 
         $related_module_id = Module::getId('states');
@@ -2759,9 +2725,7 @@ class FieldSeeder extends Seeder
             'data_type' => 'integer',
         ], $order++));
 
-
     }
-
 
     public function States()
     {
@@ -2802,7 +2766,6 @@ class FieldSeeder extends Seeder
             'field_length' => 128,
         ], $order++));
     }
-
 
     public function Document_Status()
     {
@@ -3051,7 +3014,6 @@ class FieldSeeder extends Seeder
         ], $order++));
     }
 
-
     public function Opportunity_Status()
     {
         $order = 0;
@@ -3181,7 +3143,4 @@ class FieldSeeder extends Seeder
             'field_length' => 128,
         ], $order++));
     }
-
-
-
 }

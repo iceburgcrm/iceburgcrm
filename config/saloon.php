@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Senders\GuzzleSender;
 use Saloon\HttpSender\HttpSender;
 
 return [

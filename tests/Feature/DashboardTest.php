@@ -4,12 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class DashboardTest extends TestCase
 {
     use RefreshDatabase;
+
     public $user;
 
     public function setUp(): void
@@ -18,6 +18,7 @@ class DashboardTest extends TestCase
         $this->artisan('db:seed');
         $this->user = User::find(1);
     }
+
     /**
      * A basic feature test example.
      *

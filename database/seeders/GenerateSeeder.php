@@ -2,23 +2,18 @@
 
 namespace Database\Seeders;
 
-
 use App\Models\Connector;
-use App\Models\Endpoint;
-use App\Models\ModuleConvertable;
-use App\Models\Setting;
-use App\Models\WorkFlowData;
-use Faker\Factory;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Log;
-use App\Models\Module;
-use Illuminate\Support\Facades\DB as DB;
-use App\Models\User;
-use App\Models\DataletType;
 use App\Models\Datalet;
-use App\Models\Field;
+use App\Models\DataletType;
+use App\Models\Endpoint;
+use App\Models\Module;
 use App\Models\Permission;
+use App\Models\Setting;
+use App\Models\User;
+use Faker\Factory;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB as DB;
+use Illuminate\Support\Facades\Log;
 
 class GenerateSeeder extends Seeder
 {
@@ -29,42 +24,41 @@ class GenerateSeeder extends Seeder
      */
     public function run()
     {
-        $seedAmount=50;
-        Log::info("Generating users");
+        $seedAmount = 50;
+        Log::info('Generating users');
         $this->addUsers();
         $this->addSettings();
 
-        Log::info("Generating connectors");
+        Log::info('Generating connectors');
         $this->addConnectors();
 
-        Log::info("Add Workflow Actions");
+        Log::info('Add Workflow Actions');
        // $this->addWorkflowActions();
 
-        Log::info("Add Datalet Types");
+        Log::info('Add Datalet Types');
         $this->addDataletTypes();
         $this->addDatalets();
 
-        Log::info("Generating module");
+        Log::info('Generating module');
         $module = new Module;
         $module->generate($seedAmount);
 
-
-        Log::info("Generating static lists");
+        Log::info('Generating static lists');
 
          $faker = Factory::create();
-        $current=$this;
+        $current = $this;
         Module::where('status', 1)
             ->where('create_table', 1)
             ->where('faker_seed', 0)
             ->get()
-            ->each(function ($module) use ($current, $faker) {
-                if(method_exists($current, $module->name)) {
-                    Log::info("Generating module: " . $module->name);
-                    $table=strtolower($module->name);
+            ->each(function ($module) use ($current) {
+                if (method_exists($current, $module->name)) {
+                    Log::info('Generating module: '.$module->name);
+                    $table = strtolower($module->name);
                     DB::table($table)->truncate();
-                    $data=$current->{$module->name}();
-                    foreach($data as $row) {
-                        $row['slug']=bin2hex(random_bytes(16));
+                    $data = $current->{$module->name}();
+                    foreach ($data as $row) {
+                        $row['slug'] = bin2hex(random_bytes(16));
                         DB::table($table)->insert($row);
                     }
                 }
@@ -74,12 +68,10 @@ class GenerateSeeder extends Seeder
         $this->sampleMedia();
     }
 
-
-
     private function sampleMedia()
     {
-        $file=file_get_contents('http://demo.iceburg.ca/seed/video/christmasornaments.mp4');
-        if($file){
+        $file = file_get_contents('http://demo.iceburg.ca/seed/video/christmasornaments.mp4');
+        if ($file) {
             //  'creative' => 'data:video/mp4;base64,'.base64_encode($file),
             DB::table('campaigns')->insert(
                 ['name' => 'Christmas Ad Campaign',
@@ -95,18 +87,17 @@ class GenerateSeeder extends Seeder
                     'status' => 4,
                     'soft_delete' => 0,
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]
             );
         }
 
-        $data['created_at']=date('Y-m-d H:i:s', strtotime("-" . rand(1, 31) . " DAY"));
-        $data['updated_at']=$data['created_at'];
+        $data['created_at'] = date('Y-m-d H:i:s', strtotime('-'.rand(1, 31).' DAY'));
+        $data['updated_at'] = $data['created_at'];
 
-
-        $file=file_get_contents('http://demo.iceburg.ca/seed/recording/sample.ogg');
+        $file = file_get_contents('http://demo.iceburg.ca/seed/recording/sample.ogg');
         //           'audio_recording' => 'data:audio/ogg;base64,'.base64_encode($file),
-        if($file){
+        if ($file) {
             DB::table('meetings')->insert(
                 ['name' => 'Client Meeting',
                     'description' => 'This is a typical service call',
@@ -119,25 +110,24 @@ class GenerateSeeder extends Seeder
                     'slug' => 'dsfsdfsdfss',
                     'status' => 4,
                     'created_at' => date('Y-m-d H:i:s'),
-                    'updated_at' => date('Y-m-d H:i:s')
+                    'updated_at' => date('Y-m-d H:i:s'),
                 ]
             );
         }
 
-        Log::info("Finished Seeding sample media");
+        Log::info('Finished Seeding sample media');
     }
 
     private function addModulesAndRoles()
     {
         $module = Module::where('name', 'ice_roles')->first();
-        $records=DB::table($module->name)->get();
+        $records = DB::table($module->name)->get();
         Permission::truncate();
-        foreach($records as $record)
-        {
+        foreach ($records as $record) {
             Module::all()->each(function ($module) use ($record) {
                 Permission::insert([
-                   'role_id' => $record->id,
-                   'module_id' => $module->id
+                    'role_id' => $record->id,
+                    'module_id' => $module->id,
                 ]);
             });
         }
@@ -163,38 +153,38 @@ class GenerateSeeder extends Seeder
         Datalet::truncate();
         Datalet::insert([
 
-            ['type'=>1,
-                'module_id'=>0,
+            ['type' => 1,
+                'module_id' => 0,
                 'label' => 'Total Sales',
                 'size' => 12,
                 'display_order' => 1],
-            ['type'=>2,
-                'module_id'=>0,
+            ['type' => 2,
+                'module_id' => 0,
                 'label' => 'Number of new Leads / Contacts / Accounts over the last 7 Days',
                 'size' => 12,
                 'display_order' => 2],
-            ['type'=>3,
-                'module_id'=>0,
+            ['type' => 3,
+                'module_id' => 0,
                 'label' => 'Meetings',
                 'size' => 12,
                 'display_order' => 4],
-            ['type'=>4,
-                'module_id'=>0,
+            ['type' => 4,
+                'module_id' => 0,
                 'label' => 'Number of new Opportunities / Quotes / Contracts over the last 7 Days',
                 'size' => 12,
                 'display_order' => 5],
-            ['type'=>1,
-                'module_id'=>0,
+            ['type' => 1,
+                'module_id' => 0,
                 'label' => 'Orders This Month',
                 'size' => 12,
                 'display_order' => 7],
-            ['type'=>7,
-                'module_id'=>2,
+            ['type' => 7,
+                'module_id' => 2,
                 'label' => 'CRM Stats',
                 'size' => 12,
                 'display_order' => 12],
-            ['type'=>8,
-                'module_id'=>1,
+            ['type' => 8,
+                'module_id' => 1,
                 'label' => 'Totals Report',
                 'size' => 12,
                 'display_order' => 6],
@@ -204,7 +194,7 @@ class GenerateSeeder extends Seeder
 
     private function addWorkflowActions()
     {
-        WorkflowAction::insert (
+        WorkflowAction::insert(
             [
                 ['name' => 'Insert new Module Record'],
                 ['name' => 'Insert new Relationship Record'],
@@ -212,7 +202,7 @@ class GenerateSeeder extends Seeder
                 ['name' => 'Update Relationship Record'],
                 ['name' => 'Delete Module Record'],
                 ['name' => 'Delete Relationship Record'],
-                ['name' => 'Field Change Status']
+                ['name' => 'Field Change Status'],
             ]
         );
     }
@@ -220,105 +210,103 @@ class GenerateSeeder extends Seeder
     private function addUsers()
     {
         User::truncate();
-        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('ice_users')->insertGetId([
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000'.rand(10, 99).'.jpg');
+        $userId = DB::table('ice_users')->insertGetId([
             'name' => 'Admin',
             'email' => 'admin@iceburg.ca',
-            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
+            'profile_pic' => 'data:image/jpg;base64,'.base64_encode($image),
             'password' => bcrypt('admin'),
-            'role_id' => 1
+            'role_id' => 1,
         ]);
 
-        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('ice_users')->insertGetId([
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000'.rand(10, 99).'.jpg');
+        $userId = DB::table('ice_users')->insertGetId([
             'name' => 'User',
             'email' => 'user@iceburg.ca',
-            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
+            'profile_pic' => 'data:image/jpg;base64,'.base64_encode($image),
             'password' => bcrypt('user'),
-            'role_id' => 2
+            'role_id' => 2,
         ]);
 
-        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('ice_users')->insertGetId([
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000'.rand(10, 99).'.jpg');
+        $userId = DB::table('ice_users')->insertGetId([
             'name' => 'Sales',
             'email' => 'sales@iceburg.ca',
-            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
+            'profile_pic' => 'data:image/jpg;base64,'.base64_encode($image),
             'password' => bcrypt('sales'),
-            'role_id' => 3
+            'role_id' => 3,
         ]);
 
-        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('ice_users')->insertGetId([
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000'.rand(10, 99).'.jpg');
+        $userId = DB::table('ice_users')->insertGetId([
             'name' => 'Accounting',
             'email' => 'accounting@iceburg.ca',
-            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
+            'profile_pic' => 'data:image/jpg;base64,'.base64_encode($image),
             'password' => bcrypt('accounting'),
-            'role_id' => 4
+            'role_id' => 4,
         ]);
 
-        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000' . rand(10,99) . '.jpg');
-        $userId=DB::table('ice_users')->insertGetId([
+        $image = file_get_contents('http://demo.iceburg.ca/seed/people/0000'.rand(10, 99).'.jpg');
+        $userId = DB::table('ice_users')->insertGetId([
             'name' => 'Marketing',
             'email' => 'marketing@iceburg.ca',
-            'profile_pic' => 'data:image/jpg;base64,' . base64_encode($image),
+            'profile_pic' => 'data:image/jpg;base64,'.base64_encode($image),
             'password' => bcrypt('marketing'),
-            'role_id' => 5
+            'role_id' => 5,
         ]);
     }
 
     private function addSettings()
     {
-        Log::info("Generating Settings");
+        Log::info('Generating Settings');
         Setting::insert([
             'name' => 'theme',
-            'value' => 'light'
+            'value' => 'light',
         ]);
 
         Setting::insert([
             'name' => 'search_per_page',
-            'value' => '10'
+            'value' => '10',
         ]);
 
         Setting::insert([
             'name' => 'submodule_search_per_page',
-            'value' => '10'
+            'value' => '10',
         ]);
 
         Setting::insert([
             'name' => 'title',
-            'value' => 'Iceburg CRM'
+            'value' => 'Iceburg CRM',
         ]);
 
         Setting::insert([
             'name' => 'description',
-            'value' => 'Open Source, data driven, extendable, unlimited relationships, convertable modules, 29 default themes, light/dark themes'
+            'value' => 'Open Source, data driven, extendable, unlimited relationships, convertable modules, 29 default themes, light/dark themes',
         ]);
 
         Setting::insert([
             'name' => 'max_export_records',
-            'value' => 10000
+            'value' => 10000,
         ]);
 
         Setting::insert([
             'name' => 'welcome_popup',
-            'value' => true
+            'value' => true,
         ]);
-
-
 
     }
 
     private function addConnectors()
     {
-        $connectorId=Connector::insertGetId([
+        $connectorId = Connector::insertGetId([
             'name' => 'joke of the day',
-            'base_url'=> 'https://official-joke-api.appspot.com'
+            'base_url' => 'https://official-joke-api.appspot.com',
         ]);
 
         Endpoint::insert([
-           'connector_id' => $connectorId,
-           'endpoint' => '/random_joke',
-            'class_name' => 'jokes'
+            'connector_id' => $connectorId,
+            'endpoint' => '/random_joke',
+            'class_name' => 'jokes',
         ]);
     }
 
@@ -376,145 +364,145 @@ class GenerateSeeder extends Seeder
     private function Currency()
     {
         return [
-            ['code' =>'AFN' , 'name' => 'Afghani', 'symbol' => '؋' ],
-            ['code' =>'ALL' , 'name' => 'Lek', 'symbol' => 'Lek' ],
-            ['code' =>'ANG' , 'name' => 'Netherlands Antillian Guilder', 'symbol' => 'ƒ' ],
-            ['code' =>'ARS' , 'name' => 'Argentine Peso', 'symbol' => '$' ],
-            ['code' =>'AUD' , 'name' => 'Australian Dollar', 'symbol' => '$' ],
-            ['code' =>'AWG' , 'name' => 'Aruban Guilder', 'symbol' => 'ƒ' ],
-            ['code' =>'AZN' , 'name' => 'Azerbaijanian Manat', 'symbol' => 'ман' ],
-            ['code' =>'BAM' , 'name' => 'Convertible Marks', 'symbol' => 'KM' ],
+            ['code' => 'AFN', 'name' => 'Afghani', 'symbol' => '؋'],
+            ['code' => 'ALL', 'name' => 'Lek', 'symbol' => 'Lek'],
+            ['code' => 'ANG', 'name' => 'Netherlands Antillian Guilder', 'symbol' => 'ƒ'],
+            ['code' => 'ARS', 'name' => 'Argentine Peso', 'symbol' => '$'],
+            ['code' => 'AUD', 'name' => 'Australian Dollar', 'symbol' => '$'],
+            ['code' => 'AWG', 'name' => 'Aruban Guilder', 'symbol' => 'ƒ'],
+            ['code' => 'AZN', 'name' => 'Azerbaijanian Manat', 'symbol' => 'ман'],
+            ['code' => 'BAM', 'name' => 'Convertible Marks', 'symbol' => 'KM'],
             ['code' => 'BDT', 'name' => 'Bangladeshi Taka', 'symbol' => '৳'],
-            ['code' =>'BBD' , 'name' => 'Barbados Dollar', 'symbol' => '$' ],
-            ['code' =>'BGN' , 'name' => 'Bulgarian Lev', 'symbol' => 'лв' ],
-            ['code' =>'BMD' , 'name' => 'Bermudian Dollar', 'symbol' => '$' ],
-            ['code' =>'BND' , 'name' => 'Brunei Dollar', 'symbol' => '$' ],
-            ['code' =>'BOB' , 'name' => 'BOV Boliviano Mvdol', 'symbol' => '$b' ],
-            ['code' =>'BRL' , 'name' => 'Brazilian Real', 'symbol' => 'R$' ],
-            ['code' =>'BSD' , 'name' => 'Bahamian Dollar', 'symbol' => '$' ],
-            ['code' =>'BWP' , 'name' => 'Pula', 'symbol' => 'P' ],
-            ['code' =>'BYR' , 'name' => 'Belarussian Ruble', 'symbol' => '₽' ],
-            ['code' =>'BZD' , 'name' => 'Belize Dollar', 'symbol' => 'BZ$' ],
-            ['code' =>'CAD' , 'name' => 'Canadian Dollar', 'symbol' => '$' ],
-            ['code' =>'CHF' , 'name' => 'Swiss Franc', 'symbol' => 'CHF' ],
-            ['code' =>'CLP' , 'name' => 'CLF Chilean Peso Unidades de fomento', 'symbol' => '$' ],
-            ['code' =>'CNY' , 'name' => 'Yuan Renminbi', 'symbol' => '¥' ],
-            ['code' =>'COP' , 'name' => 'COU Colombian Peso Unidad de Valor Real', 'symbol' => '$' ],
-            ['code' =>'CRC' , 'name' => 'Costa Rican Colon', 'symbol' => '₡' ],
-            ['code' =>'CUP' , 'name' => 'CUC Cuban Peso Peso Convertible', 'symbol' => '₱' ],
-            ['code' =>'CZK' , 'name' => 'Czech Koruna', 'symbol' => 'Kč' ],
-            ['code' =>'DKK' , 'name' => 'Danish Krone', 'symbol' => 'kr' ],
-            ['code' =>'DOP' , 'name' => 'Dominican Peso', 'symbol' => 'RD$' ],
-            ['code' =>'EGP' , 'name' => 'Egyptian Pound', 'symbol' => '£' ],
-            ['code' =>'EUR' , 'name' => 'Euro', 'symbol' => '€' ],
-            ['code' =>'FJD' , 'name' => 'Fiji Dollar', 'symbol' => '$' ],
-            ['code' =>'FKP' , 'name' => 'Falkland Islands Pound', 'symbol' => '£' ],
-            ['code' =>'GBP' , 'name' => 'Pound Sterling', 'symbol' => '£' ],
-            ['code' =>'GIP' , 'name' => 'Gibraltar Pound', 'symbol' => '£' ],
-            ['code' =>'GTQ' , 'name' => 'Quetzal', 'symbol' => 'Q' ],
-            ['code' =>'GYD' , 'name' => 'Guyana Dollar', 'symbol' => '$' ],
-            ['code' =>'HKD' , 'name' => 'Hong Kong Dollar', 'symbol' => '$' ],
-            ['code' =>'HNL' , 'name' => 'Lempira', 'symbol' => 'L' ],
-            ['code' =>'HRK' , 'name' => 'Croatian Kuna', 'symbol' => 'kn' ],
-            ['code' =>'HUF' , 'name' => 'Forint', 'symbol' => 'Ft' ],
-            ['code' =>'IDR' , 'name' => 'Rupiah', 'symbol' => 'Rp' ],
-            ['code' =>'ILS' , 'name' => 'New Israeli Sheqel', 'symbol' => '₪' ],
-            ['code' =>'IRR' , 'name' => 'Iranian Rial', 'symbol' => '﷼' ],
-            ['code' =>'ISK' , 'name' => 'Iceland Krona', 'symbol' => 'kr' ],
-            ['code' =>'JMD' , 'name' => 'Jamaican Dollar', 'symbol' => 'J$' ],
-            ['code' =>'JPY' , 'name' => 'Yen', 'symbol' => '¥' ],
-            ['code' =>'KGS' , 'name' => 'Som', 'symbol' => 'лв' ],
-            ['code' =>'KHR' , 'name' => 'Riel', 'symbol' => '៛' ],
-            ['code' =>'KPW' , 'name' => 'North Korean Won', 'symbol' => '₩' ],
-            ['code' =>'KRW' , 'name' => 'Won', 'symbol' => '₩' ],
-            ['code' =>'KYD' , 'name' => 'Cayman Islands Dollar', 'symbol' => '$' ],
-            ['code' =>'KZT' , 'name' => 'Tenge', 'symbol' => 'лв' ],
-            ['code' =>'LAK' , 'name' => 'Kip', 'symbol' => '₭' ],
-            ['code' =>'LBP' , 'name' => 'Lebanese Pound', 'symbol' => '£' ],
-            ['code' =>'LKR' , 'name' => 'Sri Lanka Rupee', 'symbol' => '₨' ],
-            ['code' =>'LRD' , 'name' => 'Liberian Dollar', 'symbol' => '$' ],
-            ['code' =>'LTL' , 'name' => 'Lithuanian Litas', 'symbol' => 'Lt' ],
-            ['code' =>'LVL' , 'name' => 'Latvian Lats', 'symbol' => 'Ls' ],
-            ['code' =>'MKD' , 'name' => 'Denar', 'symbol' => 'ден' ],
-            ['code' =>'MNT' , 'name' => 'Tugrik', 'symbol' => '₮' ],
-            ['code' =>'MUR' , 'name' => 'Mauritius Rupee', 'symbol' => '₨' ],
-            ['code' =>'MXN' , 'name' => 'MXV Mexican Peso Mexican Unidad de Inversion (UDI]', 'symbol' => '$' ],
-            ['code' =>'MYR' , 'name' => 'Malaysian Ringgit', 'symbol' => 'RM' ],
-            ['code' =>'MZN' , 'name' => 'Metical', 'symbol' => 'MT' ],
-            ['code' =>'NGN' , 'name' => 'Naira', 'symbol' => '₦' ],
-            ['code' =>'NIO' , 'name' => 'Cordoba Oro', 'symbol' => 'C$' ],
-            ['code' =>'NOK' , 'name' => 'Norwegian Krone', 'symbol' => 'kr' ],
-            ['code' =>'NPR' , 'name' => 'Nepalese Rupee', 'symbol' => '₨' ],
-            ['code' =>'NZD' , 'name' => 'New Zealand Dollar', 'symbol' => '$' ],
-            ['code' =>'OMR' , 'name' => 'Rial Omani', 'symbol' => '﷼' ],
-            ['code' =>'PAB' , 'name' => 'USD Balboa US Dollar', 'symbol' => 'B/.' ],
-            ['code' =>'PEN' , 'name' => 'Nuevo Sol', 'symbol' => 'S/.' ],
-            ['code' =>'PHP' , 'name' => 'Philippine Peso', 'symbol' => 'Php' ],
-            ['code' =>'PKR' , 'name' => 'Pakistan Rupee', 'symbol' => '₨' ],
-            ['code' =>'PLN' , 'name' => 'Zloty', 'symbol' => 'zł' ],
-            ['code' =>'PYG' , 'name' => 'Guarani', 'symbol' => 'Gs' ],
-            ['code' =>'QAR' , 'name' => 'Qatari Rial', 'symbol' => '﷼' ],
-            ['code' =>'RON' , 'name' => 'New Leu', 'symbol' => 'lei' ],
-            ['code' =>'RSD' , 'name' => 'Serbian Dinar', 'symbol' => 'Дин.' ],
-            ['code' =>'RUB' , 'name' => 'Russian Ruble', 'symbol' => 'руб' ],
-            ['code' =>'SAR' , 'name' => 'Saudi Riyal', 'symbol' => '﷼' ],
-            ['code' =>'SBD' , 'name' => 'Solomon Islands Dollar', 'symbol' => '$' ],
-            ['code' =>'SCR' , 'name' => 'Seychelles Rupee', 'symbol' => '₨' ],
-            ['code' =>'SEK' , 'name' => 'Swedish Krona', 'symbol' => 'kr' ],
-            ['code' =>'SGD' , 'name' => 'Singapore Dollar', 'symbol' => '$' ],
-            ['code' =>'SHP' , 'name' => 'Saint Helena Pound', 'symbol' => '£' ],
-            ['code' =>'SOS' , 'name' => 'Somali Shilling', 'symbol' => 'S' ],
-            ['code' =>'SRD' , 'name' => 'Surinam Dollar', 'symbol' => '$' ],
-            ['code' =>'SVC' , 'name' => 'USD El Salvador Colon US Dollar', 'symbol' => '$' ],
-            ['code' =>'SYP' , 'name' => 'Syrian Pound', 'symbol' => '£' ],
-            ['code' =>'THB' , 'name' => 'Baht', 'symbol' => '฿' ],
-            ['code' =>'TRY' , 'name' => 'Turkish Lira', 'symbol' => 'TL' ],
-            ['code' =>'TTD' , 'name' => 'Trinidad and Tobago Dollar', 'symbol' => 'TT$' ],
-            ['code' =>'TWD' , 'name' => 'New Taiwan Dollar', 'symbol' => 'NT$' ],
-            ['code' =>'UAH' , 'name' => 'Hryvnia', 'symbol' => '₴' ],
-            ['code' =>'USD' , 'name' => 'US Dollar', 'symbol' => '$' ],
-            ['code' =>'UYU' , 'name' => 'UYI Uruguay Peso en Unidades Indexadas', 'symbol' => '$U' ],
-            ['code' =>'UZS' , 'name' => 'Uzbekistan Sum', 'symbol' => 'лв' ],
-            ['code' =>'VEF' , 'name' => 'Bolivar Fuerte', 'symbol' => 'Bs' ],
-            ['code' =>'VND' , 'name' => 'Dong', 'symbol' => '₫' ],
-            ['code' =>'XCD' , 'name' => 'East Caribbean Dollar', 'symbol' => '$' ],
-            ['code' =>'YER' , 'name' => 'Yemeni Rial', 'symbol' => '﷼' ],
-            ['code' =>'ZAR' , 'name' => 'Rand', 'symbol' => 'R' ],
+            ['code' => 'BBD', 'name' => 'Barbados Dollar', 'symbol' => '$'],
+            ['code' => 'BGN', 'name' => 'Bulgarian Lev', 'symbol' => 'лв'],
+            ['code' => 'BMD', 'name' => 'Bermudian Dollar', 'symbol' => '$'],
+            ['code' => 'BND', 'name' => 'Brunei Dollar', 'symbol' => '$'],
+            ['code' => 'BOB', 'name' => 'BOV Boliviano Mvdol', 'symbol' => '$b'],
+            ['code' => 'BRL', 'name' => 'Brazilian Real', 'symbol' => 'R$'],
+            ['code' => 'BSD', 'name' => 'Bahamian Dollar', 'symbol' => '$'],
+            ['code' => 'BWP', 'name' => 'Pula', 'symbol' => 'P'],
+            ['code' => 'BYR', 'name' => 'Belarussian Ruble', 'symbol' => '₽'],
+            ['code' => 'BZD', 'name' => 'Belize Dollar', 'symbol' => 'BZ$'],
+            ['code' => 'CAD', 'name' => 'Canadian Dollar', 'symbol' => '$'],
+            ['code' => 'CHF', 'name' => 'Swiss Franc', 'symbol' => 'CHF'],
+            ['code' => 'CLP', 'name' => 'CLF Chilean Peso Unidades de fomento', 'symbol' => '$'],
+            ['code' => 'CNY', 'name' => 'Yuan Renminbi', 'symbol' => '¥'],
+            ['code' => 'COP', 'name' => 'COU Colombian Peso Unidad de Valor Real', 'symbol' => '$'],
+            ['code' => 'CRC', 'name' => 'Costa Rican Colon', 'symbol' => '₡'],
+            ['code' => 'CUP', 'name' => 'CUC Cuban Peso Peso Convertible', 'symbol' => '₱'],
+            ['code' => 'CZK', 'name' => 'Czech Koruna', 'symbol' => 'Kč'],
+            ['code' => 'DKK', 'name' => 'Danish Krone', 'symbol' => 'kr'],
+            ['code' => 'DOP', 'name' => 'Dominican Peso', 'symbol' => 'RD$'],
+            ['code' => 'EGP', 'name' => 'Egyptian Pound', 'symbol' => '£'],
+            ['code' => 'EUR', 'name' => 'Euro', 'symbol' => '€'],
+            ['code' => 'FJD', 'name' => 'Fiji Dollar', 'symbol' => '$'],
+            ['code' => 'FKP', 'name' => 'Falkland Islands Pound', 'symbol' => '£'],
+            ['code' => 'GBP', 'name' => 'Pound Sterling', 'symbol' => '£'],
+            ['code' => 'GIP', 'name' => 'Gibraltar Pound', 'symbol' => '£'],
+            ['code' => 'GTQ', 'name' => 'Quetzal', 'symbol' => 'Q'],
+            ['code' => 'GYD', 'name' => 'Guyana Dollar', 'symbol' => '$'],
+            ['code' => 'HKD', 'name' => 'Hong Kong Dollar', 'symbol' => '$'],
+            ['code' => 'HNL', 'name' => 'Lempira', 'symbol' => 'L'],
+            ['code' => 'HRK', 'name' => 'Croatian Kuna', 'symbol' => 'kn'],
+            ['code' => 'HUF', 'name' => 'Forint', 'symbol' => 'Ft'],
+            ['code' => 'IDR', 'name' => 'Rupiah', 'symbol' => 'Rp'],
+            ['code' => 'ILS', 'name' => 'New Israeli Sheqel', 'symbol' => '₪'],
+            ['code' => 'IRR', 'name' => 'Iranian Rial', 'symbol' => '﷼'],
+            ['code' => 'ISK', 'name' => 'Iceland Krona', 'symbol' => 'kr'],
+            ['code' => 'JMD', 'name' => 'Jamaican Dollar', 'symbol' => 'J$'],
+            ['code' => 'JPY', 'name' => 'Yen', 'symbol' => '¥'],
+            ['code' => 'KGS', 'name' => 'Som', 'symbol' => 'лв'],
+            ['code' => 'KHR', 'name' => 'Riel', 'symbol' => '៛'],
+            ['code' => 'KPW', 'name' => 'North Korean Won', 'symbol' => '₩'],
+            ['code' => 'KRW', 'name' => 'Won', 'symbol' => '₩'],
+            ['code' => 'KYD', 'name' => 'Cayman Islands Dollar', 'symbol' => '$'],
+            ['code' => 'KZT', 'name' => 'Tenge', 'symbol' => 'лв'],
+            ['code' => 'LAK', 'name' => 'Kip', 'symbol' => '₭'],
+            ['code' => 'LBP', 'name' => 'Lebanese Pound', 'symbol' => '£'],
+            ['code' => 'LKR', 'name' => 'Sri Lanka Rupee', 'symbol' => '₨'],
+            ['code' => 'LRD', 'name' => 'Liberian Dollar', 'symbol' => '$'],
+            ['code' => 'LTL', 'name' => 'Lithuanian Litas', 'symbol' => 'Lt'],
+            ['code' => 'LVL', 'name' => 'Latvian Lats', 'symbol' => 'Ls'],
+            ['code' => 'MKD', 'name' => 'Denar', 'symbol' => 'ден'],
+            ['code' => 'MNT', 'name' => 'Tugrik', 'symbol' => '₮'],
+            ['code' => 'MUR', 'name' => 'Mauritius Rupee', 'symbol' => '₨'],
+            ['code' => 'MXN', 'name' => 'MXV Mexican Peso Mexican Unidad de Inversion (UDI]', 'symbol' => '$'],
+            ['code' => 'MYR', 'name' => 'Malaysian Ringgit', 'symbol' => 'RM'],
+            ['code' => 'MZN', 'name' => 'Metical', 'symbol' => 'MT'],
+            ['code' => 'NGN', 'name' => 'Naira', 'symbol' => '₦'],
+            ['code' => 'NIO', 'name' => 'Cordoba Oro', 'symbol' => 'C$'],
+            ['code' => 'NOK', 'name' => 'Norwegian Krone', 'symbol' => 'kr'],
+            ['code' => 'NPR', 'name' => 'Nepalese Rupee', 'symbol' => '₨'],
+            ['code' => 'NZD', 'name' => 'New Zealand Dollar', 'symbol' => '$'],
+            ['code' => 'OMR', 'name' => 'Rial Omani', 'symbol' => '﷼'],
+            ['code' => 'PAB', 'name' => 'USD Balboa US Dollar', 'symbol' => 'B/.'],
+            ['code' => 'PEN', 'name' => 'Nuevo Sol', 'symbol' => 'S/.'],
+            ['code' => 'PHP', 'name' => 'Philippine Peso', 'symbol' => 'Php'],
+            ['code' => 'PKR', 'name' => 'Pakistan Rupee', 'symbol' => '₨'],
+            ['code' => 'PLN', 'name' => 'Zloty', 'symbol' => 'zł'],
+            ['code' => 'PYG', 'name' => 'Guarani', 'symbol' => 'Gs'],
+            ['code' => 'QAR', 'name' => 'Qatari Rial', 'symbol' => '﷼'],
+            ['code' => 'RON', 'name' => 'New Leu', 'symbol' => 'lei'],
+            ['code' => 'RSD', 'name' => 'Serbian Dinar', 'symbol' => 'Дин.'],
+            ['code' => 'RUB', 'name' => 'Russian Ruble', 'symbol' => 'руб'],
+            ['code' => 'SAR', 'name' => 'Saudi Riyal', 'symbol' => '﷼'],
+            ['code' => 'SBD', 'name' => 'Solomon Islands Dollar', 'symbol' => '$'],
+            ['code' => 'SCR', 'name' => 'Seychelles Rupee', 'symbol' => '₨'],
+            ['code' => 'SEK', 'name' => 'Swedish Krona', 'symbol' => 'kr'],
+            ['code' => 'SGD', 'name' => 'Singapore Dollar', 'symbol' => '$'],
+            ['code' => 'SHP', 'name' => 'Saint Helena Pound', 'symbol' => '£'],
+            ['code' => 'SOS', 'name' => 'Somali Shilling', 'symbol' => 'S'],
+            ['code' => 'SRD', 'name' => 'Surinam Dollar', 'symbol' => '$'],
+            ['code' => 'SVC', 'name' => 'USD El Salvador Colon US Dollar', 'symbol' => '$'],
+            ['code' => 'SYP', 'name' => 'Syrian Pound', 'symbol' => '£'],
+            ['code' => 'THB', 'name' => 'Baht', 'symbol' => '฿'],
+            ['code' => 'TRY', 'name' => 'Turkish Lira', 'symbol' => 'TL'],
+            ['code' => 'TTD', 'name' => 'Trinidad and Tobago Dollar', 'symbol' => 'TT$'],
+            ['code' => 'TWD', 'name' => 'New Taiwan Dollar', 'symbol' => 'NT$'],
+            ['code' => 'UAH', 'name' => 'Hryvnia', 'symbol' => '₴'],
+            ['code' => 'USD', 'name' => 'US Dollar', 'symbol' => '$'],
+            ['code' => 'UYU', 'name' => 'UYI Uruguay Peso en Unidades Indexadas', 'symbol' => '$U'],
+            ['code' => 'UZS', 'name' => 'Uzbekistan Sum', 'symbol' => 'лв'],
+            ['code' => 'VEF', 'name' => 'Bolivar Fuerte', 'symbol' => 'Bs'],
+            ['code' => 'VND', 'name' => 'Dong', 'symbol' => '₫'],
+            ['code' => 'XCD', 'name' => 'East Caribbean Dollar', 'symbol' => '$'],
+            ['code' => 'YER', 'name' => 'Yemeni Rial', 'symbol' => '﷼'],
+            ['code' => 'ZAR', 'name' => 'Rand', 'symbol' => 'R'],
         ];
     }
 
     private function Ice_Themes()
     {
         return [
-            ['name' => "light"],
-            ['name' => "dark"],
-            ['name' => "cupcake"],
-            ['name' => "bumblebee"],
-            ['name' => "emerald"],
-            ['name' => "corporate"],
-            ['name' => "synthwave"],
-            ['name' => "retro"],
-            ['name' => "cyberpunk"],
-            ['name' => "valentine"],
-            ['name' => "halloween"],
-            ['name' => "garden"],
-            ['name' => "forest"],
-            ['name' => "aqua"],
-            ['name' => "lofi"],
-            ['name' => "pastel"],
-            ['name' => "fantasy"],
-            ['name' => "wireframe"],
-            ['name' => "black"],
-            ['name' => "luxury"],
-            ['name' => "dracula"],
-            ['name' => "cmyk"],
-            ['name' => "autumn"],
-            ['name' => "business"],
-            ['name' => "acid"],
-            ['name' => "lemonade"],
-            ['name' => "night"],
-            ['name' => "coffee"],
-            ['name' => "winter"],
+            ['name' => 'light'],
+            ['name' => 'dark'],
+            ['name' => 'cupcake'],
+            ['name' => 'bumblebee'],
+            ['name' => 'emerald'],
+            ['name' => 'corporate'],
+            ['name' => 'synthwave'],
+            ['name' => 'retro'],
+            ['name' => 'cyberpunk'],
+            ['name' => 'valentine'],
+            ['name' => 'halloween'],
+            ['name' => 'garden'],
+            ['name' => 'forest'],
+            ['name' => 'aqua'],
+            ['name' => 'lofi'],
+            ['name' => 'pastel'],
+            ['name' => 'fantasy'],
+            ['name' => 'wireframe'],
+            ['name' => 'black'],
+            ['name' => 'luxury'],
+            ['name' => 'dracula'],
+            ['name' => 'cmyk'],
+            ['name' => 'autumn'],
+            ['name' => 'business'],
+            ['name' => 'acid'],
+            ['name' => 'lemonade'],
+            ['name' => 'night'],
+            ['name' => 'coffee'],
+            ['name' => 'winter'],
         ];
     }
 
@@ -819,362 +807,361 @@ class GenerateSeeder extends Seeder
 
     public function Countries()
     {
-        return array(
-            array('code' => 'US', 'name' => 'Canada'),
-            array('code' => 'AF', 'name' => 'Afghanistan'),
-            array('code' => 'AL', 'name' => 'Albania'),
-            array('code' => 'DZ', 'name' => 'Algeria'),
-            array('code' => 'AS', 'name' => 'American Samoa'),
-            array('code' => 'AD', 'name' => 'Andorra'),
-            array('code' => 'AO', 'name' => 'Angola'),
-            array('code' => 'AI', 'name' => 'Anguilla'),
-            array('code' => 'AQ', 'name' => 'Antarctica'),
-            array('code' => 'AG', 'name' => 'Antigua and/or Barbuda'),
-            array('code' => 'AR', 'name' => 'Argentina'),
-            array('code' => 'AM', 'name' => 'Armenia'),
-            array('code' => 'AW', 'name' => 'Aruba'),
-            array('code' => 'AU', 'name' => 'Australia'),
-            array('code' => 'AT', 'name' => 'Austria'),
-            array('code' => 'AZ', 'name' => 'Azerbaijan'),
-            array('code' => 'BS', 'name' => 'Bahamas'),
-            array('code' => 'BH', 'name' => 'Bahrain'),
-            array('code' => 'BD', 'name' => 'Bangladesh'),
-            array('code' => 'BB', 'name' => 'Barbados'),
-            array('code' => 'BY', 'name' => 'Belarus'),
-            array('code' => 'BE', 'name' => 'Belgium'),
-            array('code' => 'BZ', 'name' => 'Belize'),
-            array('code' => 'BJ', 'name' => 'Benin'),
-            array('code' => 'BM', 'name' => 'Bermuda'),
-            array('code' => 'BT', 'name' => 'Bhutan'),
-            array('code' => 'BO', 'name' => 'Bolivia'),
-            array('code' => 'BA', 'name' => 'Bosnia and Herzegovina'),
-            array('code' => 'BW', 'name' => 'Botswana'),
-            array('code' => 'BV', 'name' => 'Bouvet Island'),
-            array('code' => 'BR', 'name' => 'Brazil'),
-            array('code' => 'IO', 'name' => 'British lndian Ocean Territory'),
-            array('code' => 'BN', 'name' => 'Brunei Darussalam'),
-            array('code' => 'BG', 'name' => 'Bulgaria'),
-            array('code' => 'BF', 'name' => 'Burkina Faso'),
-            array('code' => 'BI', 'name' => 'Burundi'),
-            array('code' => 'KH', 'name' => 'Cambodia'),
-            array('code' => 'CM', 'name' => 'Cameroon'),
-            array('code' => 'CV', 'name' => 'Cape Verde'),
-            array('code' => 'KY', 'name' => 'Cayman Islands'),
-            array('code' => 'CF', 'name' => 'Central African Republic'),
-            array('code' => 'TD', 'name' => 'Chad'),
-            array('code' => 'CL', 'name' => 'Chile'),
-            array('code' => 'CN', 'name' => 'China'),
-            array('code' => 'CX', 'name' => 'Christmas Island'),
-            array('code' => 'CC', 'name' => 'Cocos (Keeling) Islands'),
-            array('code' => 'CO', 'name' => 'Colombia'),
-            array('code' => 'KM', 'name' => 'Comoros'),
-            array('code' => 'CG', 'name' => 'Congo'),
-            array('code' => 'CK', 'name' => 'Cook Islands'),
-            array('code' => 'CR', 'name' => 'Costa Rica'),
-            array('code' => 'HR', 'name' => 'Croatia (Hrvatska)'),
-            array('code' => 'CU', 'name' => 'Cuba'),
-            array('code' => 'CY', 'name' => 'Cyprus'),
-            array('code' => 'CZ', 'name' => 'Czech Republic'),
-            array('code' => 'DK', 'name' => 'Denmark'),
-            array('code' => 'DJ', 'name' => 'Djibouti'),
-            array('code' => 'DM', 'name' => 'Dominica'),
-            array('code' => 'DO', 'name' => 'Dominican Republic'),
-            array('code' => 'TP', 'name' => 'East Timor'),
-            array('code' => 'EC', 'name' => 'Ecudaor'),
-            array('code' => 'EG', 'name' => 'Egypt'),
-            array('code' => 'SV', 'name' => 'El Salvador'),
-            array('code' => 'GQ', 'name' => 'Equatorial Guinea'),
-            array('code' => 'ER', 'name' => 'Eritrea'),
-            array('code' => 'EE', 'name' => 'Estonia'),
-            array('code' => 'ET', 'name' => 'Ethiopia'),
-            array('code' => 'FK', 'name' => 'Falkland Islands (Malvinas)'),
-            array('code' => 'FO', 'name' => 'Faroe Islands'),
-            array('code' => 'FJ', 'name' => 'Fiji'),
-            array('code' => 'FI', 'name' => 'Finland'),
-            array('code' => 'FR', 'name' => 'France'),
-            array('code' => 'FX', 'name' => 'France, Metropolitan'),
-            array('code' => 'GF', 'name' => 'French Guiana'),
-            array('code' => 'PF', 'name' => 'French Polynesia'),
-            array('code' => 'TF', 'name' => 'French Southern Territories'),
-            array('code' => 'GA', 'name' => 'Gabon'),
-            array('code' => 'GM', 'name' => 'Gambia'),
-            array('code' => 'GE', 'name' => 'Georgia'),
-            array('code' => 'DE', 'name' => 'Germany'),
-            array('code' => 'GH', 'name' => 'Ghana'),
-            array('code' => 'GI', 'name' => 'Gibraltar'),
-            array('code' => 'GR', 'name' => 'Greece'),
-            array('code' => 'GL', 'name' => 'Greenland'),
-            array('code' => 'GD', 'name' => 'Grenada'),
-            array('code' => 'GP', 'name' => 'Guadeloupe'),
-            array('code' => 'GU', 'name' => 'Guam'),
-            array('code' => 'GT', 'name' => 'Guatemala'),
-            array('code' => 'GN', 'name' => 'Guinea'),
-            array('code' => 'GW', 'name' => 'Guinea-Bissau'),
-            array('code' => 'GY', 'name' => 'Guyana'),
-            array('code' => 'HT', 'name' => 'Haiti'),
-            array('code' => 'HM', 'name' => 'Heard and Mc Donald Islands'),
-            array('code' => 'HN', 'name' => 'Honduras'),
-            array('code' => 'HK', 'name' => 'Hong Kong'),
-            array('code' => 'HU', 'name' => 'Hungary'),
-            array('code' => 'IS', 'name' => 'Iceland'),
-            array('code' => 'IN', 'name' => 'India'),
-            array('code' => 'ID', 'name' => 'Indonesia'),
-            array('code' => 'IR', 'name' => 'Iran (Islamic Republic of)'),
-            array('code' => 'IQ', 'name' => 'Iraq'),
-            array('code' => 'IE', 'name' => 'Ireland'),
-            array('code' => 'IL', 'name' => 'Israel'),
-            array('code' => 'IT', 'name' => 'Italy'),
-            array('code' => 'CI', 'name' => 'Ivory Coast'),
-            array('code' => 'JM', 'name' => 'Jamaica'),
-            array('code' => 'JP', 'name' => 'Japan'),
-            array('code' => 'JO', 'name' => 'Jordan'),
-            array('code' => 'KZ', 'name' => 'Kazakhstan'),
-            array('code' => 'KE', 'name' => 'Kenya'),
-            array('code' => 'KI', 'name' => 'Kiribati'),
-            array('code' => 'KP', 'name' => 'Korea, Democratic People\'s Republic of'),
-            array('code' => 'KR', 'name' => 'Korea, Republic of'),
-            array('code' => 'KW', 'name' => 'Kuwait'),
-            array('code' => 'KG', 'name' => 'Kyrgyzstan'),
-            array('code' => 'LA', 'name' => 'Lao People\'s Democratic Republic'),
-            array('code' => 'LV', 'name' => 'Latvia'),
-            array('code' => 'LB', 'name' => 'Lebanon'),
-            array('code' => 'LS', 'name' => 'Lesotho'),
-            array('code' => 'LR', 'name' => 'Liberia'),
-            array('code' => 'LY', 'name' => 'Libyan Arab Jamahiriya'),
-            array('code' => 'LI', 'name' => 'Liechtenstein'),
-            array('code' => 'LT', 'name' => 'Lithuania'),
-            array('code' => 'LU', 'name' => 'Luxembourg'),
-            array('code' => 'MO', 'name' => 'Macau'),
-            array('code' => 'MK', 'name' => 'Macedonia'),
-            array('code' => 'MG', 'name' => 'Madagascar'),
-            array('code' => 'MW', 'name' => 'Malawi'),
-            array('code' => 'MY', 'name' => 'Malaysia'),
-            array('code' => 'MV', 'name' => 'Maldives'),
-            array('code' => 'ML', 'name' => 'Mali'),
-            array('code' => 'MT', 'name' => 'Malta'),
-            array('code' => 'MH', 'name' => 'Marshall Islands'),
-            array('code' => 'MQ', 'name' => 'Martinique'),
-            array('code' => 'MR', 'name' => 'Mauritania'),
-            array('code' => 'MU', 'name' => 'Mauritius'),
-            array('code' => 'TY', 'name' => 'Mayotte'),
-            array('code' => 'MX', 'name' => 'Mexico'),
-            array('code' => 'FM', 'name' => 'Micronesia, Federated States of'),
-            array('code' => 'MD', 'name' => 'Moldova, Republic of'),
-            array('code' => 'MC', 'name' => 'Monaco'),
-            array('code' => 'MN', 'name' => 'Mongolia'),
-            array('code' => 'MS', 'name' => 'Montserrat'),
-            array('code' => 'MA', 'name' => 'Morocco'),
-            array('code' => 'MZ', 'name' => 'Mozambique'),
-            array('code' => 'MM', 'name' => 'Myanmar'),
-            array('code' => 'NA', 'name' => 'Namibia'),
-            array('code' => 'NR', 'name' => 'Nauru'),
-            array('code' => 'NP', 'name' => 'Nepal'),
-            array('code' => 'NL', 'name' => 'Netherlands'),
-            array('code' => 'AN', 'name' => 'Netherlands Antilles'),
-            array('code' => 'NC', 'name' => 'New Caledonia'),
-            array('code' => 'NZ', 'name' => 'New Zealand'),
-            array('code' => 'NI', 'name' => 'Nicaragua'),
-            array('code' => 'NE', 'name' => 'Niger'),
-            array('code' => 'NG', 'name' => 'Nigeria'),
-            array('code' => 'NU', 'name' => 'Niue'),
-            array('code' => 'NF', 'name' => 'Norfork Island'),
-            array('code' => 'MP', 'name' => 'Northern Mariana Islands'),
-            array('code' => 'NO', 'name' => 'Norway'),
-            array('code' => 'OM', 'name' => 'Oman'),
-            array('code' => 'PK', 'name' => 'Pakistan'),
-            array('code' => 'PW', 'name' => 'Palau'),
-            array('code' => 'PA', 'name' => 'Panama'),
-            array('code' => 'PG', 'name' => 'Papua New Guinea'),
-            array('code' => 'PY', 'name' => 'Paraguay'),
-            array('code' => 'PE', 'name' => 'Peru'),
-            array('code' => 'PH', 'name' => 'Philippines'),
-            array('code' => 'PN', 'name' => 'Pitcairn'),
-            array('code' => 'PL', 'name' => 'Poland'),
-            array('code' => 'PT', 'name' => 'Portugal'),
-            array('code' => 'PR', 'name' => 'Puerto Rico'),
-            array('code' => 'QA', 'name' => 'Qatar'),
-            array('code' => 'RE', 'name' => 'Reunion'),
-            array('code' => 'RO', 'name' => 'Romania'),
-            array('code' => 'RU', 'name' => 'Russian Federation'),
-            array('code' => 'RW', 'name' => 'Rwanda'),
-            array('code' => 'KN', 'name' => 'Saint Kitts and Nevis'),
-            array('code' => 'LC', 'name' => 'Saint Lucia'),
-            array('code' => 'VC', 'name' => 'Saint Vincent and the Grenadines'),
-            array('code' => 'WS', 'name' => 'Samoa'),
-            array('code' => 'SM', 'name' => 'San Marino'),
-            array('code' => 'ST', 'name' => 'Sao Tome and Principe'),
-            array('code' => 'SA', 'name' => 'Saudi Arabia'),
-            array('code' => 'SN', 'name' => 'Senegal'),
-            array('code' => 'RS', 'name' => 'Serbia'),
-            array('code' => 'SC', 'name' => 'Seychelles'),
-            array('code' => 'SL', 'name' => 'Sierra Leone'),
-            array('code' => 'SG', 'name' => 'Singapore'),
-            array('code' => 'SK', 'name' => 'Slovakia'),
-            array('code' => 'SI', 'name' => 'Slovenia'),
-            array('code' => 'SB', 'name' => 'Solomon Islands'),
-            array('code' => 'SO', 'name' => 'Somalia'),
-            array('code' => 'ZA', 'name' => 'South Africa'),
-            array('code' => 'GS', 'name' => 'South Georgia South Sandwich Islands'),
-            array('code' => 'ES', 'name' => 'Spain'),
-            array('code' => 'LK', 'name' => 'Sri Lanka'),
-            array('code' => 'SH', 'name' => 'St. Helena'),
-            array('code' => 'PM', 'name' => 'St. Pierre and Miquelon'),
-            array('code' => 'SD', 'name' => 'Sudan'),
-            array('code' => 'SR', 'name' => 'Suriname'),
-            array('code' => 'SJ', 'name' => 'Svalbarn and Jan Mayen Islands'),
-            array('code' => 'SZ', 'name' => 'Swaziland'),
-            array('code' => 'SE', 'name' => 'Sweden'),
-            array('code' => 'CH', 'name' => 'Switzerland'),
-            array('code' => 'SY', 'name' => 'Syrian Arab Republic'),
-            array('code' => 'TW', 'name' => 'Taiwan'),
-            array('code' => 'TJ', 'name' => 'Tajikistan'),
-            array('code' => 'TZ', 'name' => 'Tanzania, United Republic of'),
-            array('code' => 'TH', 'name' => 'Thailand'),
-            array('code' => 'TG', 'name' => 'Togo'),
-            array('code' => 'TK', 'name' => 'Tokelau'),
-            array('code' => 'TO', 'name' => 'Tonga'),
-            array('code' => 'TT', 'name' => 'Trinidad and Tobago'),
-            array('code' => 'TN', 'name' => 'Tunisia'),
-            array('code' => 'TR', 'name' => 'Turkey'),
-            array('code' => 'TM', 'name' => 'Turkmenistan'),
-            array('code' => 'TC', 'name' => 'Turks and Caicos Islands'),
-            array('code' => 'TV', 'name' => 'Tuvalu'),
-            array('code' => 'UG', 'name' => 'Uganda'),
-            array('code' => 'UA', 'name' => 'Ukraine'),
-            array('code' => 'AE', 'name' => 'United Arab Emirates'),
-            array('code' => 'GB', 'name' => 'United Kingdom'),
-            array('code' => 'CA', 'name' => 'United States'),
-            array('code' => 'UM', 'name' => 'United States minor outlying islands'),
-            array('code' => 'UY', 'name' => 'Uruguay'),
-            array('code' => 'UZ', 'name' => 'Uzbekistan'),
-            array('code' => 'VU', 'name' => 'Vanuatu'),
-            array('code' => 'VA', 'name' => 'Vatican City State'),
-            array('code' => 'VE', 'name' => 'Venezuela'),
-            array('code' => 'VN', 'name' => 'Vietnam'),
-            array('code' => 'VG', 'name' => 'Virgin Islands (British)'),
-            array('code' => 'VI', 'name' => 'Virgin Islands (U.S.)'),
-            array('code' => 'WF', 'name' => 'Wallis and Futuna Islands'),
-            array('code' => 'EH', 'name' => 'Western Sahara'),
-            array('code' => 'YE', 'name' => 'Yemen'),
-            array('code' => 'YU', 'name' => 'Yugoslavia'),
-            array('code' => 'ZR', 'name' => 'Zaire'),
-            array('code' => 'ZM', 'name' => 'Zambia'),
-            array('code' => 'ZW', 'name' => 'Zimbabwe'),
-        );
+        return [
+            ['code' => 'US', 'name' => 'Canada'],
+            ['code' => 'AF', 'name' => 'Afghanistan'],
+            ['code' => 'AL', 'name' => 'Albania'],
+            ['code' => 'DZ', 'name' => 'Algeria'],
+            ['code' => 'AS', 'name' => 'American Samoa'],
+            ['code' => 'AD', 'name' => 'Andorra'],
+            ['code' => 'AO', 'name' => 'Angola'],
+            ['code' => 'AI', 'name' => 'Anguilla'],
+            ['code' => 'AQ', 'name' => 'Antarctica'],
+            ['code' => 'AG', 'name' => 'Antigua and/or Barbuda'],
+            ['code' => 'AR', 'name' => 'Argentina'],
+            ['code' => 'AM', 'name' => 'Armenia'],
+            ['code' => 'AW', 'name' => 'Aruba'],
+            ['code' => 'AU', 'name' => 'Australia'],
+            ['code' => 'AT', 'name' => 'Austria'],
+            ['code' => 'AZ', 'name' => 'Azerbaijan'],
+            ['code' => 'BS', 'name' => 'Bahamas'],
+            ['code' => 'BH', 'name' => 'Bahrain'],
+            ['code' => 'BD', 'name' => 'Bangladesh'],
+            ['code' => 'BB', 'name' => 'Barbados'],
+            ['code' => 'BY', 'name' => 'Belarus'],
+            ['code' => 'BE', 'name' => 'Belgium'],
+            ['code' => 'BZ', 'name' => 'Belize'],
+            ['code' => 'BJ', 'name' => 'Benin'],
+            ['code' => 'BM', 'name' => 'Bermuda'],
+            ['code' => 'BT', 'name' => 'Bhutan'],
+            ['code' => 'BO', 'name' => 'Bolivia'],
+            ['code' => 'BA', 'name' => 'Bosnia and Herzegovina'],
+            ['code' => 'BW', 'name' => 'Botswana'],
+            ['code' => 'BV', 'name' => 'Bouvet Island'],
+            ['code' => 'BR', 'name' => 'Brazil'],
+            ['code' => 'IO', 'name' => 'British lndian Ocean Territory'],
+            ['code' => 'BN', 'name' => 'Brunei Darussalam'],
+            ['code' => 'BG', 'name' => 'Bulgaria'],
+            ['code' => 'BF', 'name' => 'Burkina Faso'],
+            ['code' => 'BI', 'name' => 'Burundi'],
+            ['code' => 'KH', 'name' => 'Cambodia'],
+            ['code' => 'CM', 'name' => 'Cameroon'],
+            ['code' => 'CV', 'name' => 'Cape Verde'],
+            ['code' => 'KY', 'name' => 'Cayman Islands'],
+            ['code' => 'CF', 'name' => 'Central African Republic'],
+            ['code' => 'TD', 'name' => 'Chad'],
+            ['code' => 'CL', 'name' => 'Chile'],
+            ['code' => 'CN', 'name' => 'China'],
+            ['code' => 'CX', 'name' => 'Christmas Island'],
+            ['code' => 'CC', 'name' => 'Cocos (Keeling) Islands'],
+            ['code' => 'CO', 'name' => 'Colombia'],
+            ['code' => 'KM', 'name' => 'Comoros'],
+            ['code' => 'CG', 'name' => 'Congo'],
+            ['code' => 'CK', 'name' => 'Cook Islands'],
+            ['code' => 'CR', 'name' => 'Costa Rica'],
+            ['code' => 'HR', 'name' => 'Croatia (Hrvatska)'],
+            ['code' => 'CU', 'name' => 'Cuba'],
+            ['code' => 'CY', 'name' => 'Cyprus'],
+            ['code' => 'CZ', 'name' => 'Czech Republic'],
+            ['code' => 'DK', 'name' => 'Denmark'],
+            ['code' => 'DJ', 'name' => 'Djibouti'],
+            ['code' => 'DM', 'name' => 'Dominica'],
+            ['code' => 'DO', 'name' => 'Dominican Republic'],
+            ['code' => 'TP', 'name' => 'East Timor'],
+            ['code' => 'EC', 'name' => 'Ecudaor'],
+            ['code' => 'EG', 'name' => 'Egypt'],
+            ['code' => 'SV', 'name' => 'El Salvador'],
+            ['code' => 'GQ', 'name' => 'Equatorial Guinea'],
+            ['code' => 'ER', 'name' => 'Eritrea'],
+            ['code' => 'EE', 'name' => 'Estonia'],
+            ['code' => 'ET', 'name' => 'Ethiopia'],
+            ['code' => 'FK', 'name' => 'Falkland Islands (Malvinas)'],
+            ['code' => 'FO', 'name' => 'Faroe Islands'],
+            ['code' => 'FJ', 'name' => 'Fiji'],
+            ['code' => 'FI', 'name' => 'Finland'],
+            ['code' => 'FR', 'name' => 'France'],
+            ['code' => 'FX', 'name' => 'France, Metropolitan'],
+            ['code' => 'GF', 'name' => 'French Guiana'],
+            ['code' => 'PF', 'name' => 'French Polynesia'],
+            ['code' => 'TF', 'name' => 'French Southern Territories'],
+            ['code' => 'GA', 'name' => 'Gabon'],
+            ['code' => 'GM', 'name' => 'Gambia'],
+            ['code' => 'GE', 'name' => 'Georgia'],
+            ['code' => 'DE', 'name' => 'Germany'],
+            ['code' => 'GH', 'name' => 'Ghana'],
+            ['code' => 'GI', 'name' => 'Gibraltar'],
+            ['code' => 'GR', 'name' => 'Greece'],
+            ['code' => 'GL', 'name' => 'Greenland'],
+            ['code' => 'GD', 'name' => 'Grenada'],
+            ['code' => 'GP', 'name' => 'Guadeloupe'],
+            ['code' => 'GU', 'name' => 'Guam'],
+            ['code' => 'GT', 'name' => 'Guatemala'],
+            ['code' => 'GN', 'name' => 'Guinea'],
+            ['code' => 'GW', 'name' => 'Guinea-Bissau'],
+            ['code' => 'GY', 'name' => 'Guyana'],
+            ['code' => 'HT', 'name' => 'Haiti'],
+            ['code' => 'HM', 'name' => 'Heard and Mc Donald Islands'],
+            ['code' => 'HN', 'name' => 'Honduras'],
+            ['code' => 'HK', 'name' => 'Hong Kong'],
+            ['code' => 'HU', 'name' => 'Hungary'],
+            ['code' => 'IS', 'name' => 'Iceland'],
+            ['code' => 'IN', 'name' => 'India'],
+            ['code' => 'ID', 'name' => 'Indonesia'],
+            ['code' => 'IR', 'name' => 'Iran (Islamic Republic of)'],
+            ['code' => 'IQ', 'name' => 'Iraq'],
+            ['code' => 'IE', 'name' => 'Ireland'],
+            ['code' => 'IL', 'name' => 'Israel'],
+            ['code' => 'IT', 'name' => 'Italy'],
+            ['code' => 'CI', 'name' => 'Ivory Coast'],
+            ['code' => 'JM', 'name' => 'Jamaica'],
+            ['code' => 'JP', 'name' => 'Japan'],
+            ['code' => 'JO', 'name' => 'Jordan'],
+            ['code' => 'KZ', 'name' => 'Kazakhstan'],
+            ['code' => 'KE', 'name' => 'Kenya'],
+            ['code' => 'KI', 'name' => 'Kiribati'],
+            ['code' => 'KP', 'name' => 'Korea, Democratic People\'s Republic of'],
+            ['code' => 'KR', 'name' => 'Korea, Republic of'],
+            ['code' => 'KW', 'name' => 'Kuwait'],
+            ['code' => 'KG', 'name' => 'Kyrgyzstan'],
+            ['code' => 'LA', 'name' => 'Lao People\'s Democratic Republic'],
+            ['code' => 'LV', 'name' => 'Latvia'],
+            ['code' => 'LB', 'name' => 'Lebanon'],
+            ['code' => 'LS', 'name' => 'Lesotho'],
+            ['code' => 'LR', 'name' => 'Liberia'],
+            ['code' => 'LY', 'name' => 'Libyan Arab Jamahiriya'],
+            ['code' => 'LI', 'name' => 'Liechtenstein'],
+            ['code' => 'LT', 'name' => 'Lithuania'],
+            ['code' => 'LU', 'name' => 'Luxembourg'],
+            ['code' => 'MO', 'name' => 'Macau'],
+            ['code' => 'MK', 'name' => 'Macedonia'],
+            ['code' => 'MG', 'name' => 'Madagascar'],
+            ['code' => 'MW', 'name' => 'Malawi'],
+            ['code' => 'MY', 'name' => 'Malaysia'],
+            ['code' => 'MV', 'name' => 'Maldives'],
+            ['code' => 'ML', 'name' => 'Mali'],
+            ['code' => 'MT', 'name' => 'Malta'],
+            ['code' => 'MH', 'name' => 'Marshall Islands'],
+            ['code' => 'MQ', 'name' => 'Martinique'],
+            ['code' => 'MR', 'name' => 'Mauritania'],
+            ['code' => 'MU', 'name' => 'Mauritius'],
+            ['code' => 'TY', 'name' => 'Mayotte'],
+            ['code' => 'MX', 'name' => 'Mexico'],
+            ['code' => 'FM', 'name' => 'Micronesia, Federated States of'],
+            ['code' => 'MD', 'name' => 'Moldova, Republic of'],
+            ['code' => 'MC', 'name' => 'Monaco'],
+            ['code' => 'MN', 'name' => 'Mongolia'],
+            ['code' => 'MS', 'name' => 'Montserrat'],
+            ['code' => 'MA', 'name' => 'Morocco'],
+            ['code' => 'MZ', 'name' => 'Mozambique'],
+            ['code' => 'MM', 'name' => 'Myanmar'],
+            ['code' => 'NA', 'name' => 'Namibia'],
+            ['code' => 'NR', 'name' => 'Nauru'],
+            ['code' => 'NP', 'name' => 'Nepal'],
+            ['code' => 'NL', 'name' => 'Netherlands'],
+            ['code' => 'AN', 'name' => 'Netherlands Antilles'],
+            ['code' => 'NC', 'name' => 'New Caledonia'],
+            ['code' => 'NZ', 'name' => 'New Zealand'],
+            ['code' => 'NI', 'name' => 'Nicaragua'],
+            ['code' => 'NE', 'name' => 'Niger'],
+            ['code' => 'NG', 'name' => 'Nigeria'],
+            ['code' => 'NU', 'name' => 'Niue'],
+            ['code' => 'NF', 'name' => 'Norfork Island'],
+            ['code' => 'MP', 'name' => 'Northern Mariana Islands'],
+            ['code' => 'NO', 'name' => 'Norway'],
+            ['code' => 'OM', 'name' => 'Oman'],
+            ['code' => 'PK', 'name' => 'Pakistan'],
+            ['code' => 'PW', 'name' => 'Palau'],
+            ['code' => 'PA', 'name' => 'Panama'],
+            ['code' => 'PG', 'name' => 'Papua New Guinea'],
+            ['code' => 'PY', 'name' => 'Paraguay'],
+            ['code' => 'PE', 'name' => 'Peru'],
+            ['code' => 'PH', 'name' => 'Philippines'],
+            ['code' => 'PN', 'name' => 'Pitcairn'],
+            ['code' => 'PL', 'name' => 'Poland'],
+            ['code' => 'PT', 'name' => 'Portugal'],
+            ['code' => 'PR', 'name' => 'Puerto Rico'],
+            ['code' => 'QA', 'name' => 'Qatar'],
+            ['code' => 'RE', 'name' => 'Reunion'],
+            ['code' => 'RO', 'name' => 'Romania'],
+            ['code' => 'RU', 'name' => 'Russian Federation'],
+            ['code' => 'RW', 'name' => 'Rwanda'],
+            ['code' => 'KN', 'name' => 'Saint Kitts and Nevis'],
+            ['code' => 'LC', 'name' => 'Saint Lucia'],
+            ['code' => 'VC', 'name' => 'Saint Vincent and the Grenadines'],
+            ['code' => 'WS', 'name' => 'Samoa'],
+            ['code' => 'SM', 'name' => 'San Marino'],
+            ['code' => 'ST', 'name' => 'Sao Tome and Principe'],
+            ['code' => 'SA', 'name' => 'Saudi Arabia'],
+            ['code' => 'SN', 'name' => 'Senegal'],
+            ['code' => 'RS', 'name' => 'Serbia'],
+            ['code' => 'SC', 'name' => 'Seychelles'],
+            ['code' => 'SL', 'name' => 'Sierra Leone'],
+            ['code' => 'SG', 'name' => 'Singapore'],
+            ['code' => 'SK', 'name' => 'Slovakia'],
+            ['code' => 'SI', 'name' => 'Slovenia'],
+            ['code' => 'SB', 'name' => 'Solomon Islands'],
+            ['code' => 'SO', 'name' => 'Somalia'],
+            ['code' => 'ZA', 'name' => 'South Africa'],
+            ['code' => 'GS', 'name' => 'South Georgia South Sandwich Islands'],
+            ['code' => 'ES', 'name' => 'Spain'],
+            ['code' => 'LK', 'name' => 'Sri Lanka'],
+            ['code' => 'SH', 'name' => 'St. Helena'],
+            ['code' => 'PM', 'name' => 'St. Pierre and Miquelon'],
+            ['code' => 'SD', 'name' => 'Sudan'],
+            ['code' => 'SR', 'name' => 'Suriname'],
+            ['code' => 'SJ', 'name' => 'Svalbarn and Jan Mayen Islands'],
+            ['code' => 'SZ', 'name' => 'Swaziland'],
+            ['code' => 'SE', 'name' => 'Sweden'],
+            ['code' => 'CH', 'name' => 'Switzerland'],
+            ['code' => 'SY', 'name' => 'Syrian Arab Republic'],
+            ['code' => 'TW', 'name' => 'Taiwan'],
+            ['code' => 'TJ', 'name' => 'Tajikistan'],
+            ['code' => 'TZ', 'name' => 'Tanzania, United Republic of'],
+            ['code' => 'TH', 'name' => 'Thailand'],
+            ['code' => 'TG', 'name' => 'Togo'],
+            ['code' => 'TK', 'name' => 'Tokelau'],
+            ['code' => 'TO', 'name' => 'Tonga'],
+            ['code' => 'TT', 'name' => 'Trinidad and Tobago'],
+            ['code' => 'TN', 'name' => 'Tunisia'],
+            ['code' => 'TR', 'name' => 'Turkey'],
+            ['code' => 'TM', 'name' => 'Turkmenistan'],
+            ['code' => 'TC', 'name' => 'Turks and Caicos Islands'],
+            ['code' => 'TV', 'name' => 'Tuvalu'],
+            ['code' => 'UG', 'name' => 'Uganda'],
+            ['code' => 'UA', 'name' => 'Ukraine'],
+            ['code' => 'AE', 'name' => 'United Arab Emirates'],
+            ['code' => 'GB', 'name' => 'United Kingdom'],
+            ['code' => 'CA', 'name' => 'United States'],
+            ['code' => 'UM', 'name' => 'United States minor outlying islands'],
+            ['code' => 'UY', 'name' => 'Uruguay'],
+            ['code' => 'UZ', 'name' => 'Uzbekistan'],
+            ['code' => 'VU', 'name' => 'Vanuatu'],
+            ['code' => 'VA', 'name' => 'Vatican City State'],
+            ['code' => 'VE', 'name' => 'Venezuela'],
+            ['code' => 'VN', 'name' => 'Vietnam'],
+            ['code' => 'VG', 'name' => 'Virgin Islands (British)'],
+            ['code' => 'VI', 'name' => 'Virgin Islands (U.S.)'],
+            ['code' => 'WF', 'name' => 'Wallis and Futuna Islands'],
+            ['code' => 'EH', 'name' => 'Western Sahara'],
+            ['code' => 'YE', 'name' => 'Yemen'],
+            ['code' => 'YU', 'name' => 'Yugoslavia'],
+            ['code' => 'ZR', 'name' => 'Zaire'],
+            ['code' => 'ZM', 'name' => 'Zambia'],
+            ['code' => 'ZW', 'name' => 'Zimbabwe'],
+        ];
     }
 
     public function States()
     {
-        return  $states = array(
+        return $states = [
             // Canada
-            array('code' => 'CA', 'abbreviation' => 'AB', 'name' => 'Alberta'),
-            array('code' => 'CA', 'abbreviation' => 'BC', 'name' => 'British Columbia'),
-            array('code' => 'CA', 'abbreviation' => 'MB', 'name' => 'Manitoba'),
-            array('code' => 'CA', 'abbreviation' => 'NB', 'name' => 'New Brunswick'),
-            array('code' => 'CA', 'abbreviation' => 'NL', 'name' => 'Newfoundland and Labrador'),
-            array('code' => 'CA', 'abbreviation' => 'NT', 'name' => 'Northwest Territories'),
-            array('code' => 'CA', 'abbreviation' => 'NS', 'name' => 'Nova Scotia'),
-            array('code' => 'CA', 'abbreviation' => 'NU', 'name' => 'Nunavut'),
-            array('code' => 'CA', 'abbreviation' => 'ON', 'name' => 'Ontario'),
-            array('code' => 'CA', 'abbreviation' => 'PE', 'name' => 'Prince Edward Island'),
-            array('code' => 'CA', 'abbreviation' => 'QC', 'name' => 'Quebec'),
-            array('code' => 'CA', 'abbreviation' => 'SK', 'name' => 'Saskatchewan'),
-            array('code' => 'CA', 'abbreviation' => 'YT', 'name' => 'Yukon'),
+            ['code' => 'CA', 'abbreviation' => 'AB', 'name' => 'Alberta'],
+            ['code' => 'CA', 'abbreviation' => 'BC', 'name' => 'British Columbia'],
+            ['code' => 'CA', 'abbreviation' => 'MB', 'name' => 'Manitoba'],
+            ['code' => 'CA', 'abbreviation' => 'NB', 'name' => 'New Brunswick'],
+            ['code' => 'CA', 'abbreviation' => 'NL', 'name' => 'Newfoundland and Labrador'],
+            ['code' => 'CA', 'abbreviation' => 'NT', 'name' => 'Northwest Territories'],
+            ['code' => 'CA', 'abbreviation' => 'NS', 'name' => 'Nova Scotia'],
+            ['code' => 'CA', 'abbreviation' => 'NU', 'name' => 'Nunavut'],
+            ['code' => 'CA', 'abbreviation' => 'ON', 'name' => 'Ontario'],
+            ['code' => 'CA', 'abbreviation' => 'PE', 'name' => 'Prince Edward Island'],
+            ['code' => 'CA', 'abbreviation' => 'QC', 'name' => 'Quebec'],
+            ['code' => 'CA', 'abbreviation' => 'SK', 'name' => 'Saskatchewan'],
+            ['code' => 'CA', 'abbreviation' => 'YT', 'name' => 'Yukon'],
 
             // USA
-            array('code' => 'US', 'abbreviation' => 'AL', 'name' => 'Alabama'),
-            array('code' => 'US', 'abbreviation' => 'AK', 'name' => 'Alaska'),
-            array('code' => 'US', 'abbreviation' => 'AZ', 'name' => 'Arizona'),
-            array('code' => 'US', 'abbreviation' => 'AR', 'name' => 'Arkansas'),
-            array('code' => 'US', 'abbreviation' => 'CA', 'name' => 'California'),
-            array('code' => 'US', 'abbreviation' => 'CO', 'name' => 'Colorado'),
-            array('code' => 'US', 'abbreviation' => 'CT', 'name' => 'Connecticut'),
-            array('code' => 'US', 'abbreviation' => 'DE', 'name' => 'Delaware'),
-            array('code' => 'US', 'abbreviation' => 'FL', 'name' => 'Florida'),
-            array('code' => 'US', 'abbreviation' => 'GA', 'name' => 'Georgia'),
-            array('code' => 'US', 'abbreviation' => 'HI', 'name' => 'Hawaii'),
-            array('code' => 'US', 'abbreviation' => 'ID', 'name' => 'Idaho'),
-            array('code' => 'US', 'abbreviation' => 'IL', 'name' => 'Illinois'),
-            array('code' => 'US', 'abbreviation' => 'IN', 'name' => 'Indiana'),
-            array('code' => 'US', 'abbreviation' => 'IA', 'name' => 'Iowa'),
-            array('code' => 'US', 'abbreviation' => 'KS', 'name' => 'Kansas'),
-            array('code' => 'US', 'abbreviation' => 'KY', 'name' => 'Kentucky'),
-            array('code' => 'US', 'abbreviation' => 'LA', 'name' => 'Louisiana'),
-            array('code' => 'US', 'abbreviation' => 'ME', 'name' => 'Maine'),
-            array('code' => 'US', 'abbreviation' => 'MD', 'name' => 'Maryland'),
-            array('code' => 'US', 'abbreviation' => 'MA', 'name' => 'Massachusetts'),
-            array('code' => 'US', 'abbreviation' => 'MI', 'name' => 'Michigan'),
-            array('code' => 'US', 'abbreviation' => 'MN', 'name' => 'Minnesota'),
-            array('code' => 'US', 'abbreviation' => 'MS', 'name' => 'Mississippi'),
-            array('code' => 'US', 'abbreviation' => 'MO', 'name' => 'Missouri'),
-            array('code' => 'US', 'abbreviation' => 'MT', 'name' => 'Montana'),
-            array('code' => 'US', 'abbreviation' => 'NE', 'name' => 'Nebraska'),
-            array('code' => 'US', 'abbreviation' => 'NV', 'name' => 'Nevada'),
-            array('code' => 'US', 'abbreviation' => 'NH', 'name' => 'New Hampshire'),
-            array('code' => 'US', 'abbreviation' => 'NJ', 'name' => 'New Jersey'),
-            array('code' => 'US', 'abbreviation' => 'NM', 'name' => 'New Mexico'),
-            array('code' => 'US', 'abbreviation' => 'NY', 'name' => 'New York'),
-            array('code' => 'US', 'abbreviation' => 'NC', 'name' => 'NC'),
-            array('code' => 'US', 'abbreviation' => 'ND', 'name' => 'North Dakota'),
-            array('code' => 'US', 'abbreviation' => 'OH', 'name' => 'Ohio'),
-            array('code' => 'US', 'abbreviation' => 'OK', 'name' => 'Oklahoma'),
-            array('code' => 'US', 'abbreviation' => 'OR', 'name' => 'Oregon'),
-            array('code' => 'US', 'abbreviation' => 'PA', 'name' => 'Pennsylvania'),
-            array('code' => 'US', 'abbreviation' => 'RI', 'name' => 'Rhode Island'),
-            array('code' => 'US', 'abbreviation' => 'SC', 'name' => 'South Carolina'),
-            array('code' => 'US', 'abbreviation' => 'SD', 'name' => 'South Dakota'),
-            array('code' => 'US', 'abbreviation' => 'TN', 'name' => 'Tennessee'),
-            array('code' => 'US', 'abbreviation' => 'TX', 'name' => 'Texas'),
-            array('code' => 'US', 'abbreviation' => 'UT', 'name' => 'Utah'),
-            array('code' => 'US', 'abbreviation' => 'VT', 'name' => 'Vermont'),
-            array('code' => 'US', 'abbreviation' => 'VA', 'name' => 'Virginia'),
-            array('code' => 'US', 'abbreviation' => 'WA', 'name' => 'Washington'),
-            array('code' => 'US', 'abbreviation' => 'WV', 'name' => 'West Virginia'),
-            array('code' => 'US', 'abbreviation' => 'WI', 'name' => 'Wisconsin'),
-            array('code' => 'US', 'abbreviation' => 'WY', 'name' => 'Wyoming'),
-            array('code' => 'US', 'abbreviation' => 'AS', 'name' => 'American Samoa'),
-            array('code' => 'US', 'abbreviation' => 'DC', 'name' => 'District of Columbia'),
-            array('code' => 'US', 'abbreviation' => 'GU', 'name' => 'Guam'),
-            array('code' => 'US', 'abbreviation' => 'MP', 'name' => 'Northern Mariana Islands'),
-            array('code' => 'US', 'abbreviation' => 'PR', 'name' => 'Puerto Rico'),
-            array('code' => 'US', 'abbreviation' => 'VI', 'name' => 'United States Virgin Islands'),
-        );
+            ['code' => 'US', 'abbreviation' => 'AL', 'name' => 'Alabama'],
+            ['code' => 'US', 'abbreviation' => 'AK', 'name' => 'Alaska'],
+            ['code' => 'US', 'abbreviation' => 'AZ', 'name' => 'Arizona'],
+            ['code' => 'US', 'abbreviation' => 'AR', 'name' => 'Arkansas'],
+            ['code' => 'US', 'abbreviation' => 'CA', 'name' => 'California'],
+            ['code' => 'US', 'abbreviation' => 'CO', 'name' => 'Colorado'],
+            ['code' => 'US', 'abbreviation' => 'CT', 'name' => 'Connecticut'],
+            ['code' => 'US', 'abbreviation' => 'DE', 'name' => 'Delaware'],
+            ['code' => 'US', 'abbreviation' => 'FL', 'name' => 'Florida'],
+            ['code' => 'US', 'abbreviation' => 'GA', 'name' => 'Georgia'],
+            ['code' => 'US', 'abbreviation' => 'HI', 'name' => 'Hawaii'],
+            ['code' => 'US', 'abbreviation' => 'ID', 'name' => 'Idaho'],
+            ['code' => 'US', 'abbreviation' => 'IL', 'name' => 'Illinois'],
+            ['code' => 'US', 'abbreviation' => 'IN', 'name' => 'Indiana'],
+            ['code' => 'US', 'abbreviation' => 'IA', 'name' => 'Iowa'],
+            ['code' => 'US', 'abbreviation' => 'KS', 'name' => 'Kansas'],
+            ['code' => 'US', 'abbreviation' => 'KY', 'name' => 'Kentucky'],
+            ['code' => 'US', 'abbreviation' => 'LA', 'name' => 'Louisiana'],
+            ['code' => 'US', 'abbreviation' => 'ME', 'name' => 'Maine'],
+            ['code' => 'US', 'abbreviation' => 'MD', 'name' => 'Maryland'],
+            ['code' => 'US', 'abbreviation' => 'MA', 'name' => 'Massachusetts'],
+            ['code' => 'US', 'abbreviation' => 'MI', 'name' => 'Michigan'],
+            ['code' => 'US', 'abbreviation' => 'MN', 'name' => 'Minnesota'],
+            ['code' => 'US', 'abbreviation' => 'MS', 'name' => 'Mississippi'],
+            ['code' => 'US', 'abbreviation' => 'MO', 'name' => 'Missouri'],
+            ['code' => 'US', 'abbreviation' => 'MT', 'name' => 'Montana'],
+            ['code' => 'US', 'abbreviation' => 'NE', 'name' => 'Nebraska'],
+            ['code' => 'US', 'abbreviation' => 'NV', 'name' => 'Nevada'],
+            ['code' => 'US', 'abbreviation' => 'NH', 'name' => 'New Hampshire'],
+            ['code' => 'US', 'abbreviation' => 'NJ', 'name' => 'New Jersey'],
+            ['code' => 'US', 'abbreviation' => 'NM', 'name' => 'New Mexico'],
+            ['code' => 'US', 'abbreviation' => 'NY', 'name' => 'New York'],
+            ['code' => 'US', 'abbreviation' => 'NC', 'name' => 'NC'],
+            ['code' => 'US', 'abbreviation' => 'ND', 'name' => 'North Dakota'],
+            ['code' => 'US', 'abbreviation' => 'OH', 'name' => 'Ohio'],
+            ['code' => 'US', 'abbreviation' => 'OK', 'name' => 'Oklahoma'],
+            ['code' => 'US', 'abbreviation' => 'OR', 'name' => 'Oregon'],
+            ['code' => 'US', 'abbreviation' => 'PA', 'name' => 'Pennsylvania'],
+            ['code' => 'US', 'abbreviation' => 'RI', 'name' => 'Rhode Island'],
+            ['code' => 'US', 'abbreviation' => 'SC', 'name' => 'South Carolina'],
+            ['code' => 'US', 'abbreviation' => 'SD', 'name' => 'South Dakota'],
+            ['code' => 'US', 'abbreviation' => 'TN', 'name' => 'Tennessee'],
+            ['code' => 'US', 'abbreviation' => 'TX', 'name' => 'Texas'],
+            ['code' => 'US', 'abbreviation' => 'UT', 'name' => 'Utah'],
+            ['code' => 'US', 'abbreviation' => 'VT', 'name' => 'Vermont'],
+            ['code' => 'US', 'abbreviation' => 'VA', 'name' => 'Virginia'],
+            ['code' => 'US', 'abbreviation' => 'WA', 'name' => 'Washington'],
+            ['code' => 'US', 'abbreviation' => 'WV', 'name' => 'West Virginia'],
+            ['code' => 'US', 'abbreviation' => 'WI', 'name' => 'Wisconsin'],
+            ['code' => 'US', 'abbreviation' => 'WY', 'name' => 'Wyoming'],
+            ['code' => 'US', 'abbreviation' => 'AS', 'name' => 'American Samoa'],
+            ['code' => 'US', 'abbreviation' => 'DC', 'name' => 'District of Columbia'],
+            ['code' => 'US', 'abbreviation' => 'GU', 'name' => 'Guam'],
+            ['code' => 'US', 'abbreviation' => 'MP', 'name' => 'Northern Mariana Islands'],
+            ['code' => 'US', 'abbreviation' => 'PR', 'name' => 'Puerto Rico'],
+            ['code' => 'US', 'abbreviation' => 'VI', 'name' => 'United States Virgin Islands'],
+        ];
     }
 
     public function InputType()
     {
         return [
-            array('name' => 'tel', 'mask' => ''),
-            array('name' => 'email', 'mask' => ''),
-            array('name' => 'city', 'mask' => ''),
-            array('name' => 'custom', 'mask' => ''),
-            array('name' => 'checkbox', 'mask' => ''),
-            array('name' => 'color', 'mask' => ''),
-            array('name' => 'date', 'mask' => ''),
-            array('name' => 'datetime-local', 'mask' => ''),
-            array('name' => 'file', 'mask' => ''),
-            array('name' => 'hidden', 'mask' => ''),
-            array('name' => 'image', 'mask' => ''),
-            array('name' => 'map', 'mask' => ''),
-            array('name' => 'month', 'mask' => ''),
-            array('name' => 'number', 'mask' => ''),
-            array('name' => 'password', 'mask' => ''),
-            array('name' => 'radio', 'mask' => ''),
-            array('name' => 'range', 'mask' => ''),
-            array('name' => 'select', 'mask' => ''),
-            array('name' => 'select_mulitple', 'mask' => ''),
-            array('name' => 'tel', 'mask' => ''),
-            array('name' => 'text', 'mask' => ''),
-            array('name' => 'time', 'mask' => ''),
-            array('name' => 'url', 'mask' => ''),
-            array('name' => 'week', 'mask' => ''),
-            array('name' => 'textarea', 'mask' => ''),
-            array('name' => 'video', 'mask' => ''),
-            array('name' => 'city', 'mask' => ''),
-            array('name' => 'zip', 'mask' => ''),
-            array('name' => 'address', 'mask' => ''),
-            array('name' => 'related', 'mask' => ''),
+            ['name' => 'tel', 'mask' => ''],
+            ['name' => 'email', 'mask' => ''],
+            ['name' => 'city', 'mask' => ''],
+            ['name' => 'custom', 'mask' => ''],
+            ['name' => 'checkbox', 'mask' => ''],
+            ['name' => 'color', 'mask' => ''],
+            ['name' => 'date', 'mask' => ''],
+            ['name' => 'datetime-local', 'mask' => ''],
+            ['name' => 'file', 'mask' => ''],
+            ['name' => 'hidden', 'mask' => ''],
+            ['name' => 'image', 'mask' => ''],
+            ['name' => 'map', 'mask' => ''],
+            ['name' => 'month', 'mask' => ''],
+            ['name' => 'number', 'mask' => ''],
+            ['name' => 'password', 'mask' => ''],
+            ['name' => 'radio', 'mask' => ''],
+            ['name' => 'range', 'mask' => ''],
+            ['name' => 'select', 'mask' => ''],
+            ['name' => 'select_mulitple', 'mask' => ''],
+            ['name' => 'tel', 'mask' => ''],
+            ['name' => 'text', 'mask' => ''],
+            ['name' => 'time', 'mask' => ''],
+            ['name' => 'url', 'mask' => ''],
+            ['name' => 'week', 'mask' => ''],
+            ['name' => 'textarea', 'mask' => ''],
+            ['name' => 'video', 'mask' => ''],
+            ['name' => 'city', 'mask' => ''],
+            ['name' => 'zip', 'mask' => ''],
+            ['name' => 'address', 'mask' => ''],
+            ['name' => 'related', 'mask' => ''],
         ];
     }
-
 }

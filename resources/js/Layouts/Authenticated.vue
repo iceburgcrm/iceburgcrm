@@ -100,7 +100,6 @@
                                         Data
                                     </a>
                                 </li>
-                                <!--
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('connectors')" method="get" as="button">
                                         Connectors
@@ -111,7 +110,6 @@
                                         Scheduler
                                     </a>
                                 </li>
-                                -->
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-bold mt-3   hover:text-accent text-base-content grid-row-1" :href="route('builder')" method="get" as="button">
                                         Builder

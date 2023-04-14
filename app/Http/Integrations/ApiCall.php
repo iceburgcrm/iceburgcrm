@@ -1,19 +1,23 @@
 <?php
+
 namespace App\Http\Integrations;
 
-use Saloon\Http\SoloRequest;
 use Saloon\Enums\Method;
+use Saloon\Http\SoloRequest;
 use Saloon\Traits\Plugins\AcceptsJson;
 
 class ApiCall extends SoloRequest
 {
     protected Method $method = Method::GET;
+
     use AcceptsJson;
-    public function __construct($baseUrl, $endpointUrl='', $config=[], $headers=[]){
-        $this->defaultBaseUrl=$baseUrl;
-        $this->defaultEndpointUrl=$endpointUrl;
-        $this->defaultConfig=$config;
-        $this->defaultHeaders=$headers;
+
+    public function __construct($baseUrl, $endpointUrl = '', $config = [], $headers = [])
+    {
+        $this->defaultBaseUrl = $baseUrl;
+        $this->defaultEndpointUrl = $endpointUrl;
+        $this->defaultConfig = $config;
+        $this->defaultHeaders = $headers;
     }
 
     public function resolveEndpoint(): string

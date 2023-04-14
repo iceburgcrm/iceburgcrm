@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SubpanelField extends Model
 {
     use HasFactory;
+
     protected $table = 'ice_subpanel_fields';
 
     public function field()

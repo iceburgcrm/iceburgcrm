@@ -16,8 +16,9 @@ class CheckAdminAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::user()->role != 'Admin')
+        if (Auth::user()->role != 'Admin') {
             return redirect('dashboard')->withErrors(['No Access']);
+        }
 
         return $next($request);
     }

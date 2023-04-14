@@ -8,14 +8,14 @@ use Maatwebsite\Excel\Concerns\ToArray;
 
 class GenericImport implements ToArray
 {
-    public array $data=[];
+    public array $data = [];
+
     /**
-     * @param array $row
      * @return array
      */
     public function array(array $row)
     {
-        $this->data[]=$row;
+        $this->data[] = $row;
         /*
         return new User([
             'name'     => $row[0],

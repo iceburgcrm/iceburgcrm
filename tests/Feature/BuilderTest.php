@@ -23,6 +23,7 @@ class BuilderTest extends TestCase
         $this->artisan('db:seed');
         $this->user = User::find(1);
     }
+
     /**
      * A basic feature test example.
      *
@@ -38,7 +39,7 @@ class BuilderTest extends TestCase
     public function test_select_account_is_returning_for_all_modules()
     {
         Module::where('status', 1)->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->get('/data/builder/' . $module->id . '/type/select_module');
+            $response = $this->actingAs($this->user)->get('/data/builder/'.$module->id.'/type/select_module');
             $response->assertStatus(200);
             $this->assertGreaterThan(0, count($response->json()['module']));
             $this->assertGreaterThan(0, count($response->json()['fields']));
@@ -47,12 +48,12 @@ class BuilderTest extends TestCase
 
     public function test_create_a_module()
     {
-        $name='test';
+        $name = 'test';
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/add_module',
         ['name' => $name]);
         $response->assertStatus(200);
-        $id=Module::where('name', 'like', $name)->value('id');
-        $this->assertGreaterThan(0,$id);
+        $id = Module::where('name', 'like', $name)->value('id');
+        $this->assertGreaterThan(0, $id);
 
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/save',
             ['type' => 'module',
@@ -72,12 +73,12 @@ class BuilderTest extends TestCase
 
     public function test_create_a_field()
     {
-        $name='test';
+        $name = 'test';
         $response = $this->actingAs($this->user)->post('/data/builder/1/type/add_field',
             ['name' => $name]);
         $response->assertStatus(200);
-        $id=Field::where('name', 'like', $name)->value('id');
-        $this->assertGreaterThan(0,$id);
+        $id = Field::where('name', 'like', $name)->value('id');
+        $this->assertGreaterThan(0, $id);
 
         $response = $this->actingAs($this->user)->post('/data/builder/1/type/save',
             ['type' => 'field',
@@ -97,12 +98,12 @@ class BuilderTest extends TestCase
 
     public function test_create_a_subpanel()
     {
-        $name='test';
+        $name = 'test';
         $response = $this->actingAs($this->user)->post('/data/builder/1/type/add_subpanel',
             ['name' => $name]);
         $response->assertStatus(200);
-        $id=ModuleSubpanel::where('name', 'like', $name)->value('id');
-        $this->assertGreaterThan(0,$id);
+        $id = ModuleSubpanel::where('name', 'like', $name)->value('id');
+        $this->assertGreaterThan(0, $id);
 
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/save',
             ['type' => 'subpanel',
@@ -121,13 +122,13 @@ class BuilderTest extends TestCase
 
     public function test_create_a_relationship()
     {
-        $name='test';
+        $name = 'test';
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/add_relationship',
             ['name' => $name, 'relationship_modules' => '1,2']);
         $response->assertStatus(200);
-        $id=Relationship::where('name', 'like', $name)
+        $id = Relationship::where('name', 'like', $name)
             ->value('id');
-        $this->assertGreaterThan(0,$id);
+        $this->assertGreaterThan(0, $id);
 
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/save',
             ['type' => 'relationship',
@@ -146,12 +147,12 @@ class BuilderTest extends TestCase
 
     public function test_create_update_delete_a_datalet()
     {
-        $name='test';
+        $name = 'test';
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/add_datalet',
             ['name' => $name]);
         $response->assertStatus(200);
-        $id=Datalet::where('label', 'like', strtolower($name))->value('id');
-        $this->assertGreaterThan(0,$id);
+        $id = Datalet::where('label', 'like', strtolower($name))->value('id');
+        $this->assertGreaterThan(0, $id);
 
         $response = $this->actingAs($this->user)->post('/data/builder/0/type/save',
             ['type' => 'datalet',

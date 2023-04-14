@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Schedule extends Model
 {
     use HasFactory;
+
     protected $table = 'ice_schedules';
 }

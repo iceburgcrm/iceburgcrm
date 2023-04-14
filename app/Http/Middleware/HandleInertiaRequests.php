@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\ModuleGroup;
+use App\Models\Role;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
-use App\Models\ModuleGroup;
-use App\Models\Setting;
-use App\Models\Role;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -21,7 +21,6 @@ class HandleInertiaRequests extends Middleware
     /**
      * Determine the current asset version.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
     public function version(Request $request)
@@ -32,15 +31,15 @@ class HandleInertiaRequests extends Middleware
     /**
      * Define the props that are shared by default.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function share(Request $request)
     {
         $user = $request->user();
-        if($user){
-            $user['role']=Role::where('id', $user->role_id)->value('name');
+        if ($user) {
+            $user['role'] = Role::where('id', $user->role_id)->value('name');
         }
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $user,

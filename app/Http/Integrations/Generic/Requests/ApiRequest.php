@@ -16,13 +16,13 @@ class ApiRequest extends Request
 
     protected Method $method = Method::GET;
 
-    public function __construct($endpointUrl){
-        $this->defaultEndpointUrl=$endpointUrl;
+    public function __construct($endpointUrl)
+    {
+        $this->defaultEndpointUrl = $endpointUrl;
     }
+
     /**
      * Define the endpoint for the request
-     *
-     * @return string
      */
     public function resolveEndpoint(): string
     {

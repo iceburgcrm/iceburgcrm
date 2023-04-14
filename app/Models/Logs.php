@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Logs extends Model
 {
     use HasFactory;
+
     protected $table = 'ice_logs';
 
     public function module()
@@ -19,6 +20,4 @@ class Logs extends Model
     {
         return $this->hasOne(User::class, 'id', 'user_id');
     }
-
-
 }

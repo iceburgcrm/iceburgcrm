@@ -8,21 +8,22 @@ use Saloon\Traits\Plugins\AcceptsJson;
 class GenericAPI extends Connector
 {
     use AcceptsJson;
+
     public $defaultBaseUrl = '';
 
     public $defaultConfig = [];
+
     public $defaultHeaders = [];
 
-
-     public function __construct($baseUrl, $config=[], $headers=[]){
-         $this->defaultBaseUrl=$baseUrl;
-         $this->defaultConfig=$config;
-         $this->defaultHeaders=$headers;
+     public function __construct($baseUrl, $config = [], $headers = [])
+     {
+         $this->defaultBaseUrl = $baseUrl;
+         $this->defaultConfig = $config;
+         $this->defaultHeaders = $headers;
      }
+
     /**
      * The Base URL of the API
-     *
-     * @return string
      */
     public function resolveBaseUrl(): string
     {
@@ -48,6 +49,4 @@ class GenericAPI extends Connector
     {
         return $this->defaultConfig;
     }
-
-
 }

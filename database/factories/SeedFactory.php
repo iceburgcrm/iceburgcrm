@@ -18,59 +18,43 @@ class SeedFactory extends Factory
     {
         $data = [];
         $faker = $this->faker();
-        $module->fields()->get()->each(function ($field) use ($module, &$data, $faker) {
-            if(isset($field->list) && strlen($field->list) > 0) {
+        $module->fields()->get()->each(function ($field) use (&$data, $faker) {
+            if (isset($field->list) && strlen($field->list) > 0) {
                 $data[$field->name] = 1;
-            }
-            elseif($field->name == 'first_name') {
+            } elseif ($field->name == 'first_name') {
                 $data[$field->name] = $faker->firstName;
-            }
-            elseif($field->name == 'last_name') {
+            } elseif ($field->name == 'last_name') {
                 $data[$field->name] = $faker->lastName;
-            }
-            elseif($field->input_type == 'tel') {
+            } elseif ($field->input_type == 'tel') {
                 $data[$field->name] = $faker->phoneNumber;
-            }
-            elseif($field->input_type == 'tel') {
+            } elseif ($field->input_type == 'tel') {
                 $data[$field->name] = $faker->phoneNumber;
-            }
-            elseif($field->input_type == 'email') {
+            } elseif ($field->input_type == 'email') {
                 $data[$field->name] = $faker->email;
-            }
-            elseif($field->input_type == 'city') {
+            } elseif ($field->input_type == 'city') {
                 $data[$field->name] = $faker->city;
-            }
-            elseif($field->input_type == 'zip') {
+            } elseif ($field->input_type == 'zip') {
                 $data[$field->name] = $faker->postcode;
-            }
-            elseif($field->input_type == 'address') {
+            } elseif ($field->input_type == 'address') {
                 $data[$field->name] = $faker->address;
-            }
-
-            elseif($field->input_type == 'date') {
+            } elseif ($field->input_type == 'date') {
                 $data[$field->name] = $faker->unixTime();
-            }
-
-            elseif($field->input_type == 'currency') {
+            } elseif ($field->input_type == 'currency') {
                 $data[$field->name] = $faker->randomFloat(2, 1, 100);
-            }
-
-            elseif($field->input_type == 'related') {
+            } elseif ($field->input_type == 'related') {
                 $data[$field->name] = rand(1, 5);
-            }
-            elseif($field->input_type == 'textarea') {
+            } elseif ($field->input_type == 'textarea') {
                 $data[$field->name] = $faker->realTextBetween(50, 200);
-            }
-            elseif($field->data_type == 'string'){
+            } elseif ($field->data_type == 'string') {
 
                 $data[$field->name] = $faker->realTextBetween(10, 50);
-            }
-            elseif($field->data_type == 'Integer'){
-                $data[$field->name] = $faker->numberBetween(1,100);
-            }else {
+            } elseif ($field->data_type == 'Integer') {
+                $data[$field->name] = $faker->numberBetween(1, 100);
+            } else {
                 $data[$field->name] = 1;
             }
         });
+
         return $data;
     }
 }

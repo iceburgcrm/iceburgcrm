@@ -65,10 +65,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-     //    'users' => [
-     //        'driver' => 'database',
-      //       'table' => 'ice_users',
-      //   ],
+        //    'users' => [
+        //        'driver' => 'database',
+        //       'table' => 'ice_users',
+        //   ],
     ],
 
     /*

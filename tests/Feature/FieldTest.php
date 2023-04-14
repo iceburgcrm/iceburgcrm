@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 class FieldTest extends TestCase
@@ -19,6 +18,7 @@ class FieldTest extends TestCase
         // alternatively you can call
         //$this->seed();
     }
+
     /**
      * A basic feature test example.
      *
