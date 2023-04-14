@@ -24,7 +24,7 @@ Screenshots:
 
 [Project Home Page - iceburg.ca](https://www.iceburg.ca)
 
-[Demo](http://demo.iceburg.ca)
+[Demo](https://demo.iceburg.ca)
 
 
 Default usernames and passwords
@@ -35,8 +35,6 @@ Default usernames and passwords
 - accounting@iceburg.ca:accounting
 - marketing@iceburg.ca:marketing
 
-
-<br />
 
 ### Playground
 - Connect any MySQL database and create a CRM from it.  
@@ -62,7 +60,7 @@ Iceburg CRM is a metadata driven CRM that allows you to quickly prototype any CR
 - [25 different input types, <b>Laravel</b> field validation, <b>Maska</b> field masking]
 - [26 themes with light and dark themes available]
 - [Module based Role permissions (read, write, import, export)]
-- [Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
+- [Calendar, Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
 
 
 ## Created With
