@@ -115,7 +115,7 @@
                     </select>
 
                 </div>
-                    <div class="bg-base-200 text-base-content overflow-x-scroll shadow-sm sm:rounded-lg">
+                    <div class="bg-base-200 text-base-content overflow-x-auto shadow-sm sm:rounded-lg">
                         <div class="overflow-x-auto">
                             <table ref="tabs" class="table table-primary w-full border-primary border-solid">
                                 <thead>
