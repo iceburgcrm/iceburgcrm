@@ -39,7 +39,7 @@
                             <div class="p-6 bg-base-100 text-base-content border-b border-gray-200">
                                 <div class=" grid grid-cols-1 row-gap-5 mt-6 lg:grid-cols-2 md:grid-cols-2 lg:row-gap-6">
                                     <div class="col-span-1 col-gap-2 lg:col-span-1" v-for="(field, key) in $page.props.search_fields">
-                                        <div class="flex mt-5 items-center -mx-3">
+                                        <div class="flex mt-5 items-center">
                                             <Edit @newFieldValue="fieldValue"
                                                   :field="field"
                                                   :type="search_type"
@@ -115,7 +115,7 @@
                     </select>
 
                 </div>
-                    <div class="bg-base-200 text-base-content overflow-x-scroll shadow-sm sm:rounded-lg">
+                    <div class="bg-base-200 text-base-content overflow-x-auto shadow-sm sm:rounded-lg">
                         <div class="overflow-x-auto">
                             <table ref="tabs" class="table table-primary w-full border-primary border-solid">
                                 <thead>
