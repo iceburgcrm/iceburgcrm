@@ -23,15 +23,15 @@
 
 
                 <div tabindex='0' class="collapse">
-                    <input type="checkbox" v-model="show_search"  />
-                    <div class="collapse-title text-xsm">
+                    <input type="checkbox" v-model="show_search" id="show-search" />
+                    <label class="collapse-title text-xsm select-none" for="show-search">
 
                         <span v-if="!show_search">Show</span><span v-if="show_search">Hide</span> Search Fields
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
                     </svg>
 
-                    </div>
+                    </label>
 
                 <div class="collapse-content">
                     <form name="search" method="get">
@@ -39,7 +39,7 @@
                             <div class="p-6 bg-base-100 text-base-content border-b border-gray-200">
                                 <div class=" grid grid-cols-1 row-gap-5 mt-6 lg:grid-cols-2 md:grid-cols-2 lg:row-gap-6">
                                     <div class="col-span-1 col-gap-2 lg:col-span-1" v-for="(field, key) in $page.props.search_fields">
-                                        <div class="flex mt-5 items-center -mx-3">
+                                        <div class="flex mt-5 items-center">
                                             <Edit @newFieldValue="fieldValue"
                                                   :field="field"
                                                   :type="search_type"
