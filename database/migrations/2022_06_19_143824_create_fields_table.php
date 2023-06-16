@@ -30,6 +30,14 @@ return new class extends Migration
             $table->string('related_value_id')->default('');
             $table->integer('decimal_places')->nullable();
             $table->tinyInteger('status')->default(1);
+            $table->tinyInteger('search_display')->default(1);
+            $table->tinyInteger('list_display')->default(1);
+            $table->tinyInteger('edit_display')->default(1);
+            $table->tinyInteger('view_display')->default(1);
+            $table->integer('display_order')->default(9999);
+            $table->integer('search_order')->default(9999);
+            $table->integer('list_order')->default(9999);
+            $table->integer('edit_order')->default(9999);
             $table->id();
             $table->timestamps();
             $table->index('module_id');

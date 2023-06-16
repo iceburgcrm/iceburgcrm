@@ -124,7 +124,25 @@ Route::get('/module/{module_name}/{action}/{record_id}', function ($moduleName =
 
     [$previous, $next] = Module::getPreviousNext($module->id, $recordId);
 
+    $customData=[];
+    $componentView='Module/'.ucfirst(strtolower($action));
+    if(file_exists(resource_path('js') .'/Pages/Module/Custom/'.ucfirst(strtolower($action)) . '/' . ucfirst(strtolower($module->name)) . '.vue'))
+    {
+        $className="App\Models\Custom\\" . ucfirst($module->name);
+        if(class_exists($className))
+        {
+            $classMethod="custom_data_" . $action;
+            $class=new $className();
+            if(method_exists($class, $classMethod))
+            {
+                $customData=$class->$classMethod($recordId);
+            }
+        }
+
+        $componentView='Module/Custom/'.ucfirst(strtolower($action)) . '/' . ucfirst(strtolower($module->name));
+    }
     return Inertia::render('Module/'.ucfirst(strtolower($action)), [
+        'custom_data' => $customData,
         'module' => $module->toArray(),
         'record' => $record,
         'next' => $next,
