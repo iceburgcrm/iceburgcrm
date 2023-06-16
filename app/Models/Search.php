@@ -175,8 +175,29 @@ class Search extends Model
         $field_collection = Field::whereIn('module_id', $modules)
             ->whereNotIn('input_type', self::$excludeFieldTypes[$fieldType])
             ->with('module')
-            ->with('related_module')
-            ->get();
+            ->with('related_module');
+
+        if($fieldType == "Search")
+        {
+            $query->where('search_display', 1)
+                ->orderBy('search_order');
+        }
+        elseif($fieldType == "List")
+        {
+            $query->where('list_display', 1)
+                ->orderBy('display_order');
+        }
+        elseif($fieldType == "Display")
+        {
+            $query->where('list_display', 1)
+                ->orderBy('display_order');
+        }
+        elseif($fieldType == "Edit")
+        {
+            $query->where('edit_display', 1)
+                ->orderBy('edit_order');
+        }
+        $field_collection = $query->get();
 
         $field_collection->each(function ($field) use (&$fields) {
 
