@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('datalet', function (Request $request) {
-    return response()->json(Datalet::getData($request->id));
+    $datalet=Datalet::where('id', $request->id)->firstOrFail();
+    return response()->json($datalet->getData());
 })->middleware(['auth', 'verified'])->name('data')
     ->name('dashlet');
 
@@ -159,7 +160,8 @@ Route::any('import', function (Request $request) {
     ->name('module_record_import');
 
 Route::get('datalet', function (Request $request) {
-    return response()->json(Datalet::getData($request->id));
+    $datalet=Datalet::where('id', $request->id)->firstOrFail();
+    return response()->json($datalet->getData());
 })->middleware(['auth', 'verified'])->name('data')
     ->name('dashlet');
 
