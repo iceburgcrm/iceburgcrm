@@ -172,7 +172,7 @@ class Search extends Model
         }
 
         $fields = [];
-        $field_collection = Field::whereIn('module_id', $modules)
+        $query = Field::whereIn('module_id', $modules)
             ->whereNotIn('input_type', self::$excludeFieldTypes[$fieldType])
             ->with('module')
             ->with('related_module');
