@@ -36,6 +36,59 @@
             </select>
         </div>
 
+        <div class="btn-group" v-if="$page.props.auth.openai === true && props.fields">
+            <a v-if="props.permissions.import && props.allowed.includes('import')" class="p-2 w-20 text-xs btn   btn-outline btn-secondary text-secondary-content rounded-box shadow"  as="button"  @click="toggle_modal" @keydown.escape="toggle_modal">
+                AI Assist
+            </a>
+            <dialog id="my_modal_1" class="modal" :class="{ 'modal-open': showModal }"  @submit.prevent>
+                <div class="modal-box m-5 w-screen w-full">
+                    <div class="modal-action">
+                        <div class="dialog grid grid-flow-col auto-cols-max">
+                            <button class="btn btn-primary btn-sm" @click="ai_field_assist" :disabled="isProcessingAI">Process</button>
+                            <button class="btn btn-error btn-sm" @click="toggle_modal">Close</button>
+                        </div>
+                    </div>
+                    <h3 class="font-bold text-lg">Select Fields</h3>
+                    <p class="py-4 w-full">
+                        <table class="w-full">
+                            <tr v-for="(option, index) in props.fields" :key="index">
+                                <td>
+                                    <div class="btn-group">
+                                        <input
+                                            :id="`checkbox_${option.name}`"
+                                            type="checkbox"
+                                            v-model="ai_fields[option.name]"
+                                            ref="checkboxRef"
+                                        />
+                                    </div>
+                                </td>
+                                <td>
+                                    <label :for="`checkbox_${index}`">{{ option.name }}</label>
+
+                                </td>
+                                <td>
+                                    <input
+                                        type="text"
+                                        :value="props.field_data['1__' + option.name]"
+                                        class="w-full px-3 py-2 border rounded-md"
+                                        readonly
+                                    />
+                                </td>
+                            </tr>
+                        </table>
+                    </p>
+                    <div class="modal-action">
+                        <div class="dialog grid grid-flow-col auto-cols-max">
+                            <button class="btn btn-primary btn-sm" @click="ai_field_assist" :disabled="isProcessingAI">Process</button>
+                            <button class="btn btn-error btn-sm" @click="toggle_modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
+
+        </div>
+
+
         <div class="btn-group">
         <a v-if="props.allowed.includes('convert_to') && props.module.convertedmodules && props.module.convertedmodules.module" class="p-2 w-20 text-xs btn  btn-outline btn-primary text-primary-content rounded-box shadow" :href="`/module/${props.module.convertedmodules.module.name}/add?from_id=${props.record.id}&from_module=${props.module.id}`" method="get" as="button">
             Convert
@@ -54,19 +107,30 @@
 
 import axios from "axios";
 import {usePage} from "@inertiajs/inertia-vue3";
-import {watch, onMounted, ref, reactive} from 'vue';
+import {watch, onMounted, ref, reactive, nextTick} from 'vue';
 import Alert from "@/Components/Alert";
+
+
 
 
 const props = defineProps({
     permissions: [Object, null],
     module: [Object, null],
     allowed: [Array, null],
-    record: [Object, null]
+    record: [Object, null],
+    fields: [Object, null],
+    field_data: [Object, null]
 });
+
+const emit = defineEmits(['newFieldValues']);
+
+
+const ai_fields = ref({});
+
 
 const types = ['xlsx', 'xls', 'csv', 'tsv', 'ods', 'html'];
 const download_menu = ref('');
+const isProcessingAI = ref(false);
 
 const convert_module_id = ref('');
 const delete_id = ref('');
@@ -76,6 +140,48 @@ const alert_data = reactive({
     error_alert: ref(null),
     alert_text: ref('')
 });
+
+const showModal = ref(false);
+
+const toggle_modal = function() {
+
+    ai_fields.value = {};
+
+    nextTick(() => {
+        props.fields.forEach((option) => {
+            const optionName = option.name;
+            const fieldDataKey = `${props.module.id}__${optionName}`;
+            const hasNonEmptyData =
+                props.field_data &&
+                typeof props.field_data[fieldDataKey] === 'string' &&
+                props.field_data[fieldDataKey].trim().length > 0;
+            ai_fields.value[optionName] = false;
+        });
+
+
+
+    });
+    showModal.value = !showModal.value;
+
+
+
+}
+
+const ai_field_assist = function () {
+    isProcessingAI.value = true;
+    axios.post('/data/ai_assist/fields/' + usePage().props.value.module.id, {'ai_fields': ai_fields.value, 'field_data': props.field_data},
+        { responseType: 'json' })
+        .then(response => {
+            emit('updateInputValues', response.data);
+            showModal.value = !showModal.value;
+            isProcessingAI.value = false;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+
 
 const deleteRecord = async function (record_id, type) {
     let ok = await confirm('Are you sure you want to delete this record?');
@@ -98,7 +204,10 @@ const deleteRecord = async function (record_id, type) {
 
 };
 
+
+
 onMounted(() => {
+
 
     watch([download_menu], async (val) => {
         if(val+'' === 'delete'){
@@ -148,4 +257,8 @@ onMounted(() => {
         window.location.href="/module/" + props.module.name + "/add?convert_from_record=" + props.record['id'] + "&convert_module_id=" + val;
     });
 });
+
+function isObject(value) {
+    return Object.prototype.toString.call(value) === '[object Object]';
+}
 </script>

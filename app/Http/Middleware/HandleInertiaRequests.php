@@ -39,10 +39,10 @@ class HandleInertiaRequests extends Middleware
         if ($user) {
             $user['role'] = Role::where('id', $user->role_id)->value('name');
         }
-
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $user,
+                'openai' => !empty(env('OPENAI_API_KEY')),
                 'system_settings' => Setting::getSettings(),
                 'modules' => ModuleGroup::with('modules')->get(),
             ],
