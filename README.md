@@ -123,6 +123,8 @@ sudo chmod 775 storage -R
 AI Assist (Optional)
 ```
 // Add your OPENAI KEY AND ORG ID TO your environment file to enable AI Assist
+// This will enable an AI ASSIST button in add or edit modules 
+// that will allow you to fill in any field with AI Assisted data
 OPENAI_API_KEY=
 OPENAI_ORGANIZATION=
 ```
