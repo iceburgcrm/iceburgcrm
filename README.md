@@ -2,7 +2,7 @@
 
 # Iceburg CRM
 ### Laravel CRM
-
+#### With optional AI Assist
 Screenshots:
 <p>
 <a href="https://www.iceburg.ca/images/screenshot1.jpg" target="_blank">
@@ -118,6 +118,13 @@ php artisan db:seed
 Deploy
 ```php
 sudo chmod 775 storage -R
+```
+
+AI Assist (Optional)
+```
+// Add your OPENAI KEY AND ORG ID TO your environment file to enable AI Assist
+OPENAI_API_KEY=
+OPENAI_ORGANIZATION=
 ```
 
 ## Default Iceburg CRM
