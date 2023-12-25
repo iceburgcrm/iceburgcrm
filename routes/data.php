@@ -2,6 +2,7 @@
 
 use App\Exports\GenericExport;
 use App\Imports\GenericImport;
+use App\Models\AIAssist;
 use App\Models\Datalet;
 use App\Models\Field;
 use App\Models\Module;
@@ -168,6 +169,12 @@ Route::get('datalet', function (Request $request) {
 Route::get('search_data', function (Request $request) {
     return response()->json(Search::getData($request->all())->toArray());
 })->middleware(['auth', 'verified'])->name('search_data');
+
+Route::any('ai_assist/fields/{module_id}', function (Request $request, $id = 0) {
+    $data = AiAssist::suggestFields($id, $request->all());
+    return response()->json($data);
+})->middleware(['auth', 'verified'])->name('ai_assist')
+    ->name('ai_assist');
 
 Route::get('subpanel/{subpanel_id}', function (Request $request, $id = 0) {
     $subpanel = ModuleSubpanel::getSubpanelData($id, $request->all());

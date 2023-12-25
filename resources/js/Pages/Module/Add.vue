@@ -8,8 +8,13 @@
                     <Title :module="$page.props.module" :page_description="$page.props.type === 'add' ? 'Add' : 'Edit'" />
                 </div>
                 <div class="col-span-4">
+
                     <HeadButtons
+                        ref="header_buttons"
                         class="col-span-2"
+                        @updateInputValues="updateFieldValues"
+                        :field_data="fieldValueData"
+                        :fields="$page.props.fields"
                         :module="$page.props.module"
                         :permissions="$page.props.permissions"
                         :allowed="$page.props.type === 'edit' ? ['import', 'add', 'export', 'audit_log', 'delete'] :
@@ -31,8 +36,8 @@
                             <div class="col-span-1 col-gap-5 lg:col-span-1" v-for="(field, key) in search_fields">
                                 <div class="flex items-center pt-5 pb-5">
 
-
                                     <Edit @newFieldValue="fieldValue"
+                                          :key="record[field.name]"
                                           :field="field"
                                           :type="search_type"
                                           :default_value="convert_from_record ? convert_from_record[field.name]  : record ? record[field.name] : ''"
@@ -66,12 +71,12 @@ const alert = reactive({
 });
 
 import Edit from '@/Components/Fields/Edit'
-import { ref, toRef, toRefs, computed, toRaw, watch, onMounted, reactive } from 'vue';
+import { ref, toRef, toRefs, computed, toRaw, watch, onMounted, reactive, onUpdated } from 'vue';
 
 const module_id = ref(usePage().props.value.module.id);
 const relationship_id = ref('');
 const search_type = ref('module');
-const record = ref(usePage().props.value.record);
+const record = ref(usePage().props.value.record || {});
 const convert_from_record = ref(usePage().props.value.convert_from_record);
 
 const from_id = ref(usePage().props.value.from_id);
@@ -80,7 +85,10 @@ const from_module = ref(usePage().props.value.from_module);
 const default_values = ref('');
 let fieldValueData = {};
 const search_fields = ref(reactive(usePage().props.value.fields));
+
 let params = [];
+
+const header_buttons = ref(null);
 
 onMounted(() => {
         watch([relationship_id, module_id], (val) => {
@@ -120,7 +128,24 @@ const save_record = function () {
 
 const fieldValue = ((evt) => {
     fieldValueData[evt.field_name] = evt.value;
+    header_buttons.value.field_data=fieldValueData
 });
+
+const updateFieldValues = ((evt) => {
+    evt.forEach((data) => {
+        record.value[data.name]=data.value;
+    });
+    search_fields.value = [];
+    search_fields.value = reactive(usePage().props.value.fields);
+
+});
+
+onUpdated(() => {
+    console.log('Component updated');
+    // You can inspect the updated state or perform actions after the update
+});
+
+
 
 
 </script>
