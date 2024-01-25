@@ -45,6 +45,9 @@ Default usernames and passwords
 [IceburgCRM.com](https://www.iceburgcrm.com)
 
 
+The Iceburg CRM is open-sourced software licensed under the [AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html)
+Commercial Software License Agreement Available as tier in [patreon](https://www.patreon.com/iceburgcrm)
+
 
 ## About Iceburg CRM
 
@@ -211,4 +214,6 @@ If you discover a security vulnerability within Iceburg CRM, please send an e-ma
 
 ## License
 
-The Iceburg CRM is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Iceburg CRM is open-sourced software licensed under the [AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html)
+Commercial Software License Agreement Available as tier in [patreon](https://www.patreon.com/iceburgcrm)
+
