@@ -26,14 +26,15 @@ Screenshots:
 
 [Demo](https://demo.iceburg.ca)
 
+### Default usernames and passwords
 
-Default usernames and passwords
-
-- admin@iceburg.ca:admin
-- user@iceburg.ca:user
-- sales@iceburg.ca:sales
-- accounting@iceburg.ca:accounting
-- marketing@iceburg.ca:marketing
+Username | Password
+--- | ---
+admin@iceburg.ca | admin
+user@iceburg.ca | user
+sales@iceburg.ca | sales
+accounting@iceburg.ca | accounting
+marketing@iceburg.ca | marketing
 
 
 ### Playground
