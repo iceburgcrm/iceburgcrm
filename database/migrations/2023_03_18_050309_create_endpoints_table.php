@@ -17,12 +17,12 @@ return new class extends Migration
             $table->string('endpoint', 200)->default('');
             $table->string('class_name', 100)->default('default');
             $table->string('request_type', 10)->default('GET');
-            $table->string('params', 5000)->default('');
-            $table->string('headers', 5000)->default('');
+            $table->string('params', 190)->default('');
+            $table->string('headers', 190)->default('');
             $table->integer('status')->default(1);
             $table->integer('last_run_status')->default(1);
-            $table->string('last_run_message', 1000)->default('');
-            $table->string('last_run_data', 10000)->default('');
+            $table->string('last_run_message', 190)->default('');
+            $table->string('last_run_data', 190)->default('');
             $table->integer('last_ran')->default(0);
         });
     }
