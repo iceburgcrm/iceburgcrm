@@ -47,15 +47,11 @@ class Search extends Model
                     $value = 0;
                     }
                 }
-                //print_r($field->module->name . "." . $pieces[1]);
-                //print_r($value);
                 $results->where($field->module->name.'.'.$pieces[1], $operator, $value);
 
             }
 
         }
-        //dd($results->toSql());
-       // exit;
         if (! isset($request['order_by']) || empty($request['order_by'])) {
             $request['order_by'] = $order_by_field;
         }
@@ -131,11 +127,11 @@ class Search extends Model
         $selectFields = [];
         $selectStatement = '';
 
-        if (! isset($request['order_by']) || $request['order_by'] == '') {
-        $request['order_by'] = 'id';
-        }
         $module = Module::where('id', intval($request['module_id']))->firstOrFail();
 
+        if (! isset($request['order_by']) || $request['order_by'] == '') {
+            $request['order_by'] = $module->primary_field;
+        }
         $fields = Field::where('module_id', $module->id)->with('module')->with('related_module')->get();
         foreach ($fields as $field) {
             if (empty($request['typeahead']) || (in_array($field->input_type, ['text', 'tel', 'email']))) {
@@ -144,14 +140,14 @@ class Search extends Model
         }
 
         if (isset($request['typeahead'])) {
-        $selectStatement = 'id, ';
+            $selectStatement = $module->primary_field. ', ';
         }
         $selectStatement .= implode(',', $selectFields);
         if ($selectStatement != '') {
         $selectStatement .= ', ';
         }
         $results = DB::table($module->name)
-            ->selectRaw($selectStatement.$module->name.'.'.'id as '.$module->name.'_row_id');
+            ->selectRaw($selectStatement.$module->name.'.' . $module->primary_field . ' as '.$module->name.'_row_id');
 
         $order_by_field = $module->name.'_row_id';
 

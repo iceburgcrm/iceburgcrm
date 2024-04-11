@@ -24,7 +24,7 @@ class FieldSeeder
         for ($x = 0; $x < $seed; $x++) {
 
             $data = Field::factory()->make()->toArray();
-            $data = ['slug' => $faker->regexify('[A-Za-z0-9]{20}')];
+            $data = ['ice_slug' => $faker->regexify('[A-Za-z0-9]{20}')];
             $this->module->fields()->get()->each(function ($field) use (&$data, $faker) {
 
                 if (! empty($field->list)) {

@@ -44,4 +44,13 @@ class SettingTest extends TestCase
         $response->assertJsonCount(Setting::getSetting('search_per_page'), 'data');
 
     }
+
+    public function showLogo()
+    {
+        $logoSetting = Setting::where('name', 'logo')->first();
+        $base64Image = optional($logoSetting)->additional_text;
+
+        // Pass the base64Image to the view
+        return view('your-view-name', compact('base64Image'));
+    }
 }
