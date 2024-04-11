@@ -147,7 +147,7 @@ class ModuleTest extends TestCase
                 for ($x = 0; $x < (Field::where('module_id', $module->id)->count() + 1); $x++) {
 
                     $fields = Field::where('module_id', $module->id)
-                        ->where('name', 'NOT LIKE', 'slug')->get();
+                        ->where('name', 'NOT LIKE', 'ice_slug')->get();
                     $data = [];
                     $data['module_id'] = $module->id;
                     $data['search_type'] = 'module';

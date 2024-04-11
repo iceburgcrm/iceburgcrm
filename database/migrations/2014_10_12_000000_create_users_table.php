@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->mediumText('profile_pic')->nullable();
             $table->integer('role_id')->default(2);
-            $table->string('slug')->default('');
+            $table->string('ice_slug')->default('');
             $table->rememberToken();
             $table->timestamps();
         });

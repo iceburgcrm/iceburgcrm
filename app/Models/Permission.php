@@ -30,13 +30,13 @@ class Permission extends Model
     {
 
         if (! in_array($type, self::$types)) {
-        return false;
+            return false;
         }
         if (
             Auth::user()->role != 'Admin'
             && Module::where('id', $module_id)->value('admin')
         ) {
-        return false;
+            return false;
         }
         Logs::insert([
             'user_id' => Auth::user()->id,

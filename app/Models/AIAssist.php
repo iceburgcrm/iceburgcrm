@@ -10,7 +10,7 @@ class AIAssist extends Model
 {
     use HasFactory;
 
-    public static function suggestFields($module_id, $data)
+    public static function suggestFields($module_id, $data, $additional_text="")
     {
         $module=Module::where('id', $module_id)->first();
         $txt='Complete the following values for the fields below.  They are from a crm module called ' . $module->name;
@@ -38,6 +38,7 @@ class AIAssist extends Model
             }
 
         }
+        $txt.=$additional_text;
 
         $response=self::getData($txt);
 

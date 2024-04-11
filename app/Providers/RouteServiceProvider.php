@@ -48,6 +48,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('data')
                 ->group(base_path('routes/data.php'));
 
+            Route::middleware('web')
+                ->prefix('data')
+                ->group(base_path('routes/custom.php'));
+
         });
     }
 
