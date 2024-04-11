@@ -28,13 +28,16 @@ Screenshots:
 
 [Demo](https://demo.iceburg.ca)
 
-Default usernames and passwords
 
-- admin@iceburg.ca:admin
-- user@iceburg.ca:user
-- sales@iceburg.ca:sales
-- accounting@iceburg.ca:accounting
-- marketing@iceburg.ca:marketing
+### Default usernames and passwords
+
+Username | Password
+--- | ---
+admin@iceburg.ca | admin
+user@iceburg.ca | user
+sales@iceburg.ca | sales
+accounting@iceburg.ca | accounting
+marketing@iceburg.ca | marketing
 
 ### Describe your CRM and let's AI create it.
 
