@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('admin')->default(0);
             $table->integer('parent_id')->default(0);
             $table->integer('primary')->default(0);
+            $table->string('primary_field', 64)->default('id');
             $table->string('icon', 128)->default('CircleStackIcon');
             $table->integer('module_group_id');
             $table->timestamps();

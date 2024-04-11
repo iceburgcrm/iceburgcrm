@@ -2,7 +2,7 @@
     "name": "iceburgcrm/iceburgcrm",
     "type": "project",
     "description": "Iceburg CRM is a metadata driven CRM that allows you to quickly prototype any CRM. The default CRM is based on a typical business CRM but the flexibility of dynamic modules, fields, subpanels allows prototyping of any number of different tyes of CRMs.",
-    "keywords": ["framework", "crm", "vue3", "inertia", "iceburg", "iceburg crm", "cms", "composition api"],
+    "keywords": ["framework", "crm", "vue3", "inertia", "iceburg", "iceburg crm", "cms", "composition api", "ai", "metadata", "laravel", "daisyui", "vue", "tailwinds", "llm"],
     "license": "MIT",
     "authors": [
         {
@@ -15,10 +15,6 @@
     "support": {
         "docs": "http://docs.iceburg.ca"
     },
-    "funding": [{
-        "type": "patreon",
-        "url": "https://www.patreon.com/iceburgcrm"
-    }],
     "require": {
         "php": "^8.1.0",
         "guzzlehttp/guzzle": "^7.2",
@@ -30,9 +26,8 @@
         "openai-php/laravel": "^0.8.1",
         "phpoffice/phpspreadsheet": "^1.9",
         "psr/simple-cache": "^2.0",
-        "sammyjo20/saloon-http-sender": "^0.3.2",
-        "sammyjo20/saloon-laravel": "^2.0",
-        "tightenco/ziggy": "^1.0"
+        "tightenco/ziggy": "^1.0",
+        "iamcal/sql-parser": "^0.4.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
@@ -53,9 +48,12 @@
         }
     },
     "autoload-dev": {
-        "psr-4": {
+            "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "classmap": [
+            "database/seeders"
+        ]
     },
     "scripts": {
         "post-autoload-dump": [

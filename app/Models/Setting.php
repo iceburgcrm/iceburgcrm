@@ -34,6 +34,13 @@ class Setting extends Model
         Setting::all()->each(function ($item) use (&$data) {
             return $data[$item->name] = $item->value;
         });
+        if (!auth()->check()) {
+            /* Only set for guest so large imaging isn't passing each request */
+            $logo=Setting::where('name', 'logo')->value('additional_data');
+            if(strlen($logo)){
+                $data['logo']=$logo;
+            }
+        }
 
         return $data;
     }

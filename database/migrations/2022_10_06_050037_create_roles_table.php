@@ -16,8 +16,7 @@ return new class extends Migration
         Schema::create('ice_roles', function (Blueprint $table) {
             $table->id();
             $table->string('name', 200);
-            $table->string('slug', 16);
-
+            $table->string('ice_slug')->default('');
             $table->timestamps();
         });
     }

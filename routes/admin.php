@@ -9,6 +9,7 @@ use App\Models\Relationship;
 use App\Models\Role;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use Inertia\Inertia;
 
 Route::get('modules', function () {
@@ -118,3 +119,8 @@ Route::get('permissions', function () {
             ['name' => 'Permissions', 'url' => '', 'svg' => 'settings']),
     ]);
 })->middleware(['auth', 'verified'])->name('permissions');
+
+
+
+
+

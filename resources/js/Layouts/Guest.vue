@@ -1,15 +1,24 @@
 <script setup>
+import { computed } from 'vue';
 import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/inertia-vue3';
+import {Link, usePage} from '@inertiajs/inertia-vue3';
+
+const logo = computed(() => usePage().props.value.auth.system_settings.logo);
+const backgroundStyle = computed(() => {
+    const imageUrl = logo.value
+        ? `data:image/png;base64,${logo.value}`
+        : '/images/iceburg.png';
+    return { backgroundImage: `url('${imageUrl}')` };
+});
 </script>
 
 <template>
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-base-100 text-base-content">
 
-        <div class="hero min-h-screen bg-base-200"  style="background-image: url(/images/iceburg.png);">
+        <div :style="backgroundStyle" class="hero min-h-screen bg-base-200">
             <div class="hero-content flex-col lg:flex-row-reverse">
                 <div class="text-center lg:text-left">
-                    <div class="opacity-70 bg-white rounded-2xl p-10">
+                    <div class="opacity-80 bg-white rounded-2xl p-10">
                     <h1 class="text-5xl font-bold text-neutral border-accent">{{$page.props.auth.system_settings.title ? $page.props.auth.system_settings.title : ''}}</h1>
                     <p class="py-6">
                         {{$page.props.auth.system_settings.description ? $page.props.auth.system_settings.description : ''}}

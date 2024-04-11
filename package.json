@@ -33,13 +33,14 @@
         "laravel-vue-pagination": "^3.0.0",
         "maska": "^1.5.0",
         "moment": "^2.29.4",
-        "qalendar": "^2.2.0",
+        "qalendar": "2.2.0",
         "v-calendar": "^3.0.0-alpha.8",
         "v-pagination-3": "^0.1.7",
         "vue-autosuggest": "^2.2.0",
         "vue-cal": "^4.8.0",
         "vue-chart-3": "^3.1.8",
         "vue3-charts": "^1.1.31",
+        "vue3-quill": "^0.3.1",
         "vue3-simple-typeahead": "^1.0.11",
         "vuepress": "^1.9.7"
     }
