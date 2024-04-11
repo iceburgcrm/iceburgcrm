@@ -272,8 +272,8 @@ OPENAI_ORGANIZATION=
 **For beekeepers to track hive health, manage honey production records, schedule maintenance, and engage with local and online beekeeping communities.**  
 [Preview](https://beekeeping.iceburg.ca)
 
-### Wordpress CRM
-![Wordpress CRM Icon](https://demo.iceburg.ca/images/wordpress.jpg?rand=12346)  
+### Wordpress CRM  
+<img src="https://demo.iceburg.ca/images/wordpress.jpg?rand=12346" alt="Wordpress CRM Icon" width="10" height="10">
 **This is a premade instance of a wordpress database with iceburgcrm. Once created, download and point your wordpress files.**  Changing the data in the CRM will change the wordpress website.
 [CRM Preview](https://wordpress.iceburg.ca)  
 [Wordpress Website](https://wordpresssite.iceburg.ca)
