@@ -273,7 +273,7 @@ OPENAI_ORGANIZATION=
 [Preview](https://beekeeping.iceburg.ca)
 
 ### Wordpress CRM  
-<img src="https://demo.iceburg.ca/images/wordpress.jpg?rand=12346" alt="Wordpress CRM Icon" width="10" height="10">
+<img src="https://demo.iceburg.ca/images/wordpress.jpg?rand=12346" alt="Wordpress CRM Icon" width="100" height="100">
 **This is a premade instance of a wordpress database with iceburgcrm. Once created, download and point your wordpress files.**  Changing the data in the CRM will change the wordpress website.
 [CRM Preview](https://wordpress.iceburg.ca)  
 [Wordpress Website](https://wordpresssite.iceburg.ca)
