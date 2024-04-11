@@ -19,6 +19,7 @@ class ModuleSeeder extends Seeder
     {
         ModuleGroup::truncate();
         Module::truncate();
+        ModuleConvertable::truncate();
 
         $this->seedModuleGroups();
         $this->seedModules();

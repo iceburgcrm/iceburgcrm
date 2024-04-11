@@ -84,7 +84,7 @@ class Module extends Model
                             }
                         });
                         $table->id();
-                        $table->string('slug', 64)->unique();
+                        $table->string('ice_slug', 64)->unique();
                         $table->integer('soft_delete')->default(0);
                         $table->timestamps();
                     });
@@ -193,8 +193,8 @@ class Module extends Model
     {
         $module = self::find($moduleId);
         $data = DB::table($module->name)
-            ->selectRaw($module->name.'.'.'*, '.$module->name.'.'.'id as '.$module->name.'_row_id, '.$module->name.'.'.'id as row_id')
-            ->where('id', $id)->first();
+            ->selectRaw($module->name.'.'.'*, '.$module->name.'.' . $module->primary_field . ' as '.$module->name.'_row_id, '.$module->name.'.'. $module->primary_field . ' as row_id')
+            ->where($module->primary_field, $id)->first();
 
         if ($replaceRelatedIds) {
         $data = self::replaceRelatedIds($moduleId, $data);
@@ -239,12 +239,12 @@ class Module extends Model
 
         $module = self::find($moduleId);
         $previous = DB::table($module->name)
-            ->where('id', '<', $recordId)
-            ->pluck('id')
+            ->where($module->primary_field, '<', $recordId)
+            ->pluck($module->primary_field)
             ->first();
         $next = DB::table($module->name)
-            ->where('id', '>', $recordId)
-            ->pluck('id')
+            ->where($module->primary_field, '>', $recordId)
+            ->pluck($module->primary_field)
             ->first();
 
         return [$previous, $next];
@@ -273,10 +273,10 @@ class Module extends Model
     {
         Log::info('Deleting ModuleID '.$moduleId.'  Data: '.print_r($data));
         $module = self::find($moduleId);
-        $results = DB::table($module->name)->whereIn('id', $data)->get()->toArray();
+        $results = DB::table($module->name)->whereIn($module->primary_field, $data)->get()->toArray();
         event(new ModuleRecordDeleted($results));
 
-        return DB::table($module->name)->whereIn('id', $data)->delete();
+        return DB::table($module->name)->whereIn($module->primary_field, $data)->delete();
     }
 
     public static function saveRecord($module_id, $request, $returnId = false)
@@ -332,7 +332,7 @@ class Module extends Model
                    // DB::table($module->name)->update($value)->where('id', $recordId);
                 } else {
                     $value['updated_at'] = Carbon::now();
-                    DB::table($module->name)->where('id', $recordId)->update($value);
+                    DB::table($module->name)->where($module->primary_field, $recordId)->update($value);
                     $id = $recordId;
 
                 }
@@ -340,7 +340,7 @@ class Module extends Model
             } else {
                 $value['created_at'] = Carbon::now();
                 $value['updated_at'] = Carbon::now();
-                $value['slug'] = $faker->regexify('[A-Za-z0-9]{20}');
+                $value['ice_slug'] = $faker->regexify('[A-Za-z0-9]{20}');
                 $id = DB::table($module->name)->insertGetId($value);
                 WorkFlowData::insert([
                     'from_id' => isset($request['from_id']) ? $request['from_id'] : 0,
@@ -377,7 +377,7 @@ class Module extends Model
                 }
                 $arr[$item->name] = $singleItem;
             });
-            $arr['slug'] = $faker->regexify('[A-Za-z0-9]{20}');
+            $arr['ice_slug'] = $faker->regexify('[A-Za-z0-9]{20}');
             $ids[] = DB::table($module->name)->insertGetId($arr);
         }
 

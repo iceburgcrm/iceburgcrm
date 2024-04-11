@@ -9,6 +9,8 @@ class Endpoint extends Model
 {
     use HasFactory;
 
+    protected $table = 'ice_endpoints';
+
     protected $casts = [
         'status' => 'boolean',
     ];

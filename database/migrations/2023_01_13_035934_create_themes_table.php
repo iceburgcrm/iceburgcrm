@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('ice_themes', function (Blueprint $table) {
             $table->id();
             $table->string('name', 255);
+            $table->string('ice_slug')->default('');
             $table->timestamps();
         });
     }

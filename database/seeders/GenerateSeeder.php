@@ -30,14 +30,14 @@ class GenerateSeeder extends Seeder
         $this->addSettings();
 
         Log::info('Generating connectors');
-        $this->addConnectors();
+        //$this->addConnectors();
 
         Log::info('Add Workflow Actions');
        // $this->addWorkflowActions();
 
         Log::info('Add Datalet Types');
-        $this->addDataletTypes();
-        $this->addDatalets();
+        //$this->addDataletTypes();
+        //$this->addDatalets();
 
         Log::info('Generating module');
         $module = new Module;
@@ -58,14 +58,14 @@ class GenerateSeeder extends Seeder
                     DB::table($table)->truncate();
                     $data = $current->{$module->name}();
                     foreach ($data as $row) {
-                        $row['slug'] = bin2hex(random_bytes(16));
+                        $row['ice_slug'] = bin2hex(random_bytes(16));
                         DB::table($table)->insert($row);
                     }
                 }
             });
 
         $this->addModulesAndRoles();
-        $this->sampleMedia();
+        //$this->sampleMedia();
     }
 
     private function sampleMedia()
@@ -83,7 +83,7 @@ class GenerateSeeder extends Seeder
                     'creative' => 'data:video/mp4;base64,'.base64_encode($file),
                     'campaign_type' => 1,
                     'assigned_to' => 1,
-                    'slug' => 'dsfsdfsdfs',
+                    'ice_slug' => 'dsfsdfsdfs',
                     'status' => 4,
                     'soft_delete' => 0,
                     'created_at' => date('Y-m-d H:i:s'),
@@ -107,7 +107,7 @@ class GenerateSeeder extends Seeder
                     'audio_recording' => 'data:audio/ogg;base64,'.base64_encode($file),
                     'types' => 1,
                     'assigned_to' => 1,
-                    'slug' => 'dsfsdfsdfss',
+                    'ice_slug' => 'dsfsdfsdfss',
                     'status' => 4,
                     'created_at' => date('Y-m-d H:i:s'),
                     'updated_at' => date('Y-m-d H:i:s'),
