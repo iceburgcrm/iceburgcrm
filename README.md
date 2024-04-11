@@ -36,7 +36,7 @@ Default usernames and passwords
 - accounting@iceburg.ca:accounting
 - marketing@iceburg.ca:marketing
 
-### Describe your CRM and use AI to create it.
+### Describe your CRM and let's AI create it.
 
 ## About Iceburg CRM
 
