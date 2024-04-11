@@ -233,42 +233,42 @@ OPENAI_ORGANIZATION=
 ## Templates
 
 ### Classic CRM
-![Classic CRM Icon](https://demo.iceburg.ca/images/classic.jpg?rand=12456)  
+<img src="https://demo.iceburg.ca/images/classic.jpg?rand=12346" alt="Classic CRM Icon" width="100" height="100">
 **Classic CRM. Accounts, Contacts, Contracts, LineItems, etc.**  
 [Preview](https://classic.iceburg.ca)
 
 ### Rare Books CRM
-![Rare Books CRM Icon](https://demo.iceburg.ca/images/rarebooks.jpg?rand=12456)  
+<img src="https://demo.iceburg.ca/images/rarebooks.jpg?rand=12346" alt="Rare Books CRM Icon" width="100" height="100">
 **A platform for sneaker enthusiasts to catalog their collections, track market values, manage trades or sales, and connect with other collectors.**  
 [Preview](https://rarebooks.iceburg.ca)
 
 ### Wine Connoisseurs CRM
-![Wine CRM Icon](https://demo.iceburg.ca/images/wine.jpg?rand=12456)  
+<img src="https://demo.iceburg.ca/images/wine.jpg?rand=12346" alt="Wine CRM Icon" width="100" height="100"> 
 **For wine enthusiasts and sellers, offering cellar management, tasting notes, vintage tracking, and a community feature for sharing recommendations and organizing tastings.**  
 [Preview](https://wine.iceburg.ca)
 
 ### Fitness Studio CRM
-![Fitness CRM Icon](https://demo.iceburg.ca/images/fitness.jpg?rand=12356)  
+<img src="https://demo.iceburg.ca/images/fitness.jpg?rand=12346" alt="Fitness CRM Icon" width="100" height="100"> 
 **Tailored for small to medium fitness studios, featuring membership management, class scheduling, fitness progress tracking for members, and integration with wearable tech for health data.**  
 [Preview](https://fitness.iceburg.ca)
 
 ### Professional Networking CRM
-![Networking CRM Icon](https://demo.iceburg.ca/images/networking.jpg?rand=12456)  
+<img src="https://demo.iceburg.ca/images/networking.jpg?rand=12346" alt="Networking CRM Icon" width="100" height="100">  
 **A niche CRM for professional networking organizations, offering event planning, member engagement tracking, mentorship program management, and job boards.**  
 [Preview](https://networking.iceburg.ca)
 
 ### Crafting Supplies CRM
-![Crafting Supplies CRM Icon](https://demo.iceburg.ca/images/crafting.jpg?rand=13456)  
+<img src="https://demo.iceburg.ca/images/crafting.jpg?rand=12346" alt="Crafting Supplies CRM Icon" width="100" height="100"> 
 **For retailers and enthusiasts of crafting, offering inventory management, project tracking, supplier databases, and community features for sharing project ideas and tutorials.**  
 [Preview](https://crafting.iceburg.ca)
 
 ### Gourmet Coffee Enthusiasts CRM
-![Gourmet Coffee CRM Icon](https://demo.iceburg.ca/images/coffee.jpg)  
+<img src="https://demo.iceburg.ca/images/coffee.jpg?rand=12346" alt="Gourmet Coffee CRM Icon" width="100" height="100">  
 **A platform for coffee lovers to track their favorite beans, roasts, brewing methods, and café experiences, including a marketplace for specialty beans and equipment.**  
 [Preview](https://coffee.iceburg.ca)
 
 ### BeeKeeping CRM
-![BeeKeeping CRM Icon](https://demo.iceburg.ca/images/beekeeping.jpg?rand=12356)  
+<img src="https://demo.iceburg.ca/images/beekeeping.jpg?rand=12346" alt="BeeKeeping CRM Icon" width="100" height="100"> 
 **For beekeepers to track hive health, manage honey production records, schedule maintenance, and engage with local and online beekeeping communities.**  
 [Preview](https://beekeeping.iceburg.ca)
 
