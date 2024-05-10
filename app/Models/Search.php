@@ -176,22 +176,26 @@ class Search extends Model
         if($fieldType == "Search")
         {
             $query->where('search_display', 1)
-                ->orderBy('search_order');
+                ->orderBy('search_order')
+                ->orderBy('id');
         }
         elseif($fieldType == "List")
         {
             $query->where('list_display', 1)
-                ->orderBy('display_order');
+                ->orderBy('display_order')
+                ->orderBy('id');
         }
         elseif($fieldType == "Display")
         {
             $query->where('list_display', 1)
-                ->orderBy('display_order');
+                ->orderBy('display_order')
+                ->orderBy('id');
         }
         elseif($fieldType == "Edit")
         {
             $query->where('edit_display', 1)
-                ->orderBy('edit_order');
+                ->orderBy('edit_order')
+                ->orderBy('id');
         }
         $field_collection = $query->get();
 
