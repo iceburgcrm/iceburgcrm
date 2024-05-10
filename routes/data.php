@@ -48,7 +48,7 @@ Route::post('delete/{base_id}/type/{type}', function (Request $request, $baseId,
         ['success' => $status]
     );
 })->middleware(['auth', 'verified'])
-    ->name('get_record');
+    ->name('delete_record');
 
 Route::get('module/{module_id}/record/{record_id}', function ($moduleId = 0, $recordId = 0) {
     if (! Permission::checkPermission($moduleId)) {
