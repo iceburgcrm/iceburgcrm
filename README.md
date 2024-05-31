@@ -294,3 +294,6 @@ If you discover a security vulnerability within Iceburg CRM, please send an e-ma
 ## License
 
 The Iceburg CRM is open-sourced software licensed under the [AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
+## Other Frameworks
+A [Python Django Version](https://github.com/iceburgcrm/iceburgcrmpython) is available
