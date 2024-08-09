@@ -64,4 +64,7 @@ return [
         'encrypt_cookies' => App\Http\Middleware\EncryptCookies::class,
     ],
 
+    'personal_access_tokens' =>  'ice_personal_access_tokens',
+
+
 ];

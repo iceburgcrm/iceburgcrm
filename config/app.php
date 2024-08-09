@@ -154,6 +154,8 @@ return [
     |
     */
 
+
+
     'providers' => [
 
         /*
@@ -181,6 +183,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        App\Providers\SanctumServiceProvider::class,
 
         /*
          * Package Service Providers...

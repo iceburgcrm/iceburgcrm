@@ -47,15 +47,14 @@ Iceburg CRM is a metadata driven CRM with AI abilities that allows you to quickl
 
 ## Features
 
-- [Unlimited Relationships between any number modules without common fields]
 - [Metadata creations of  modules, fields, relationships, subpanels, datalets, seeding]
 - [Ability to Import/Export in 6 different formats (XLSX, CSV, TSV, ODS, XLS, HTML]
 - [25 different input types, <b>Laravel</b> field validation, <b>Maska</b> field masking]
 - [26 themes with light and dark themes available]
 - [Module based Role permissions (read, write, import, export)]
 - [Calendar, Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
-
-
+- [Field Level Relationships, Module Level Relationships 2 way, 3 way, 4 way, ...]
+- [Build-in API, Workflow]
 ## Created With
 
 Iceburg CRM is created with:
@@ -85,11 +84,11 @@ php artisan iceburg:seed --type=ai --prompt="Create a stamp collecting crm"
 ### Ways to Install
 - <b>Default</b> - Install the default Classic IceburgCRM:  55 Modules, 282 Fields, 43 Relationships,  24 Subpanels, 5 Datalets
 ```php
-php artisan iceburg:seed
+php artisan iceburg:create
 ```
 - <b>AdminPanel</b> - Point to an existing Database and turn it into a CRM.  Type is requires but additional parameters are optional.  If not supplied will use existing connection details.
 ```php
-php artisan iceburg:seed --type=adminpanel --connection_host=123.123.123.123 --connection_port=3306 --connection_database=databasename --connection_username=dbuser --connection_password=dbpassword --connection_charset=utf8mb4 --connection_collation=utf8mb4_unicode_ci
+php artisan iceburg:create --type=adminpanel --connection_host=123.123.123.123 --connection_port=3306 --connection_database=databasename --connection_username=dbuser --connection_password=dbpassword --connection_charset=utf8mb4 --connection_collation=utf8mb4_unicode_ci
 ```
 Example of a live wordpress database converted to a CRM.
 [Wordpress CRM](https://wordpress.iceburg.ca)  
@@ -97,16 +96,16 @@ Example of a live wordpress database converted to a CRM.
 
 - <b>Core</b> - Install only the core files.  This will create a blank CRM template.
 ```php
-php artisan iceburg:seed --type=core
+php artisan iceburg:create --type=core
 ```
 - <b>Custom</b> - Add your own modules, field, relationships, subpanels and generate it.
 ```php
-php artisan iceburg:seed --type=custom
+php artisan iceburg:create --type=custom
 ```
 - <b>AI</b> - Describe the CRM you want and let AI create it.  Including the logo parameter will create an unique image for your login page.  ChatGPT 3.5 is used as the default.
   Dalle-3 is used for image generation.  Cost: 4 cents per crm with logo or a 1 penny without the logo.
 ```php
-php artisan iceburg:seed --type=ai --prompt="Create a stamp collecting crm" logo="yes"
+php artisan iceburg:create --type=ai --prompt="Create a stamp collecting crm" logo="yes"
 ```
 Each AI generation is different.  Based on the prompt above here are three CRM's created:
 [Stamp Collectors CRM 1](https://postagestamps.iceburg.ca/)
@@ -161,7 +160,8 @@ Deploy
 sudo chmod 775 storage -R
 ```
 
-AI Assist (Optional)
+## AI Assist (Optional)
+AI Assist will try to determine values for your current module by using the name, description of the module and the field.   It suggests for blank fields and provides a confirmation preview before you commit to saving.
 ```
 // Add your OPENAI KEY AND ORG ID TO your environment file to enable AI Assist
 // This will enable an AI ASSIST button in add or edit modules 
@@ -171,6 +171,284 @@ AI Assist (Optional)
 OPENAI_API_KEY=
 OPENAI_ORGANIZATION=
 ```
+
+## API
+```
+Get Token
+curl -X POST localhost:8000/api/login -H "Content-Type: application/json" -d '{"email": "admin@iceburg.ca", "password": "admin"}
+
+Sample Return:
+{"token":"2|16ajbNyxwDhBUvupqLCSQSJyFV5d0IQao7Bwm2ch3b6e331b"}
+
+
+# 1. Get All CRM Modules
+curl -X GET http://localhost:8000/api/crm -H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+Sample Return:
+[{"id":1,"name":"ice_users","label":"Users","description":"Users","status":1,"faker_seed":0,"create_table":0,"view_order":0,"admin":0,"parent_id":0,"primary":1,"primary_field":"id","icon":"UserPlusIcon","module_group_id":6,"created_at":null,"updated_at":null},{"id":2,"name":"ice_roles","label":"Roles","description":"Roles","status":1,"faker_seed":0,"create_table":0,"view_order":1,"admin":0,"parent_id":0,"primary":1,"primary_field":"id","icon":"CircleStackIcon","module_group_id":6,"created_at":null,"updated_at":null},
+
+
+# 2. Search CRM Data
+curl -X GET http://localhost:8000/api/crm/search \
+-H "Authorization: Bearer YOUR_TOKEN_HERE" \
+-H "Content-Type: application/json" \
+-d '{"search_key": "value"}'
+
+Use the format of the search which can be seen on the network tab after you've completed a search in the page called search_data.
+
+This will take the users module for a name 'admin' and save the data to a text file.
+curl -X GET http://localhost:8000/api/crm/search -H "Authorization: Bearer 4|DPGVyKHEXoZiWT4kBQYdzC0uzw9EpcR0JeDhBUx6d2744c5c" -H "Content-Type: application/json" -d '{
+    "1__name": "admin",
+    "1__email": "undefined",
+    "1__role_id": "undefined",
+    "page": 1,
+    "per_page": 10,
+    "search_order": "asc",
+    "order_by": "",
+    "search_type": "module",
+    "module_id": 1,
+    "text_search_type": "fuzzy"
+}' > data.txt
+
+Sample output
+{"current_page":1,"data":[{"ice_users__name":"Admin","ice_users__profile_pic":"data:image\/jpg;base64,\/9j...
+
+# 3. Get a Specific CRM Module
+curl -X GET http://localhost:8000/api/crm/1 \
+-H "Authorization: Bearer YOUR_TOKEN_HERE"
+
+Sample output
+{"id":1,"name":"ice_users","label":"Users","description":"Users","status":1,"faker_seed":0,"create_table":0,"view_order":0,"admin":0,"parent_id":0,"primary":1,"primary_field":"id","icon":"UserPlusIcon","module_group_id":6,"created_at":null,"updated_at":null}
+
+# 4. Update or Add a CRM Record
+curl -X PUT http://localhost:8000/api/crm/1 \
+-H "Authorization: Bearer YOUR_TOKEN_HERE" \
+-H "Content-Type: application/json" \
+-d '{"field1": "new_value1", "field2": "new_value2"}'
+
+
+To update include the record id
+curl -X PUT http://localhost:8000/api/crm/9 \
+-H "Authorization: Bearer 2|qXONV6OYboLruwcdBP3mL55XsEftujd5vogQ5EI9ebb51884" \
+-H "Content-Type: application/json" \
+-d '{"record_id": 1, "9__name": "Jacobs Ltd 22test"}'
+
+Output
+ID record saved
+
+To Add a new record do not include a record id
+curl -X PUT http://localhost:8000/api/crm/9 -H "Authorization: Bearer 2|qXONV6OYboLruwcdBP3mL55XsEftujd5vogQ5EI9ebb51884" -H "Content-Type: application/json" -d '{"9__name": "Jacobs Ltd test2"}'
+
+Output
+ID of new record
+
+# 5. Delete a Record in a CRM Module
+curl -X DELETE http://localhost:8000/api/crm/1/["module" or "relationship"] \
+-H "Authorization: Bearer YOUR_TOKEN_HERE" \
+-H "Content-Type: application/json" \
+-d '{"record_ids": [1, 2, 3]}'
+
+curl -X DELETE http://localhost:8000/api/crm/2/module -H "Authorization: Bearer 2|16ajbNyxwDhBUvupqLCSQSJyFV5d0IQao7Bwm2ch3b6e331b" -H "Content-Type: application/json" -d '{"record_ids": [1, 2, 3]}' > a.txt
+
+
+
+```
+
+
+## Relationships
+
+### Field Level Relationships
+
+IceburgCRM supports field level relationships.   A field level relationship could be a state field in an accounts module.  When added or searching you would select the value from the dropdown.
+
+In the database, the ID of the related module and field is stored.  When you export module or relationship data IceburgCRM substitutes the ids for the value in the related module.  When you import the reverse process happens.
+For example:   If you had a related State field and had the Alabama saved.  In the database you would see 1 in the accounts tables record.  In the ice_fields you would see that this field is a related type pointing to module with the id 17 (States module id is 17) and field id 2 (2nd field is the value field). 
+When you export by default you will be Alabama and when you import Alabama is replaced with 1 again.
+
+
+### Module Level Relationships
+
+IceburgCRM supports Unlimited relationships between modules.
+
+A typical CRM has a two way relationship between two modules.  For example Accounts have many contacts and contacts can have many accounts.
+
+IceburgCRM allows you to create relationships between 2, 3, 4 or more modules.
+
+Why would you need a relationship between more than 2 modules?
+Let's say you wanted to have a subpanel that stored when a contract was signed, who signed, what location.  A typical CRM will duplicate data or create new fields (that sit empty for all of the other records) or find some awkward method to force the data into a two way relationship.
+
+IceburgCRM allows you to relate a Contract module, Account module, Contact module, City module, State module, Country module without having to add a related field or worse a free text field.
+
+You can have multiple relationships and use them to create multiple subpanels for modules.  For example you may want an Account & Contact subpanel but you may also want an Account Contact Opportunity subpanel.
+
+You would use a relationship for a subpanel and then select the fields you want from any module.
+
+
+A contract module could have a relationship to an account, a contact, a location
+
+
+### Themes
+
+Out of the box these themes are available.  For more information or to try different themes visit (https://daisyui.com/docs/themes/)
+
+```
+themes: [
+"light",
+"dark",
+"cupcake",
+"bumblebee",
+"emerald",
+"corporate",
+"synthwave",
+"retro",
+"cyberpunk",
+"valentine",
+"halloween",
+"garden",
+"forest",
+"aqua",
+"lofi",
+"pastel",
+"fantasy",
+"wireframe",
+"black",
+"luxury",
+"dracula",
+"cmyk",
+"autumn",
+"business",
+"acid",
+"lemonade",
+"night",
+"coffee",
+"winter",
+"dim",
+"nord",
+"sunset"],
+```
+
+## Field Types
+
+You can customize and add your own field types with their own special properties.  Out of the box IceburgCRM has these:
+```
+tel
+currency
+checkbox
+password
+image
+video
+audio
+file
+number
+email
+url
+zip
+date
+related
+address
+textarea
+color
+radio
+text
+```
+_Try the Color field type.  It will present a color picker._
+
+## Calender
+
+Fully customizable including colors and event hooks.  You can select, day, week or month for the calendar view.  The meetings module holds the data that powers the calendar.  Allows multiple appointments at the same time.  Click on an event to generate a popup.
+
+## Datalets
+
+Datalets are frontpage widgets.  They can take the form of a graph, table, or video or anything.  In the default IceburgCRM we provide a number of different graphs.  In the AI generated CRMs we provide information base datalets.
+
+Adding your own is easy.  Add the datalet to the datalets table, add your new data function in the backend and create your vue template. 
+
+## Workflow - Confortable Modules
+You can setup a workflow between modules.  A stage box will appear in the module detail screen showing you at what stage this record is in the workflow.  It also allows you to select other records in the workflow to examine what happened previously or later in the chain. 
+
+There a 5 module workflow setup in the default IceburgCRM.  You can modify the workflow in the seeding files or in the workflow table.
+
+Change these records in the ModuleSeeker file:
+```
+        ModuleConvertable::insert([
+        'primary_module_id' => Module::where('name', 'leads')->first()->id,
+        'module_id' => Module::where('name', 'contacts')->first()->id,
+        'level' => 1,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'contacts')->first()->id,
+            'module_id' => Module::where('name', 'accounts')->first()->id,
+            'level' => 2,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'accounts')->first()->id,
+            'module_id' => Module::where('name', 'quotes')->first()->id,
+            'level' => 3,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'quotes')->first()->id,
+            'module_id' => Module::where('name', 'opportunities')->first()->id,
+            'level' => 4,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'opportunities')->first()->id,
+            'module_id' => Module::where('name', 'contracts')->first()->id,
+            'level' => 5,
+        ]);
+
+        ModuleConvertable::insert([
+            'primary_module_id' => Module::where('name', 'contracts')->first()->id,
+            'module_id' => 0,
+            'level' => 6,
+        ]);
+```
+
+## Roles and Permission
+
+IceburgCRM provides permissions by role and by module.  And allows you to set read, write, export import permissions.
+
+
+## Import / Export
+
+
+You have the ability to Import/Export in 6 different formats (XLSX, CSV, TSV, ODS, XLS, HTML].  Word is also available to be used but requires a system specific driver so it has been left out of the default options.
+
+
+
+## Custom Seeding
+
+### Files explained
+
+These files will be run in this sequence
+
+####  DatabaseSeeder
+A database seeder file calls the remaining seeder files in sequence.  These must be run in sequence and data generated in the previous step may be required in the next step.
+
+#### ModuleSeeder
+
+This file creates the module records, module groups records and the module_convertable records (workflow)
+
+#### FieldSeeder
+
+This file creates all of the fields and relates them to modules
+
+#### RelationshipSeeder
+
+This file seeds the relationships between modules
+
+#### GenerateSeeder
+
+This file generates the default data for the modules.  It also adds the datalets, roles and permissions and any sample media.
+
+#### ModuleSubpanelSeeder
+
+This file generates the subpanel data.  It needs to be run last.
+
+
 
 ## Default Iceburg CRM
 
