@@ -24,7 +24,7 @@ Route::get('modules', function () {
 Route::get('connectors', function () {
 
     return Inertia::render('Admin/Connectors', [
-        'connectors' => Connector::with('endpoints')->get(),
+        'connectors' => Connector::with('commands')->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(
             ['name' => 'Admin', 'url' => '', 'svg' => 'admin'],
             ['name' => 'Connectors', 'url' => '', 'svg' => 'settings']),
@@ -52,13 +52,17 @@ Route::get('scheduler', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('scheduler');
 
-Route::get('connector/{connector_id}', function ($connector_id) {
+Route::get('connector/{connector_id?}', function ($connector_id = null) {
+
+    $connector = $connector_id ?
+        Connector::with('commands')->find($connector_id) :
+        null;
 
     return Inertia::render('Admin/Connector', [
-        'connector' => Connector::with('endpoints')->first(),
+        'connector' => $connector,
         'breadcrumbs' => Setting::getBreadCrumbs(
             ['name' => 'Admin', 'url' => '', 'svg' => 'admin'],
-            ['name' => 'Connectors', 'url' => '', 'svg' => 'settings']),
+            ['name' => 'Connectors', 'url' => '/admin/connectors', 'svg' => 'settings']),
     ]);
 })->middleware(['auth', 'verified'])->name('connector');
 
@@ -72,7 +76,7 @@ Route::get('workflow', function () {
             ['name' => 'Admin', 'url' => '', 'svg' => 'admin'],
             ['name' => 'Permissions', 'url' => '', 'svg' => 'settings']),
     ]);
-})->middleware(['auth', 'verified'])->name('permissions');
+})->middleware(['auth', 'verified'])->name('workflow');
 
 Route::get('subpanels', function () {
 

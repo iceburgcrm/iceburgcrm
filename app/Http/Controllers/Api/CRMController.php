@@ -20,22 +20,30 @@ class CRMController extends Controller
 {
     public function index()
     {
+
         $modules = Module::where('status', 1)->get();
         return response()->json($modules, 200);
     }
 
 
     public function search(Request $request){
+
         return response()->json(Search::getData($request->all())->toArray(), 200);
     }
 
     public function show($id)
     {
+        if (! Permission::checkPermission($id, 'export')) {
+            return response()->json(['error' => 'No Access'], 422);
+        }
         return response()->json(Module::find($id)->toArray(), 200);
     }
 
     public function updateoradd(Request $request, $id)
     {
+        if (! Permission::checkPermission($id, 'write')) {
+            return response()->json(['error' => 'No Access'], 422);
+        }
         $data=$request->all();
         $module = Module::find($id);
         if (is_null($module)) {
@@ -46,6 +54,9 @@ class CRMController extends Controller
 
     public function destroy($id, $type='module', Request $request)
     {
+        if (! Permission::checkPermission($id, 'write')) {
+            return response()->json(['error' => 'No Access'], 422);
+        }
         $recordIds = $request->input('record_ids');
 
         $moduleId = $id;

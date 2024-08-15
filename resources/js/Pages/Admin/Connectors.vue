@@ -1,95 +1,95 @@
-
 <template>
-    <Head title="Settings" />
+    <Head title="Connectors" />
     <BreezeAuthenticatedLayout>
 
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
                 Connectors
             </h2>
-
         </template>
-        <BreadCrumbs :levels="$page.props.breadcrumbs" />
 
+        <BreadCrumbs :levels="$page.props.breadcrumbs" />
 
         <div class="w-full bg-base-100">
             <div class="bg-base-100 mt-10 text-base-content max-w-full sm:px-3 lg:px-4">
+                <!-- Add a link to create a new connector -->
+                <div class="mb-4">
+                    <a class="btn btn-primary" :href="`/admin/connector`">New Connector</a>
+                </div>
+
                 <table class="bg-base-200 text-base-content table table-zebra table-compact lg:table-normal w-full border-secondary border-solid">
                     <thead>
-                    <th>Name</th>
-                    <th>Endpoints</th>
-                    <th>Base URL</th>
-                    <th>Actions</th>
+                    <tr>
+                        <th>Name</th>
+                        <th>Auth Type</th>
+                        <th>Base URL</th>
+                        <th>Client ID</th>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
-                    <tr v-for="connector in connectors">
+                    <tbody>
+                    <tr v-for="connector in connectors" :key="connector.id">
                         <td>
-                            <span class="text-lg">{{connector.name}}</span>
+                            <span class="text-lg">{{ connector.name }}</span>
                         </td>
                         <td>
-                            <div class="grid grid-flow-row" v-for="endpoint in connector.endpoints">
-                                <div>
-                                    {{endpoint.endpoint}}
-                                </div>
-
-                            </div>
+                            {{ connector.auth_type }}
                         </td>
                         <td>
-                            {{connector.base_url}}
+                            {{ connector.base_url }}
                         </td>
                         <td>
-                            <a class="btn btn-sm btn-primary" :href="`/admin/connector/${connector.id}`">Edit</a>
+                            {{ connector.client_id || 'N/A' }}
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" :href="`/admin/connector/${connector.id}`">Details</a>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
     </BreezeAuthenticatedLayout>
 </template>
+
 <script setup>
-import {ref, computed, reactive} from "vue";
+import { ref } from "vue";
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, usePage } from '@inertiajs/inertia-vue3';
-import axios from "axios";
 import BreadCrumbs from "@/Components/BreadCrumbs";
-import Alert from "@/Components/Alert";
-
 
 const connectors = ref(usePage().props.value.connectors);
+
 console.log(connectors.value);
 
-const set_connector_status= function(id, event) {
-
+const setConnectorStatus = async (id, event) => {
     event.preventDefault();
-}
-/*
-const set_connector_status= function(connector_id, connector_status)
-{
-    const formData = new FormData();
-    formData.append('status', connector_status);
-    formData.append('id', connector_id);
-    axios.post('/data/connector/set_connector', formData, {headers}).then((res) => {
-       connectors =
-           axios.get('/data/connectors',
-               {responseType: 'arraybuffer'})
-               .then(response => {
-                   connectors.value=response.data.connectors;
-               }).catch(function (error) {
 
-               }, 5000);
-           });
+    try {
+        const formData = new FormData();
+        formData.append('status', event.target.value); // Assuming you are getting the status from the event
+        formData.append('id', id);
 
-        setTimeout(() => {
-            data.success_alert=false;
-        }, 2000);
-    }).catch(function (error){
-        data.alert_text="There was an error saving your auth key";
-        data.error_alert=true;
-        setTimeout(() => {
-            data.error_alert=null;
-            data.alert_text='';
-        }, 5000);
-    });
-}
-*/
+        await axios.post('/data/connector/set_connector', formData);
 
+        const response = await axios.get('/data/connectors');
+        connectors.value = response.data.connectors;
+
+        // Handle success alert
+        // For example:
+        // data.success_alert = true;
+        // setTimeout(() => data.success_alert = false, 2000);
+    } catch (error) {
+        console.error("Error setting connector status", error);
+
+        // Handle error alert
+        // For example:
+        // data.error_alert = true;
+        // data.alert_text = "There was an error saving your auth key";
+        // setTimeout(() => {
+        //     data.error_alert = false;
+        //     data.alert_text = '';
+        // }, 5000);
+    }
+};
 </script>

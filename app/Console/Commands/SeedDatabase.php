@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Dotenv\Dotenv;
 
 class SeedDatabase extends Command
 {
@@ -48,6 +49,8 @@ class SeedDatabase extends Command
         $connection_charset = $this->option('connection_charset');
         $connection_collation = $this->option('connection_collation');
 
+        $dotenv = Dotenv::createImmutable(base_path());
+        $dotenv->load();
 
         Config::set('database.connections.custom', [
             'driver' => 'mysql',
@@ -142,5 +145,6 @@ class SeedDatabase extends Command
                 ]);
                 break;
         }
+
     }
 }

@@ -5,7 +5,7 @@ namespace Database\Seeders\Ai;
 use App\Models\Connector;
 use App\Models\Datalet;
 use App\Models\DataletType;
-use App\Models\Endpoint;
+use App\Models\ConnectorCommand;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Setting;

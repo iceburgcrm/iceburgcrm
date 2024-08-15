@@ -5,15 +5,18 @@ use App\Http\Integrations\ApiCall;
 use App\Http\Integrations\Generic\GenericAPI;
 use App\Http\Integrations\Generic\Requests\ApiRequest;
 use App\Models\Admin;
+use App\Models\ConnectorCommand;
 use App\Models\Permission;
 use App\Models\Setting;
+use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Models\Connector;
 
 Route::get('module', function ($request) {
     return response()->json(Admin::getData($request));
 })->middleware(['auth', 'verified'])
-    ->name('relationship_fields');
+    ->name('admin_relationship_fields');
 
 Route::any('permissions', function () {
     return response()->json(
@@ -45,10 +48,34 @@ Route::post('settings', function (Request $request) {
 
 Route::post('resetcrm', function (Request $request) {
     return response()->json(['status' => Admin::resetCRM()]);
-})->middleware(['auth', 'verified'])->name('settings_save');
+})->middleware(['auth', 'verified'])->name('reset_crm');
 
-Route::get('sendrequest', function (Request $request) {
+Route::get('commands/run/{id}', function (Request $request, $id) {
 
+    $endpoint = ConnectorCommand::find($id);
+    $customData = [
+        'key1' => 'value1',
+        'key2' => 'value2',
+    ];
+
+    $apiService = new ApiService($customData);
+    $response = $apiService->makeRequest($endpoint);
+    return response()->json($response);
+
+})->middleware(['auth', 'verified'])->name('endpoint_run');
+
+Route::get('sendrequest', function (Request $request, $id) {
+
+    $endpoint = Endpoint::find($id);
+    $customData = [
+        'key1' => 'value1',
+        'key2' => 'value2',
+    ];
+
+    $apiService = new ApiService($customData);
+    $response = $apiService->makeRequest($endpoint);
+    return response()->json($response);
+    /*
     $apicall = new ApiCall('https://official-joke-api.appspot.com/random_joke');
     $res = $apicall->send();
     $items = $res->collect()->toArray();
@@ -64,28 +91,5 @@ Route::get('sendrequest', function (Request $request) {
 
     return response()->json(['status' => 1, 'data' => $requestApi->send(),
     ]);
+    */
 })->middleware(['auth', 'verified'])->name('sendrequest');
-
-Route::get('connector/delete_endpoint/{endpoint_id}', function ($endpointId) {
-
-    Endpoint::where('id', $endpointId)->delete();
-
-    return response()->json(Connectors::all());
-
-})->middleware(['auth', 'verified'])->name('data')
-    ->name('delete_endpoint');
-
-Route::get('connector/delete_connector/{connector_id}', function ($connectorId) {
-
-    Endpoint::where('connector_id', $connectorId)->delete();
-    Connector::where('id', $connectorId)->delete();
-
-    return response()->json(Connectors::all());
-})->middleware(['auth', 'verified'])->name('data')
-    ->name('delete_connector');
-
-Route::get('connectors', function () {
-
-    return response()->json(Connectors::all());
-})->middleware(['auth', 'verified'])->name('data')
-    ->name('subpanel_relationship_fields');

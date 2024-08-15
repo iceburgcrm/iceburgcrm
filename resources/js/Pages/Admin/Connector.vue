@@ -1,284 +1,370 @@
-
 <template>
-    <Head :title="`Connector ${connector.name}`" />
+    <Head :title="`Connector ${connector.name || 'New'}`" />
     <BreezeAuthenticatedLayout>
-
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
-                <div class="collapse">
-                    <input type="checkbox" class="peer" />
-                    <div class="collapse-title peer-checked:bg-secondary peer-checked:text-secondary-content">
-                        Connector - {{connector.name}}
+                {{ connector.name ? `Edit Connector: ${connector.name}` : 'Create New Connector' }}
+            </h2>
+        </template>
+
+        <BreadCrumbs :levels="$page.props.breadcrumbs" />
+        <div class="w-full bg-base-100">
+            <div class="bg-base-100 mt-10 text-base-content max-w-full sm:px-3 lg:px-4">
+
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Name</span>
+                    </label>
+                    <input type="text" v-model="connector.name" class="input input-bordered w-full" required />
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Class</span>
+                    </label>
+                    <input type="text" v-model="connector.class" class="input input-bordered w-full" required />
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Auth Type</span>
+                    </label>
+                    <select v-model="connector.auth_type" class="select select-bordered w-full">
+                        <option value="">Select Auth Type</option>
+                        <option value="OAuth2">OAuth2</option>
+                        <option value="API Key">API Key</option>
+                        <option value="Basic Auth">Basic Auth</option>
+                        <option value="None">None</option>
+                    </select>
+                </div>
+                <div v-if="connector.auth_type === 'OAuth2'">
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text">Client ID</span>
+                        </label>
+                        <input type="text" v-model="connector.client_id" class="input input-bordered w-full" />
                     </div>
-                    <div class="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
-                        <p class="grid">
-                            <div>
-                                <div class="form-control w-full max-w-xs">
-                                    <label class="label">
-                                        <span class="label-text">API Key</span>
-                                    </label>
-                                    <input type="text" @change="change_connector" placeholder="Auth Key" v-model="connector.auth_key" />
-                                </div>
-                            </div>
-                            <div>
-                                <div class="form-control w-full max-w-xs">
-                                    <label class="label">
-                                        <span class="label-text">Name</span>
-                                    </label><input type="text" @change="change_connector" v-model="connector.name" />
-                                </div>
-                            </div>
-                            <div>
-                                <div class="form-control w-full max-w-xs">
-                                    <label class="label">
-                                        <span class="label-text">Active</span>
-                                    </label>{{connector.status}}
-                                    <input type="checkbox" @change="change_connector" class="toggle toggle-success" v-model="connector.status" checked />
-                                </div>
-                            </div>
-                            <div>
-                                <a @click="delete_connector" class="btn btn-sm btn-error">Delete Connector</a>
-                            </div>
-                        </p>
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text">Client Secret</span>
+                        </label>
+                        <input type="text" v-model="connector.client_secret" class="input input-bordered w-full" />
+                    </div>
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text">Token URL</span>
+                        </label>
+                        <input type="text" v-model="connector.token_url" class="input input-bordered w-full" />
+                    </div>
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text">Refresh Token</span>
+                        </label>
+                        <input type="text" v-model="connector.refresh_token" class="input input-bordered w-full" />
                     </div>
                 </div>
-                <br />
+                <div v-if="connector.auth_type === 'Basic Auth'">
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text">Username</span>
+                        </label>
+                        <input type="text" v-model="connector.username" class="input input-bordered w-full" />
+                    </div>
+                    <div class="form-control mb-4">
+                        <label class="label">
+                            <span class="label-text">Password</span>
+                        </label>
+                        <input type="text" v-model="connector.password" class="input input-bordered w-full" />
+                    </div>
+                </div>
+                <!-- Existing fields -->
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Base URL</span>
+                    </label>
+                    <input type="text" v-model="connector.base_url" class="input input-bordered w-full" />
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Auth Key</span>
+                    </label>
+                    <input type="text" v-model="connector.auth_key" class="input input-bordered w-full" />
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Token Expiry</span>
+                    </label>
+                    <input type="text" :value="connector.token_expires_at" disabled class="input input-bordered w-full" />
+                </div>
+                <div class="form-control mb-4">
+                    <label class="label">
+                        <span class="label-text">Active</span>
+                    </label>
+                    <input type="checkbox" v-model="connector.status" class="toggle toggle-success" />
+                </div>
+                <a @click="save_connector" class="btn btn-sm btn-success">{{ connector.id ? 'Save Connector' : 'Add Connector' }}</a>
+                <a v-if="connector.id" @click="delete_connector" class="btn btn-sm btn-error ml-4">Delete Connector</a>
+            </div>
+        </div>
 
-            </h2>
-
-        </template>
-        <BreadCrumbs :levels="$page.props.breadcrumbs" />
-
-
-
+        <!-- Commands Section -->
         <div class="w-full bg-base-100">
-            <h4 class="text-lg text-center">Endpoints</h4>
             <div class="bg-base-100 mt-10 text-base-content max-w-full sm:px-3 lg:px-4">
-                <table class="bg-base-200 text-base-content table table-zebra table-compact lg:table-normal w-full border-secondary border-solid">
-                    <thead>
-                    <th>Endpoint</th>
-                    <th>Mapping Class</th>
-                    <th>Type</th>
-                    <th>Params</th>
-                    <th>Header</th>
-                    <th>Last</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                    </thead>
-                    <tr v-for="endpoint in $page.props.connector.endpoints">
-                        <td>
-                            <input type="text" size="10" :value="endpoint.endpoint" />
-                        </td>
-                        <td>
-                            <input type="text" size="10"  :value="endpoint.class_name" />
-                        </td>
-                        <td>
-                            <div class="form-control w-full max-w-xs">
-                                <select @change="change_endpoint" v-model="endpoint.request_type" class="select select-bordered">
-                                    <option value="GET">GET</option>
-                                    <option value="POST">POST</option>
-                                    <option value="PUT">PUT</option>
-                                </select>
-                            </div>
-                        </td>
-                        <td>
-                           <textarea @change="change_endpoint" class="textarea " :value="endpoint.params" placeholder=""></textarea>
-                        </td>
-                        <td>
-                            <textarea @change="change_endpoint" class="textarea " :value="endpoint.headers" placeholder=""></textarea>
+                <a @click="add_command()" class="btn float-right w-100 btn-sm btn-primary mb-4">
+                    Add
+                </a>
+                <h4 class="text-lg text-center mb-4">Commands</h4>
+                <div v-for="(command, index) in connector.commands" :key="command.id">
+                    <div class="w-full stats w-400 stats-vertical mb-10 lg:stats-horizontal shadow">
+                        <div class="stat">
+                            <label v-if="command.editing" class="label">Name</label>
+                            <input v-if="command.editing" v-model="command.name" class="input input-bordered w-full" />
+                            <div v-else class="stat-value">{{ command.name }}</div>
 
-                        </td>
+                            <label v-if="command.editing" class="label mt-2">Method Name</label>
+                            <input v-if="command.editing" v-model="command.method_name" class="input input-bordered w-full" />
+                            <div v-else class="stat-title mt-5 mb-5"><b>Method Name: {{ command.method_name }}</b></div>
 
-                        <td>
-                            <div class="grid grid-flow-row">
-                                <b>Last Status: {{endpoint.last_status}}</b>
-                                <b>Last Message: {{endpoint.last_message}}</b>
-                                <b>Last Ran: {{endpoint.last_ran}}</b>
+                            <label v-if="command.editing" class="label mt-2">Description</label>
+                            <textarea v-if="command.editing" v-model="command.description" class="textarea textarea-bordered w-full"></textarea>
+                            <div v-else class="stat-desc">{{ command.description }}</div>
+                        </div>
 
+                        <div class="stat">
+                            <a @click="run_command(command.id)" class="btn w-20 btn-sm btn-success">Run</a>
+
+                            <div class="stat-title"><b>Last Ran: {{ command.last_ran }}</b></div>
+                            <div class="stat-desc"><b>Last Run Data: {{ command.last_ran_data }}</b></div>
+                        </div>
+
+                        <div class="stat w-100">
+                            <div class="stat-title">Status:
+                                <input type="checkbox" v-model="command.status" class="toggle toggle-success" />
                             </div>
-                        </td>
-                        <td>
-                            <input @change="change_endpoint" type="checkbox" class="toggle toggle-success" v-model="endpoint.status" checked />
-                        </td>
-                        <td class="grid-flow-row">
-                            <div>
-                                <a @click="run_endpoint(endpoint.id)" class="btn btn-sm btn-success">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-                                    </svg>
-                                </a>
+
+                            <div class="stat">
+                                <!-- Save and Cancel Buttons -->
+                                <div v-if="command.editing">
+                                    <a @click="save_command(command.id)" class="btn btn-sm btn-success">Save</a>
+                                    <a @click="cancel_edit(command)" class="btn btn-sm btn-warning ml-2">Cancel</a>
+                                </div>
+
+                                <!-- Edit and Delete Buttons -->
+                                <div v-else>
+                                    <a @click="edit_command(command)" class="btn btn-sm btn-primary ml-2">Edit</a>
+                                    <a @click="delete_command(command.id, index)" class="btn btn-sm btn-error ml-2">Delete</a>
+                                </div>
                             </div>
-                            <div>
-                                <a :href="`/admin/schedule/endpoint/${endpoint.id}`" class="btn btn-sm btn-neutral">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </a>
-                            </div>
-                            <div>
-                                <a @click="delete_endpoint(endpoint.id)" class="btn btn-sm btn-error">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                                </svg>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </BreezeAuthenticatedLayout>
 </template>
+
+
+
 <script setup>
-import {ref, computed, reactive} from "vue";
+import { ref, reactive } from "vue";
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, usePage } from '@inertiajs/inertia-vue3';
 import axios from "axios";
 import BreadCrumbs from "@/Components/BreadCrumbs";
-import Alert from "@/Components/Alert";
 
-
-const connector = ref(usePage().props.value.connector);
-const endpoint = ref([]);
+const connector = ref(usePage().props.value.connector || { commands: [] }); // Ensure connector is an object
+if (connector.value.auth_type) {
+    connector.value.auth_type = connector.value.auth_type;
+}
 const method_types = ref(usePage().props.value.method_types);
 const form = ref();
-
 const data = reactive({
-    success_alert: ref(''),
-    error_alert: ref(''),
-    alert_text: ref(''),
+    success_alert: '',
+    error_alert: '',
+    alert_text: '',
 });
 
-const headers = { 'Content-Type': 'multipart/form-data'};
 
-const delete_endpoint = function(endpoint_id){
-    formData.append('status', connector.status.value);
-    axios.post('/data/connector/delete_endpoint/' + endpoint_id, {}, {headers}).then((res) => {
-        data.alert_text="Deleted";
-        data.success_alert=true;
-        setTimeout(() => {
-            axios.get('/data/connectors').then((res) => {
-               connector.value = res.data;
-           });
-        }, 2000);
-    }).catch(function (error){
-        data.alert_text="There was an error saving your auth key";
-        data.error_alert=true;
-        setTimeout(() => {
-            data.error_alert=null;
-            data.alert_text='';
-        }, 5000);
-    });
+
+const headers = { 'Content-Type': 'multipart/form-data' };
+const save_connector = () => {
+
+    if (!connector.value.name) {
+        console.log(connector);
+        alert('The name field is required.');
+        return;
+    }
+
+
+    const payload = {
+        id: connector.value.id,
+        name: connector.value.name,
+        class: connector.value.class,
+        auth_type: connector.value.auth_type,
+        auth_key: connector.value.auth_key,
+        base_url: connector.value.base_url,
+        token_url: connector.value.token_url || '',
+        client_id: connector.value.client_id || '',
+        client_secret: connector.value.client_secret || '',
+        username: connector.value.username || '',
+        password: connector.value.password || '',
+        access_token: connector.value.access_token || '',
+        refresh_token: connector.value.refresh_token || '',
+        token_expires_at: connector.value.token_expires_at || '',
+        status: connector.value.status || false
+    };
+
+    const url = `/data/connector/set_connector`;
+    const method = 'post';
+
+    axios({
+        method,
+        url,
+        data: payload,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+    })
+        .then(response => {
+            data.success_alert = response.data.message || 'Connector saved successfully';
+        })
+        .catch(error => {
+            data.error_alert = error.response?.data?.message || 'Error saving connector';
+        });
+};
+
+
+const add_command = () => {
+    const new_command = { name: '', method_name: '', status: true, editing: true, id: null, connector_id: connector.value.id  }; // Initialize without ID
+    console.log('in new comnad')
+    console.log(new_command)
+    connector.value.commands.push(new_command);
+};
+
+
+const delete_connector = () => {
+    if (confirm('Are you sure you want to delete this connector?')) {
+        axios.delete(`/data/connectors/${connector.value.id}`)
+            .then(response => {
+                data.success_alert = response.data.message || 'Connector deleted successfully';
+                connector.value = { commands: [] }; // Reset the connector after deletion
+            })
+            .catch(error => {
+                data.error_alert = error.response?.data?.message || 'Error deleting connector';
+            });
+    }
+};
+
+const run_command = (command_id) => {
+    axios.post('/data/connector/run_command', { command_id }, {
+        'Content-Type': 'application/json',
+            'Accept': 'application/json'
+     })
+        .then((res) => {
+            data.alert_text = "Command ran successfully";
+            data.success_alert = true;
+            setTimeout(() => { data.success_alert = false; }, 2000);
+        })
+        .catch((error) => {
+            data.alert_text = "Error running command";
+            data.error_alert = true;
+            setTimeout(() => { data.error_alert = false; data.alert_text = ''; }, 5000);
+        });
 }
-const delete_connector = function(){
-    formData.append('status', connector.status.value);
-    axios.post('/data/connector/delete_connector/' + connector.id.value, {}, {headers}).then((res) => {
-        data.alert_text="Deleted";
-        data.success_alert=true;
-        setTimeout(() => {
-            window.location='/admin/connectors';
-        }, 2000);
-    }).catch(function (error){
-        data.alert_text="There was an error saving your auth key";
-        data.error_alert=true;
-        setTimeout(() => {
-            data.error_alert=null;
-            data.alert_text='';
-        }, 5000);
-    });
-}
 
-const run_endpoint = function(endpoint_id)
-{
 
-}
-const change_connector = function()
-{
-    const formData = new FormData();
-    formData.append('auth_key', connector.auth_key.value);
-    formData.append('name', connector.name.value);
-    formData.append('status', connector.status.value);
-    axios.post('/data/connector/set_connector', formData, {headers}).then((res) => {
-        data.alert_text="Saved";
-        data.success_alert=true;
-        setTimeout(() => {
-            data.success_alert=false;
-        }, 2000);
-    }).catch(function (error){
-        data.alert_text="There was an error saving your auth key";
-        data.error_alert=true;
-        setTimeout(() => {
-            data.error_alert=null;
-            data.alert_text='';
-        }, 5000);
-    });
+const edit_command = (command) => {
+    command.editing = true;
+};
 
-}
 
-const change_endpoint = function()
-{
-    const formData = new FormData();
-    formData.append('auth_key', connector.auth_key.value);
-    formData.append('name', connector.name.value);
-    formData.append('status', connector.status.value);
-    axios.post('/data/connector/set_endpoint', formData, {headers}).then((res) => {
-        data.alert_text="Saved";
-        data.success_alert=true;
-        setTimeout(() => {
-            data.success_alert=false;
-        }, 2000);
-    }).catch(function (error){
-        data.alert_text="There was an error saving your auth key";
-        data.error_alert=true;
-        setTimeout(() => {
-            data.error_alert=null;
-            data.alert_text='';
-        }, 5000);
-    });
 
-}
+const save_command = (command_id) => {
+    const command = connector.value.commands.find(cmd => cmd.id === command_id);
 
-const set_permission = function (permission_id, permission_can, type)
-{
-    data.alert_text= '';
-    data.success_alert=false;
-    data.error_alert=false;
-    const formData = new FormData();
+    // If the command is not found by ID, handle it as a new command
+    if (!command && command_id === null) {
+        const new_command = connector.value.commands.find(cmd => cmd.id === null);
+        if (new_command) {
+            // If it's a new command with no ID
+            save_new_command(new_command);
+        }
+        return;
+    }
 
-    formData.append('input_file', file.value);
-    formData.append('module_id', data.module_id);
-    formData.append('module_name', data.module_name);
-    formData.append('preview', data.preview);
-    formData.append('first_row_header', data.first_row_header);
-    axios.post('/data/import', formData, {headers}).then((res) =>
-    {
+    if (!command) {
+        console.error("Command not found:", command_id);
+        return;
+    }
 
-        if(data.preview === false)
-        {
-            data.alert_text="Records have been imported";
-            window.scrollTo(0, 'top');
-            data.success_alert=true;
-            data.preview=false;
+    if (!command.name || !command.method_name || !command.description) {
+        alert("Name, Description and Method Name are required.");
+        return;
+    }
+
+    if (command.id) {
+        // Update existing command
+        axios.post(`/data/connector/update_command/${command_id}`, command)
+            .then((res) => {
+                command.editing = false;
+            })
+            .catch((error) => {
+                console.error("Error updating command:", error);
+            });
+    } else {
+        // Add new command
+        save_new_command(command);
+    }
+};
+
+
+const cancel_edit = (command) => {
+    if (command.id === null) {
+        // Remove new command if it has no ID
+        const index = connector.value.commands.indexOf(command);
+        if (index > -1) {
+            connector.value.commands.splice(index, 1);
+        }
+    } else {
+        // Simply cancel editing for existing command
+        command.editing = false;
+    }
+};
+
+
+
+
+const save_new_command = (command) => {
+    axios.post('/data/connector/add_command', command)
+        .then((res) => {
+            command.editing = false;
+            command.id = res.data.command.id; // Assign the ID returned from the server
+            console.log("New command saved with ID:", command.id); // Debug log
+        })
+        .catch((error) => {
+            console.error("Error adding new command:", error);
+        });
+};
+
+
+const delete_command = (command_id, index) => {
+    axios.post('/data/connector/delete_command/' + command_id, {}, { headers })
+        .then((res) => {
+            // Remove the command from the array
+            connector.value.commands.splice(index, 1);
+            data.alert_text = "Command deleted";
+            data.success_alert = true;
             setTimeout(() => {
-                window.location='/import?success=1&records=';
+                data.success_alert = false;
             }, 2000);
-
-        }
-        else {
-
-            preview_data.fields=res.data.fields;
-            preview_data.row=res.data.row;
-            preview_data.show=true;
-            data.preview=true;
-        }
-
-    }).catch(function (error) {
-
-        data.alert_text="There was an error with your import.  Please try again.";
-        data.error_alert=true;
-        setTimeout(() => {
-            data.error_alert=null;
-            data.alert_text='';
-        }, 5000)});
-
-}
+        })
+        .catch((error) => {
+            data.alert_text = "Error deleting command";
+            data.error_alert = true;
+            setTimeout(() => {
+                data.error_alert = false;
+                data.alert_text = '';
+            }, 5000);
+        });
+};
 </script>

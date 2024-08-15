@@ -15,8 +15,10 @@ class Connector extends Model
         'status' => 'boolean',
     ];
 
-    public function endpoints()
+    protected $guarded = [];
+
+    public function commands()
     {
-        return $this->hasMany(Endpoint::class, 'connector_id', 'id');
+        return $this->hasMany(ConnectorCommand::class, 'connector_id', 'id');
     }
 }

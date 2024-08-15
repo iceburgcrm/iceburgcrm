@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('start_hour');
             $table->integer('start_minute')->default(0);
             $table->integer('start_day')->default(0);
+            $table->integer('command_id')->default(0);
             $table->enum('frequency', ['once', 'daily', 'weekly', 'monthly', 'yearly'])->default('once');
             $table->integer('status')->default(1);
 
