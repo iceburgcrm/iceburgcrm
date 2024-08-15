@@ -4262,6 +4262,9 @@ html {
 :where(.table *:last-child) :where(*:last-child) :where(th, td):last-child {
   border-bottom-right-radius: var(--rounded-box, 1rem);
 }
+.textarea-bordered {
+  --tw-border-opacity: 0.2;
+}
 .textarea:focus {
   outline: 2px solid hsla(var(--bc) / 0.2);
   outline-offset: 2px;
@@ -4658,6 +4661,9 @@ html {
 .row-span-3 {
   grid-row: span 3 / span 3;
 }
+.float-right {
+  float: right;
+}
 .m-5 {
   margin: 1.25rem;
 }
@@ -5000,6 +5006,9 @@ html {
 }
 .overflow-x-scroll {
   overflow-x: scroll;
+}
+.break-all {
+  word-break: break-all;
 }
 .rounded {
   border-radius: 0.25rem;
@@ -5792,17 +5801,9 @@ html {
   --tw-bg-opacity: 1;
   background-color: hsl(var(--b2, var(--b1)) / var(--tw-bg-opacity));
 }
-.peer:checked ~ .peer-checked\:bg-secondary {
-  --tw-bg-opacity: 1;
-  background-color: hsl(var(--s) / var(--tw-bg-opacity));
-}
 .peer:checked ~ .peer-checked\:text-base-content {
   --tw-text-opacity: 1;
   color: hsl(var(--bc) / var(--tw-text-opacity));
-}
-.peer:checked ~ .peer-checked\:text-secondary-content {
-  --tw-text-opacity: 1;
-  color: hsl(var(--sc) / var(--tw-text-opacity));
 }
 @media (min-width: 640px) {
 

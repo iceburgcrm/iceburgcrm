@@ -5,7 +5,7 @@ namespace Database\Seeders\Core;
 use App\Models\Connector;
 use App\Models\Datalet;
 use App\Models\DataletType;
-use App\Models\Endpoint;
+use App\Models\ConnectorCommand;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Role;
@@ -290,14 +290,41 @@ class GenerateSeeder extends Seeder
     {
         $connectorId = Connector::insertGetId([
             'name' => 'joke of the day',
+            'class' => 'jokes',
             'base_url' => 'https://official-joke-api.appspot.com',
+            'auth_type' => 'None',
         ]);
 
-        Endpoint::insert([
+        ConnectorCommand::insert([
             'connector_id' => $connectorId,
-            'endpoint' => '/random_joke',
-            'class_name' => 'jokes',
+            'name' => 'Random Joke',
+            'description' => 'Get a random jokei',
+            'method_name' => 'random_joke',
         ]);
+
+        $connectorId = Connector::insertGetId([
+            'name' => 'IceburgCRM',
+            'class' => 'iceburg',
+            'base_url' => 'http://localhost',
+            'auth_type' => 'Basic Auth',
+            'username' => 'admin@iceburg.ca',
+            'password' => 'admin',
+        ]);
+
+        ConnectorCommand::insert([
+            'connector_id' => $connectorId,
+            'name' => 'Backup Contacts',
+            'description' => 'This method will backup the last 10 contacts to another IceburgCRM instance',
+            'method_name' => 'backup_contacts',
+        ]);
+
+        ConnectorCommand::insert([
+            'connector_id' => $connectorId,
+            'name' => 'Backup Accounts',
+            'description' => 'This method will backup the last 10 accounts to another IceburgCRM instance',
+            'method_name' => 'backup_accounts',
+        ]);
+
     }
 
 

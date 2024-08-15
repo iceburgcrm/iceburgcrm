@@ -3,6 +3,8 @@
 use App\Exports\GenericExport;
 use App\Imports\GenericImport;
 use App\Models\AIAssist;
+use App\Models\Connector;
+use App\Models\ConnectorCommand;
 use App\Models\Datalet;
 use App\Models\Field;
 use App\Models\Module;
@@ -109,7 +111,7 @@ Route::any('subpanel/save', function (Request $request) {
     return response()->json(['error' => 'Missing Subpanel ID'], 500);
 
 })->middleware(['auth', 'verified'])
-    ->name('module_record_save');
+    ->name('subpanel_record_save');
 
 Route::any('import', function (Request $request) {
 
@@ -210,3 +212,149 @@ Route::get('related_field_name/field_id/{field_id}/value/{value}', function (Req
 
 })->middleware(['auth', 'verified'])->name('data')
     ->name('data_related');
+
+
+
+Route::get('connector/delete_command/{command_id}', function ($commandId) {
+
+    ConnectorCommand::where('id', $commandId)->delete();
+
+    return response()->json(Connectors::all());
+
+})->middleware(['auth', 'verified'])->name('data')
+    ->name('delete_endpoint');
+
+Route::get('connector/delete_connector/{connector_id}', function ($connectorId) {
+
+    ConnectorCommand::where('connector_id', $connectorId)->delete();
+    Connector::where('id', $connectorId)->delete();
+
+    return response()->json(Connectors::all());
+})->middleware(['auth', 'verified'])->name('data')
+    ->name('delete_connector');
+
+Route::get('connectors', function () {
+
+    return response()->json(Connectors::all());
+})->middleware(['auth', 'verified'])->name('data')
+    ->name('subpanel_relationship_fields');
+
+
+
+
+// Route for Saving the Connector
+Route::post('connector/set_connector', function (Request $request) {
+    $data = $request->only([
+        'name', 'auth_type', 'auth_key', 'base_url', 'token_url',
+        'client_id', 'client_secret', 'username', 'password',
+        'access_token', 'refresh_token', 'token_expires_at', 'status'
+    ]);
+
+
+    // Validate and/or save the connector here
+    $connector = Connector::updateOrCreate(
+        ['id' => $request->input('id')],
+        $data
+    );
+
+    return response()->json(['status' => 'Connector saved successfully', 'connector' => $connector]);
+})->middleware(['auth', 'verified'])->name('set_connector');
+
+// Route for Deleting the Connector
+Route::delete('connector/delete_connector/{id}', function ($id) {
+    $connector = Connector::find($id);
+
+    if ($connector) {
+        // Delete all associated ConnectorCommands
+        $connector->commands()->delete();
+        // Delete the connector
+        $connector->delete();
+
+        return response()->json(['status' => 'Connector and its commands deleted successfully']);
+    } else {
+        return response()->json(['status' => 'Connector not found'], 404);
+    }
+})->middleware(['auth', 'verified'])->name('delete_connector');
+
+Route::post('connector/run_command', function (Request $request) {
+    $commandId = $request->input('command_id');
+
+    $custom_command=ConnectorCommand::where('id', $commandId)->with('connector')->firstOrFail();
+    $className = $custom_command->connector['class'];
+
+    // Define the full path to the class
+    $classPath = app_path("Connectors/{$className}Connector.php");
+
+    // Check if the class file exists
+    if (File::exists($classPath)) {
+        // Create the full namespace for the class
+        $fullClassName = "App\\Connectors\\{$className}Connector";
+
+        // Check if the class exists and is instantiable
+        if (class_exists($fullClassName)) {
+            $connectorInstance = new $fullClassName($custom_command);
+
+            $response = $connectorInstance->{$custom_command->method_name}();
+            $custom_command->last_updated=\Carbon\Carbon::now();
+            $custom_command->last_output=$response;
+            $custom_command->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => $response,
+                'class' => $fullClassName,
+                'instance' => $connectorInstance,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => "Class {$fullClassName} is not instantiable",
+            ], 500);
+        }
+    } else {
+        return response()->json([
+            'status' => 'error',
+            'message' => "Class {$className} does not exist in /app/Connectors",
+        ], 404);
+    }
+
+})->middleware(['auth', 'verified'])->name('run_command');
+
+
+
+// Route for Updating a Command
+Route::post('connector/update_command/{id?}', function ($id, Request $request) {
+    $command = ConnectorCommand::find($id);
+
+    if ($command) {
+        $data = $request->only(['name', 'method_name', 'description', 'status']);
+        $command->update($data);
+
+        return response()->json(['status' => 'Command updated successfully']);
+    } else {
+        return response()->json(['status' => 'Command not found'], 404);
+    }
+})->middleware(['auth', 'verified'])->name('update_command');
+
+// Route for Adding a New Command
+Route::post('connector/add_command', function (Request $request) {
+    $data = $request->only(['name', 'method_name', 'description', 'status', 'connector_id']);
+
+    $command = ConnectorCommand::create($data);
+
+    return response()->json(['status' => 'Command added successfully', 'command' => $command]);
+})->middleware(['auth', 'verified'])->name('add_command');
+
+// Route for Deleting a Command
+Route::post('connector/delete_command/{id}', function ($id) {
+    $command = ConnectorCommand::find($id);
+
+    if ($command) {
+        $command->delete();
+        return response()->json(['status' => 'Command deleted successfully']);
+    } else {
+        return response()->json(['status' => 'Command not found'], 404);
+    }
+})->middleware(['auth', 'verified'])->name('delete_command');
+
+

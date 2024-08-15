@@ -5,7 +5,7 @@ namespace Database\Seeders\Default;
 use App\Models\Connector;
 use App\Models\Datalet;
 use App\Models\DataletType;
-use App\Models\Endpoint;
+use App\Models\ConnectorCommand;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Setting;
@@ -293,13 +293,15 @@ class GenerateSeeder extends Seeder
     {
         $connectorId = Connector::insertGetId([
             'name' => 'joke of the day',
+            'class' => 'jokes',
             'base_url' => 'https://official-joke-api.appspot.com',
         ]);
 
-        Endpoint::insert([
+        ConnectorCommand::insert([
             'connector_id' => $connectorId,
-            'endpoint' => '/random_joke',
-            'class_name' => 'jokes',
+            'name' => 'Random Joke',
+            'description' => 'Get a random jokei',
+            'method_name' => 'random_joke',
         ]);
     }
 
