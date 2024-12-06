@@ -1,0 +1,52 @@
+{
+    "version": "v1.0.0",
+    "entity": {
+        "type": "individual",
+        "role": "maintainer",
+        "name": "Rob",
+        "email": "rob@iceburg.ca",
+        "phone": "",
+        "description": "I'm a developer interested in building metadata powered applications using AI to seed data which shapes the application.\n\n",
+        "webpageUrl": {
+            "url": "https://www.software-developer.ca",
+            "wellKnown": "https://www.software-developer.ca/.well-known/funding-manifest-urls"
+        }
+    },
+    "projects": [{
+        "guid": "iceburgcrm",
+        "name": "Iceburg CRM",
+        "description": "Iceburg CRM is a metadata driven CRM with AI abilities that allows you to quickly prototype any CRM. The default CRM is based on a typical business CRM but the flexibility of dynamic modules, fields, subpanels allows prototyping of any number of different tyes of CRMs",
+        "webpageUrl": {
+            "url": "https://www.iceburg.ca",
+			"wellKnown": "https://www.iceburg.ca/.well-known/funding-manifest-urls"
+        },
+        "repositoryUrl": {
+            "url": "https://github.com/iceburgcrm/iceburgcrm",
+			"wellKnown": "https://github.com/iceburgcrm/iceburgcrm/blob/main/.well-known/funding-manifest-urls"
+        },
+        "licenses": ["spdx:AGPL-3.0"],
+        "tags": ["crm", "ai", "laravel", "metadata", "aicrm", "cms", "php", "opensource"]
+    }],
+    "funding": {
+        "channels": [
+            {
+                "guid": "github",
+                "type": "other",
+                "address": "",
+                "description": "Github sponsorship"
+            }
+        ],
+        "plans": [
+            {
+                "guid": "angel-plan",
+                "status": "active",
+                "name": "Goodwill plan",
+                "description": "Pay anything you wish to show your goodwill for the project.",
+                "amount": 0,
+                "currency": "USD",
+                "frequency": "one-time",
+                "channels": ["github"]
+            }
+        ]
+    }
+}
