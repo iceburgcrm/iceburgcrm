@@ -13,7 +13,7 @@ class PopulateCommand extends Command
      * @var string
      */
     protected $signature = 'iceburg:populate {--amount=} {--module_id=} {--start_at=}';
-    protected $description = 'AI Populate existing CRM';
+    protected $description = 'AI Populate an existing CRM';
 
 
     /**

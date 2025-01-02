@@ -24,7 +24,7 @@ const submit = () => {
         <Head title="Forgot Password" />
 
         <div class="mb-4 text-sm text-gray-600">
-            Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.
+            {{ $t('page.forgotpassword') }}
         </div>
 
         <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
@@ -41,7 +41,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <BreezeButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Email Password Reset Link
+                    {{ $t('page.emailpasswordresetlink') }}
                 </BreezeButton>
             </div>
         </form>

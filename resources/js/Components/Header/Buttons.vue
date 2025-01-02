@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <h3 class="font-bold text-lg">Select Fields</h3>
-                    <p class="py-4 w-full">
+                    <div class="py-4 w-full">
                         <table class="w-full">
                             <tr v-for="(option, index) in props.fields" :key="index">
                                 <td>
@@ -76,7 +76,7 @@
                                 </td>
                             </tr>
                         </table>
-                    </p>
+                    </div>
                     <div class="modal-action">
                         <div class="dialog grid grid-flow-col auto-cols-max">
                             <button class="btn btn-primary btn-sm" @click="ai_field_assist" :disabled="isProcessingAI">Process</button>

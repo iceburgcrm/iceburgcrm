@@ -1,11 +1,9 @@
 <template>
     <div class="card lg:card-side bg-base-100 shadow-xl">
         <div class="card-body">
-            <p>
                 <ul>
                     <li class="input-primary" v-for="(item,key) in fields">{{key.replace('_', ' ')}}: {{item}}</li>
                 </ul>
-            </p>
         </div>
     </div>
 </template>

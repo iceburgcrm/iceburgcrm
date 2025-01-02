@@ -26,7 +26,7 @@
                     <input type="checkbox" v-model="show_search" id="show-search" />
                     <label class="collapse-title text-xsm select-none" for="show-search">
 
-                        <span v-if="!show_search">Show</span><span v-if="show_search">Hide</span> Search Fields
+                        <span v-if="!show_search">{{ $t('page.show') }}</span><span v-if="show_search">Hide</span> Search Fields
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
                     </svg>
@@ -123,14 +123,14 @@
                                     <th>
                                         <input type="button" class="btn-primary outline-primary">
                                         <select class="dropdown-content menu p-2 shadow bg-base-100 rounded-box text-sm w-24" v-model="action_menu">
-                                            <option value="" class="text-sm">Action</option>
-                                            <option v-if="$page.props.permissions.export === 1" value="xlsx">Export Excel(XLSX)</option>
-                                            <option v-if="$page.props.permissions.export === 1" value="xls">Export Excel Compatible (XLS)</option>
-                                            <option v-if="$page.props.permissions.export === 1" value="csv">Export CSV</option>
-                                            <option v-if="$page.props.permissions.export === 1" value="tsv">Export TSV</option>
-                                            <option v-if="$page.props.permissions.export === 1" value="ods">Export ODS</option>
-                                            <option v-if="$page.props.permissions.export === 1" value="html">Export HTML</option>
-                                            <option v-if="$page.props.permissions.write === 1" value="delete">Delete</option>
+                                            <option value="" class="text-sm">{{ $t('page.action') }}</option>
+                                            <option v-if="$page.props.permissions.export === 1" value="xlsx">{{ $t('page.exportxlsx') }}</option>
+                                            <option v-if="$page.props.permissions.export === 1" value="xls">{{ $t('page.exportxls') }}</option>
+                                            <option v-if="$page.props.permissions.export === 1" value="csv">{{ $t('page.exportcsv') }}</option>
+                                            <option v-if="$page.props.permissions.export === 1" value="tsv">{{ $t('page.exporttsv') }}</option>
+                                            <option v-if="$page.props.permissions.export === 1" value="ods">{{ $t('page.exportods') }}</option>
+                                            <option v-if="$page.props.permissions.export === 1" value="html">{{ $t('page.exporthtml') }}</option>
+                                            <option v-if="$page.props.permissions.write === 1" value="delete">{{ $t('page.delete') }}</option>
                                         </select>
                                     </th>
                                     <th v-for="field in display_fields">
@@ -140,11 +140,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-if="show_loading" ><td class="w-full" colspan="500">Loading...</td></tr>
+                                <tr v-if="show_loading" ><td class="w-full" colspan="500">{{ $t('page.loading') }}</td></tr>
                                 <tr v-for="(row, index) in search_data">
                                     <td class="w-50">
                                         <input type="checkbox" v-bind:id="'id-' + row.id"  v-model="selected_records" v-bind:value="row[$page.props.module.name + '_row_id']">
-                                        <a class="pl-3" :href="`/module/${$page.props.module.name}/edit/${row[$page.props.module.name + '_row_id']}`">Edit</a>
+                                        <a class="pl-3" :href="`/module/${$page.props.module.name}/edit/${row[$page.props.module.name + '_row_id']}`">{{ $t('page.edit') }}</a>
                                     </td>
                                     <td class="text-lg h-10" v-for="(item, key) in $page.props.display_fields">
                                         <Display
@@ -159,7 +159,7 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Actions</th>
+                                    <th>{{ $t('page.actions') }}</th>
                                     <th  v-for="(field, key) in $page.props.display_fields" >
                                         <a v-if="active_fields[key]"  class="underline decoration-gray-900" @click.prevent="sort_by_field(field)">{{ field.label }}</a>
                                     </th>

@@ -11,7 +11,7 @@
                 <div class="grid grid-flow-col grid-col-2 justify-between">
                     <div>
                         <a class="btn btn-outline btn-primary btn-sm text-sm" :href="`/subpanel/add/${props.id}?from_module=${props.module_id}&amp;from_id=${props.record_id}`" method="get" as="button">
-                            Add
+                            {{ $t('page.add') }}
                         </a>
                     </div>
                     <div>
@@ -25,9 +25,9 @@
                                         </path>
                                     </svg>
                                 </button>
-                                <input type="text" class=" text-sm px-4 py-2 w-40" v-model="search_text" placeholder="Search...">
+                                <input type="text" class=" text-sm px-4 py-2 w-40" v-model="search_text" :placeholder="$t('page.searchtext')">
                                 <select class=" text-sm" v-model="search_field">
-                                    <option value="">Select Column</option>
+                                    <option value="">{{ $t('page.selectcolumn') }}</option>
                                     <option  v-for="(field, index) in fields" :value="field.field.module_id + '__' + field.field.name">{{field.field.name}}</option>
                                 </select>
 
@@ -55,10 +55,10 @@
 
                                 <td class="w-20">
                                     <a class="text-xs btn-xs underline btn-link btn text-primary pb-2" v-if="props.permissions.write" :href="`/subpanel/${props.id}/edit/${value.relationship_id}?from_module=${props.module_id}&amp;from_id=${props.record_id}`" method="get" as="button">
-                                        Edit
+                                        {{ $t('page.edit') }}
                                     </a><br>
                                     <a class="text-xs btn-xs underline btn-link btn text-error" v-if="props.permissions.write" @click.prevent="deleteRecord(value.relationship_id)" href="" method="get" role="button">
-                                        Delete
+                                        {{ $t('page.delete') }}
                                     </a>
                                 </td>
                                 <td class="hover" v-for="(field, index) in fields">
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="w-50">
-                    <label class="text-sm">Per Page: </label>
+                    <label class="text-sm">{{ $t('page.perpage') }}: </label>
                     <select class=" text-sm" v-model="per_page">
                         <option value="2">2</option>
                         <option value="5">5</option>

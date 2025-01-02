@@ -1,11 +1,11 @@
 
 <template>
-    <Head title="Settings" />
+    <Head :title="$t('page.modules')" />
     <BreezeAuthenticatedLayout>
 
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Modules
+                {{ $t('page.modules') }}
             </h2>
 
         </template>
@@ -16,7 +16,7 @@
                 <div class="grid row-auto">
                     <div class="p-5  grid grid-row-2 bg-white">
                         <label for="search" class="block text-sm font-medium leading-5 text-gray-700">
-                            Select Module
+                            {{ $t('page.selectmodule') }}
                         </label>
                         <select v-model="module_id" name="module_id" class="select select-primary w-full md:w-1/2 lg:w-1/4">
                             <option :value="item.id" v-for="item in $page.props.modules">{{item.label}}</option>
@@ -25,7 +25,7 @@
 
 
                     <div class="p-5 bg-white">
-                        <input @click.prevent="save()" type="submit" class="btn btn-secondary" value="Save" />
+                        <input @click.prevent="save()" type="submit" class="btn btn-secondary" :value="$t('page.save')" />
                     </div>
                 </div>
             </div>

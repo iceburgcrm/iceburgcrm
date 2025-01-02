@@ -19,7 +19,7 @@ class SeedDatabase extends Command
      */
 
     protected $signature = 'iceburg:create {--type=default} {--prompt=} {--model=gpt-3.5-turbo} {--logo=} {--seed_amount=} {--seed_type=} {--module_id=} {--connection_host=} {--connection_port=} {--connection_database=} {--connection_username=} {--connection_password=} {--connection_charset=} {--connection_collation=}';
-    protected $description = 'Create your crm';
+    protected $description = 'Creates a crm.  iceburg:create {--type=default} {--prompt=} {--model=gpt-3.5-turbo} {--logo=} {--seed_amount=} {--seed_type=} {--module_id=} {--connection_host=} {--connection_port=} {--connection_database=} {--connection_username=} {--connection_password=} {--connection_charset=} {--connection_collation=}';
 
     /**
      * The console command description.

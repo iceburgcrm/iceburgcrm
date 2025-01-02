@@ -9,8 +9,8 @@
                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
                     </label>
                     <ul tabindex="0" class=" text-base-content bg-base-100 dropdown-content menu p-2 shadow rounded-box w-52">
-                        <li style="font-weight: bolder;"><a href="/dashboard">Dashboard</a></li>
-                        <li style="font-weight: bolder;"><a href="/modules">All Modules</a></li>
+                        <li style="font-weight: bolder;"><a href="/dashboard">{{ $t('page.dashboard') }}</a></li>
+                        <li style="font-weight: bolder;"><a href="/modules">{{ $t('page.allmodules') }}</a></li>
                         <ul class="p-2  bg-base-100" v-for="module_category in $page.props.auth.modules">
                             <li v-if="module_category.id < 5" class="semi-bold">{{module_category.label}} <svg class="fill-current" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"/></svg>
                             </li>
@@ -27,8 +27,8 @@
             </div>
             <div class="navbar-center hidden lg:flex z-40">
                 <ul class="menu menu-horizontal p-0 text-primary-content bg-primary z-40">
-                    <li style="font-weight: bolder;"><a href="/dashboard">Dashboard</a></li>
-                    <li style="font-weight: bolder;"><a href="/modules">All Module</a></li>
+                    <li style="font-weight: bolder;"><a href="/dashboard">{{ $t('page.dashboard') }}</a></li>
+                    <li style="font-weight: bolder;"><a href="/modules">{{ $t('page.allmodules') }}</a></li>
                     <li tabindex="0" v-for="module_category in $page.props.auth.modules">
                          <a v-if="module_category.name != 'admin'"> {{module_category.label}}
 
@@ -69,80 +69,79 @@
                         <div class="grid grid-flow-row p-5 bg-base-100 gp-5">
                             <ul>
                                 <li>
-                                    <a class="font-medium  hover:text-accent text-base-content grid-row-1" :href="route('logout')" method="post" as="button">
-                                        Log Out
+                                    <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('logout')" method="post" as="button">
+                                        {{ $t('page.logout') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="font-medium  hover:text-accent text-base-content grid-row-1" :href="route('import')" method="post" as="button">
-                                        Import
+                                    <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('import')" method="post" as="button">
+                                        {{ $t('page.import') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'"><hr class="mt-3 mb-3" /></li>
-
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium  hover:text-accent text-base-content grid-row-1" :href="route('settings')" method="get" as="button">
-                                        Settings
+                                    <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('settings')" method="get" as="button">
+                                        {{ $t('page.settings') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium  hover:text-accent text-base-content grid-row-1" href="/admin/permissions" method="get" as="button">
-                                        Permissions
+                                    <a class="font-medium hover:text-accent text-base-content grid-row-1" href="/admin/permissions" method="get" as="button">
+                                        {{ $t('page.permissions') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-medium hover:text-accent text-base-content grid-row-1" href="/module/ice_roles" method="get" as="button">
-                                        Roles
+                                        {{ $t('page.roles') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('data')" method="get" as="button">
-                                        Data
+                                        {{ $t('page.data') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('connectors')" method="get" as="button">
-                                        Connectors
+                                        {{ $t('page.connectors') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
                                     <a class="font-medium hover:text-accent text-base-content grid-row-1" :href="route('scheduler')" method="get" as="button">
-                                        Scheduler
+                                        {{ $t('page.scheduler') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-bold mt-3   hover:text-accent text-base-content grid-row-1" :href="route('builder')" method="get" as="button">
-                                        Builder
+                                    <a class="font-bold mt-3 hover:text-accent text-base-content grid-row-1" :href="route('builder')" method="get" as="button">
+                                        {{ $t('page.builder') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium hover:text-accent ml-2 text-base-content grid-row-1"  href="/module/ice_modules" method="get" as="button">
-                                        Modules
+                                    <a class="font-medium hover:text-accent ml-2 text-base-content grid-row-1" href="/module/ice_modules" method="get" as="button">
+                                        {{ $t('page.modules') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1"  href="/module/ice_fields" method="get" as="button">
-                                        Fields
+                                    <a class="font-medium ml-2 hover:text-accent text-base-content grid-row-1" href="/module/ice_fields" method="get" as="button">
+                                        {{ $t('page.fields') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1" href="/module/ice_module_subpanels" method="get" as="button">
-                                        Subpanels
+                                    <a class="font-medium ml-2 hover:text-accent text-base-content grid-row-1" href="/module/ice_module_subpanels" method="get" as="button">
+                                        {{ $t('page.subpanels') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content grid-row-1" href="/module/ice_relationships" method="get" as="button">
-                                        Relationships
+                                    <a class="font-medium ml-2 hover:text-accent text-base-content grid-row-1" href="/module/ice_relationships" method="get" as="button">
+                                        {{ $t('page.relationships') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2   hover:text-accent text-base-content grid-row-1" href="/module/ice_datalets" method="get" as="button">
-                                        Datalets
+                                    <a class="font-medium ml-2 hover:text-accent text-base-content grid-row-1" href="/module/ice_datalets" method="get" as="button">
+                                        {{ $t('page.datalets') }}
                                     </a>
                                 </li>
                                 <li v-if="$page.props.auth.user.role === 'Admin'">
-                                    <a class="font-medium ml-2  hover:text-accent text-base-content font-bold grid-row-1" href="/module/ice_users" method="get" as="button">
-                                        Users
+                                    <a class="font-medium ml-2 hover:text-accent text-base-content font-bold grid-row-1" href="/module/ice_users" method="get" as="button">
+                                        {{ $t('page.users') }}
                                     </a>
                                 </li>
                             </ul>

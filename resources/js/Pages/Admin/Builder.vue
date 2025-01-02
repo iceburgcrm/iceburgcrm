@@ -38,7 +38,7 @@
                     <div v-if="module" class="card w-full bg-base-100 shadow-xl">
                         <div class="card-body">
                             <h2 class="card-title">{{ module.label }}</h2>
-                            <p class="w-full grid-flow-col grid-col-3 mt-5">
+                            <div class="w-full grid-flow-col grid-col-3 mt-5">
                             <div class="mt-5 mb-5"><button @click="regenerate_module(module.id)" class="mb-10 btn btn-error text-error-content btn-outline">Regenerate Module (Existing data will be deleted)</button> Seed: <input v-model="seed" type="text" size="4" placeholder="50" /></div>
 
                             <div class="grid grid-flow-col col-auto">
@@ -65,14 +65,14 @@
                                     <div class="collapse-content bg-neutral text-neutral-content peer-checked:bg-base-200 peer-checked:text-base-content">
                                         <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('module', module.id)">Delete</button></div>
 
-                                        <p class="grid grid-flow-col col-auto" v-for="(value,key) in module">
-                                        <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
-                                            <label class="label">
-                                                <span class="label-text text-lg">{{key.toUpperCase()}}</span> </label>
-                                            <p class="font-light">{{help['module'][key]}}</p>
-                                            <input type="text" :id="'data' + key+'_'+'module'+'_'+module.id" @change="save_value(key,'module', module.id)" placeholder="" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                        <div class="grid grid-flow-col col-auto" v-for="(value,key) in module">
+                                            <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
+                                                <label class="label">
+                                                    <span class="label-text text-lg">{{key.toUpperCase()}}</span> </label>
+                                                <p class="font-light">{{help['module'][key]}}</p>
+                                                <input type="text" :id="'data' + key+'_'+'module'+'_'+module.id" @change="save_value(key,'module', module.id)" placeholder="" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                            </div>
                                         </div>
-                                        </p>
                                     </div>
                                 </div>
 
@@ -90,17 +90,17 @@
                                             </div>
                                             <div class="collapse-content bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
                                                 <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('field', field.id)">Delete</button></div>
-                                                <p class="grid grid-flow-col col-auto" v-for="(value,key) in field">
+                                                <div class="grid grid-flow-col col-auto" v-for="(value,key) in field">
 
-                                                <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
-                                                    <label class="label">
-                                                        <span class="label-text">{{key.toUpperCase()}}</span>
-                                                    </label>
-                                                    <p class="font-light">{{help['field'][key]}}</p>
-                                                    <input type="text" placeholder="" :id="'data' + key+'_'+'field'+'_'+field.id" @change="save_value(key, 'field', field.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                                    <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
+                                                        <label class="label">
+                                                            <span class="label-text">{{key.toUpperCase()}}</span>
+                                                        </label>
+                                                        <p class="font-light">{{help['field'][key]}}</p>
+                                                        <input type="text" placeholder="" :id="'data' + key+'_'+'field'+'_'+field.id" @change="save_value(key, 'field', field.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                                    </div>
+
                                                 </div>
-
-                                                </p>
                                             </div>
                                         </div>
 
@@ -121,35 +121,35 @@
                                             <div class="collapse-content bg-secondary text-secondary-content peer-checked:bg-base-200 peer-checked:text-base-content">
                                                 <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('subpanel', subpanel.id)">Delete</button></div>
 
-                                                <p class="grid grid-flow-col col-auto" v-for="(value,key) in subpanel">
-                                                <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full max-w-xs mt-4">
-                                                    <label class="label">
-                                                        <span class="label-text">{{key.toUpperCase()}}</span>
-                                                    </label>
-                                                    <p class="font-light">{{help['subpanel'][key]}}</p>
-                                                    <div class="grid-flow-row" v-if="key === 'subpanelfields'">
+                                                <div class="grid grid-flow-col col-auto" v-for="(value,key) in subpanel">
+                                                    <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full max-w-xs mt-4">
+                                                        <label class="label">
+                                                            <span class="label-text">{{key.toUpperCase()}}</span>
+                                                        </label>
+                                                        <div class="font-light">{{help['subpanel'][key]}}</div>
+                                                            <div class="grid-flow-row" v-if="key === 'subpanelfields'">
 
-                                                        <div class="" v-for="(subpanel_array_fields in value">
-                                                            <ul class="ml-5 list-disc" v-for="(subpanel_field, subpanel_field_key) in subpanel_array_fields">
-                                                                <li v-if="subpanel_field_key === 'field'">{{subpanel_field.module.label}} - {{subpanel_field.label}} [<a class="text-error" @click="delete_subpanel_field(subpanel_field.id, value.id)">x</a>]</li>
-                                                            </ul>
+                                                                <div class="" v-for="(subpanel_array_fields in value">
+                                                                    <ul class="ml-5 list-disc" v-for="(subpanel_field, subpanel_field_key) in subpanel_array_fields">
+                                                                        <li v-if="subpanel_field_key === 'field'">{{subpanel_field.module.label}} - {{subpanel_field.label}} [<a class="text-error" @click="delete_subpanel_field(subpanel_field.id, value.id)">x</a>]</li>
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="mb-5">
+                                                                    <button class="text-sm input-primary btn btn-primary text-primary-content mt-5" value="Add a field" @click="show_subpanel_field_list(subpanel.id)">Add</button> [requires a selected relationship]
+                                                                    <span v-if="subpanel_field_values[subpanel.id]">
+                                                                        <br>
+                                                                        <select v-if="subpanel_field_values[subpanel.id]" v-model="subpanel_field_list[subpanel.id]" name="relationship_id" class="input select-primary w-full md:w-1/2 lg:w-1/4">
+                                                                            <option :value="item.id" v-for="item in subpanel_field_values">{{item.module.label}} - {{item.label}}</option>
+                                                                        </select>
+                                                                        <button class="text-lg input-primary text-neutral mt-5 ml-5" value="Add a field" @click="add_subpanel_field(key, value.id, subpanel.id)">Add Field</button>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div v-else-if="key === 'relationship'">
                                                         </div>
-                                                        <div class="mb-5">
-                                                            <button class="text-sm input-primary btn btn-primary text-primary-content mt-5" value="Add a field" @click="show_subpanel_field_list(subpanel.id)">Add</button> [requires a selected relationship]
-                                                            <span v-if="subpanel_field_values[subpanel.id]">
-                                                                <br>
-                                                                <select v-if="subpanel_field_values[subpanel.id]" v-model="subpanel_field_list[subpanel.id]" name="relationship_id" class="input select-primary w-full md:w-1/2 lg:w-1/4">
-                                                                    <option :value="item.id" v-for="item in subpanel_field_values">{{item.module.label}} - {{item.label}}</option>
-                                                                </select>
-                                                                <button class="text-lg input-primary text-neutral mt-5 ml-5" value="Add a field" @click="add_subpanel_field(key, value.id, subpanel.id)">Add Field</button>
-                                                            </span>
-                                                        </div>
+                                                        <input v-else type="text" placeholder="" :id="'data' + key+'_'+'subpanel'+'_'+subpanel.id" @change="save_value(key, 'subpanel', subpanel.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
                                                     </div>
-                                                    <div v-else-if="key === 'relationship'">
-                                                    </div>
-                                                    <input v-else type="text" placeholder="" :id="'data' + key+'_'+'subpanel'+'_'+subpanel.id" @change="save_value(key, 'subpanel', subpanel.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
                                                 </div>
-                                                </p>
                                             </div>
                                         </div>
 
@@ -157,7 +157,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -182,17 +182,17 @@
                                     <div class="collapse-content bg-primary text-primary-content peer-checked:bg-base-200 peer-checked:text-base-content">
                                         <div class="align-right justify-end"><button class="btn btn-error btn-outline" @click="delete_item('datalet', datalet.id)">Delete</button></div>
 
-                                        <p class="grid grid-flow-col col-auto" v-for="(value,key) in datalet">
+                                        <div class="grid grid-flow-col col-auto" v-for="(value,key) in datalet">
 
-                                        <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
-                                            <label class="label">
-                                                <span class="label-text">{{key.toUpperCase()}}</span>
-                                            </label>
-                                            <p class="font-light">{{help['datalet'][key]}}</p>
-                                            <input type="text" placeholder="" :id="'data' + key+'_'+'datalet'+'_'+datalet.id" @change="save_value(key, 'datalet', datalet.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                            <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
+                                                <label class="label">
+                                                    <span class="label-text">{{key.toUpperCase()}}</span>
+                                                </label>
+                                                <p class="font-light">{{help['datalet'][key]}}</p>
+                                                <input type="text" placeholder="" :id="'data' + key+'_'+'datalet'+'_'+datalet.id" @change="save_value(key, 'datalet', datalet.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                            </div>
+
                                         </div>
-
-                                        </p>
                                     </div>
                                 </div>
 
@@ -226,17 +226,17 @@
                                     <div class="collapse-content bg-secondary text-secondary-content peer-checked:bg-base-200 peer-checked:text-base-content">
                                         <div class="align-right justify-end"><button @click="delete_item('relationship', relationship.id)" class="btn btn-error btn-outline">Delete</button></div>
 
-                                        <p class="grid grid-flow-col col-auto" v-for="(value,key) in relationship">
+                                        <div class="grid grid-flow-col col-auto" v-for="(value,key) in relationship">
 
-                                        <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
-                                            <label class="label">
-                                                <span class="label-text">{{key.toUpperCase()}}</span>
-                                            </label>
-                                            <p class="font-light">{{help['relationship'][key]}}</p>
-                                            <input type="text" placeholder="" :id="'data' + key+'_'+'field'+'_'+relationship.id" @change="save_value(key, 'field', relationship.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                            <div v-show="!['id', 'updated_at', 'created_at'].includes(key)" class="form-control w-full mt-4">
+                                                <label class="label">
+                                                    <span class="label-text">{{key.toUpperCase()}}</span>
+                                                </label>
+                                                <p class="font-light">{{help['relationship'][key]}}</p>
+                                                <input type="text" placeholder="" :id="'data' + key+'_'+'field'+'_'+relationship.id" @change="save_value(key, 'field', relationship.id)" class="input input-bordered w-full max-w-xs" :value="`${value}`" />
+                                            </div>
+
                                         </div>
-
-                                        </p>
                                     </div>
                                 </div>
 

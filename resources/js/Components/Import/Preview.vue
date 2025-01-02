@@ -1,7 +1,6 @@
 <template>
     <div class="card lg:card-side bg-base-100 shadow-xl">
         <div class="card-body">
-            <p>
                 <div class="overflow-x-auto">
                     <table class="table w-full">
                         <thead>
@@ -16,7 +15,6 @@
                         </tbody>
                     </table>
                 </div>
-            </p>
         </div>
     </div>
 </template>

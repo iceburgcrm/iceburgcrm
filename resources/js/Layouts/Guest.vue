@@ -14,7 +14,6 @@ const backgroundStyle = computed(() => {
 
 <template>
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-base-100 text-base-content">
-
         <div :style="backgroundStyle" class="hero min-h-screen bg-base-200">
             <div class="hero-content flex-col lg:flex-row-reverse">
                 <div class="text-center lg:text-left">

@@ -5,7 +5,7 @@
 
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Import
+                {{ $t('page.import') }}
             </h2>
 
         </template>
@@ -23,7 +23,7 @@
 
                             <div class="grid h-20 w-full card bg-base-300 rounded-box place-items-center">
                                 <label for="search" class="block text-sm font-medium leading-5 select-secondary input-secondary text-secondary-content">
-                                    Select a File
+                                    {{ $t('page.selectfile') }}
                                 </label>
                                 <input class="file-input file-input-bordered file-input-secondary w-full max-w-xs" type="file" id="file-input" @change="onFileChanged($event)" name="file" />
                             </div>
@@ -31,7 +31,7 @@
 
                     <div class="p-5  grid grid-row-2 bg-base-100">
                         <label for="search" class="block text-sm font-medium leading-5 text-gray-700">
-                            Select Module
+                            {{ $t('page.selectmodule') }}
                         </label>
                         <select required v-model="data.module_id" name="module_id" class="input select-secondary rounded">
                             <option :value="item.id" v-for="item in $page.props.modules">{{item.label}}</option>
@@ -39,7 +39,7 @@
                     </div>
                     <div class="p-5  grid grid-row-2 bg-base-100">
                         <label for="search" class="block text-sm font-medium leading-5 text-base-content">
-                            Use First Row as Column Names
+                            {{ $t('page.usefirstrow') }}
                         </label>
                         <input v-model="data.first_row_header" type="checkbox" class="checkbox checkbox-secondary rounded">
                     </div>
@@ -47,8 +47,8 @@
                     <Preview v-if="preview_data.show" :fields="preview_data.fields" :row="preview_data.row" />
 
                     <div class="p-5 bg-base-100">
-                        <input v-if="preview_data.show === false && data.module_id !== null" @click.prevent="upload()" type="submit" class="btn btn-secondary" name="import" value="Preview" />
-                        <input v-if="preview_data.show" @click.prevent="process()" type="submit" class="btn btn-secondary" name="import" value="Import" />
+                        <input v-if="preview_data.show === false && data.module_id !== null" @click.prevent="upload()" type="submit" class="btn btn-secondary" name="import" :value="$t('page.preview')" />
+                        <input v-if="preview_data.show" @click.prevent="process()" type="submit" class="btn btn-secondary" name="import" :value="$t('page.import')" />
                     </div>
                 </div>
 

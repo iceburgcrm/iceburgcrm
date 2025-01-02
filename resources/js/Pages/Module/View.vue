@@ -29,10 +29,10 @@
             <div>
                 <label class="input-group">
                     <a  class="btn btn-ghost" v-if="$page.props.previous" :href="`/module/${$page.props.module.name}/view/${$page.props.previous}`" method="get" as="button">
-                        Previous
+                        {{ $t('pagination.previous') }}
                     </a>
                     <a  class="btn btn-ghost" v-if="$page.props.next" :href="`/module/${$page.props.module.name}/view/${$page.props.next}`" method="get" as="button">
-                        Next
+                        {{ $t('pagination.next') }}
                     </a>
                 </label>
             </div>
@@ -67,10 +67,10 @@
             <div>
                 <label class="input-group">
                     <a  class="btn btn-ghost" v-if="$page.props.previous" :href="`/module/${$page.props.module.name}/view/${$page.props.previous}`" method="get" as="button">
-                        Previous
+                        {{ $t('pagination.previous') }}
                     </a>
                     <a  class="btn btn-ghost" v-if="$page.props.next" :href="`/module/${$page.props.module.name}/view/${$page.props.next}`" method="get" as="button">
-                        Next
+                        {{ $t('pagination.next') }}
                     </a>
                 </label>
             </div>
@@ -79,7 +79,7 @@
         <div v-if="$page.props.workflow.length > 0" class="pt-5 pb-5 max-w-full sm:px-3 lg:px-4 bg-base-200 text-base-content rounded  shadow-sm m-5" >
             <div class="card shadow-xl bg-base-100 text-base-content  border-gray-200">
                 <div class="card-body">
-                    <h2 class="card-title mb-5"><a :id="label">Workflow</a></h2>
+                    <h2 class="card-title mb-5"><a :id="label">{{ $t('page.workflow') }}</a></h2>
                     <div class="grid grid-flow-row">
                         <div class="align-center">
                             <ul class="steps steps-vertical w-full">

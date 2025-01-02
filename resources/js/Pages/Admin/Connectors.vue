@@ -1,10 +1,10 @@
 <template>
-    <Head title="Connectors" />
+    <Head :title="$t('page.connectors')" />
     <BreezeAuthenticatedLayout>
 
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
-                Connectors
+                {{ $t('page.connectors') }}
             </h2>
         </template>
 
@@ -12,19 +12,18 @@
 
         <div class="w-full bg-base-100">
             <div class="bg-base-100 mt-10 text-base-content max-w-full sm:px-3 lg:px-4">
-                <!-- Add a link to create a new connector -->
                 <div class="mb-4">
-                    <a class="btn btn-primary" :href="`/admin/connector`">New Connector</a>
+                    <a class="btn btn-primary" :href="`/admin/connector`">{{ $t('page.newconnector') }}</a>
                 </div>
 
                 <table class="bg-base-200 text-base-content table table-zebra table-compact lg:table-normal w-full border-secondary border-solid">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Auth Type</th>
-                        <th>Base URL</th>
-                        <th>Client ID</th>
-                        <th>Actions</th>
+                        <th>{{ $t('page.name') }}</th>
+                        <th>{{ $t('page.authtype') }}</th>
+                        <th>{{ $t('page.baseurl') }}</th>
+                        <th>{{ $t('page.clientid') }}</th>
+                        <th>{{ $t('page.actions') }}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -67,7 +66,7 @@ const setConnectorStatus = async (id, event) => {
 
     try {
         const formData = new FormData();
-        formData.append('status', event.target.value); // Assuming you are getting the status from the event
+        formData.append('status', event.target.value);
         formData.append('id', id);
 
         await axios.post('/data/connector/set_connector', formData);
@@ -75,21 +74,9 @@ const setConnectorStatus = async (id, event) => {
         const response = await axios.get('/data/connectors');
         connectors.value = response.data.connectors;
 
-        // Handle success alert
-        // For example:
-        // data.success_alert = true;
-        // setTimeout(() => data.success_alert = false, 2000);
+
     } catch (error) {
         console.error("Error setting connector status", error);
-
-        // Handle error alert
-        // For example:
-        // data.error_alert = true;
-        // data.alert_text = "There was an error saving your auth key";
-        // setTimeout(() => {
-        //     data.error_alert = false;
-        //     data.alert_text = '';
-        // }, 5000);
     }
 };
 </script>

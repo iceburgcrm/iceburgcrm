@@ -7,6 +7,7 @@ import BreezeLabel from '@/Components/Label.vue';
 import BreezeValidationErrors from '@/Components/ValidationErrors.vue';
 import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 
+
 defineProps({
     canResetPassword: Boolean,
     status: String,
@@ -39,23 +40,23 @@ const submit = () => {
         <form @submit.prevent="submit" class=" bg-base-200 text-base-content">
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Email</span>
+                    <span class="label-text">{{ $t('page.email') }}</span>
                 </label>
                 <input type="text" placeholder="email" class="input input-bordered" v-model="form.email" required autofocus autocomplete="username" />
             </div>
             <div class="form-control">
                 <label class="label">
-                    <span class="label-text">Password</span>
+                    <span class="label-text">{{ $t('page.password') }}</span>
                 </label>
 
                 <input type="password" placeholder="password" class="input input-bordered" v-model="form.password" required autocomplete="current-password" />
                     <label class="label">
-                    <a v-if="canResetPassword" :href="route('password.request')" class="label-text-alt link link-hover">Forgot password?</a>
+                    <a v-if="canResetPassword" :href="route('password.request')" class="label-text-alt link link-hover">{{ $t('page.forgotpassword') }}</a>
                 </label>
             </div>
 
             <div class="form-control mt-6">
-                <button class="btn btn-primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">Login</button>
+                <button class="btn btn-primary" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">{{ $t('page.login') }}</button>
 
             </div>
             <!--

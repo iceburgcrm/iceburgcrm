@@ -1,11 +1,11 @@
 
 <template>
-    <Head title="Settings" />
+    <Head :title="$t('page.workflow')" />
     <BreezeAuthenticatedLayout>
 
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
-                Workflow
+                {{ $t('page.workflow') }}
             </h2>
 
         </template>
@@ -21,15 +21,14 @@
 
                     <div>
                         <ul class="steps steps-vertical">
-                            <li class="step step-primary">Lead</li>
-                            <li class="step step-primary">Contact</li>
-                            <li class="step step-primary">Account</li>
-                            <li class="step step-primary">Opportunity</li>
-                            <li class="step">Contract</li>
+                            <li class="step step-primary">{{ $t('page.lead') }}</li>
+                            <li class="step step-primary">{{ $t('page.contact') }}</li>
+                            <li class="step step-primary">{{ $t('page.account') }}</li>
+                            <li class="step step-primary">{{ $t('page.opportunity') }}</li>
+                            <li class="step">{{ $t('page.contract') }}</li>
                         </ul>
                         </div>
                     </div>
-
 
             </div>
         </div>

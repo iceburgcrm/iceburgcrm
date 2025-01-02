@@ -15,6 +15,7 @@ use App\Models\WorkFlowData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 /*
@@ -27,6 +28,18 @@ use Inertia\Inertia;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+
+Route::get('/lang/{locale}', function ($locale) {
+    $path = resource_path("lang/{$locale}.json");
+    if (!File::exists($path)) {
+        abort(404);
+    }
+
+    return response()->json(json_decode(File::get($path)));
+});
+
 
 Route::get('/calendar', function () {
 

@@ -1,11 +1,11 @@
 
 <template>
-    <Head title="Settings" />
+    <Head :title="$t('page.permissions')" />
     <BreezeAuthenticatedLayout>
 
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
-                Permissions
+                {{ $t('page.permissions') }}
             </h2>
 
         </template>
@@ -22,13 +22,13 @@
                         <div>
 
                             <select v-model="role_id" name="module_id" class="input select-secondary w-full md:w-1/2 lg:w-1/4">
-                                <option value="">Select a Role</option>
+                                <option value="">{{ $t('page.selectarole') }}</option>
                                 <option :value="item.id" v-for="item in $page.props.roles">{{item.name}}</option>
                             </select>
 
 
                             <select v-model="module_id" name="module_id" class="input select-secondary w-full md:w-1/2 lg:w-1/4">
-                                <option value="">Select a Module</option>
+                                <option value="">{{ $t('page.selectamodule') }}</option>
                                 <option :value="item.id" v-for="item in $page.props.modules">{{item.label}}</option>
                             </select>
                         </div>
@@ -38,12 +38,14 @@
 
                 <table class="bg-base-200 text-base-content table table-zebra table-compact lg:table-normal w-full border-secondary border-solid">
                     <thead>
-                    <th>Role</th>
-                    <th>Module</th>
-                    <th>Can Read</th>
-                    <th>Can Write</th>
-                    <th>Can Import</th>
-                    <th>Can Export</th>
+                        <tr>
+                            <th>{{ $t('page.role') }}</th>
+                            <th>{{ $t('page.module') }}</th>
+                            <th>{{ $t('page.canread') }}</th>
+                            <th>{{ $t('page.canwrite') }}</th>
+                            <th>{{ $t('page.canimport') }}</th>
+                            <th>{{ $t('page.canexport') }}</th>
+                        </tr>
                     </thead>
                     <tr v-for="permission in permissions">
                         <td>

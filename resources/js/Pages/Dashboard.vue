@@ -4,7 +4,7 @@
     <BreezeAuthenticatedLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
-                Dashboard
+                {{ $t('page.dashboard') }}
             </h2>
         </template>
 

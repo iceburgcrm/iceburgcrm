@@ -1,5 +1,5 @@
 <template>
-    <Head title="Module" />
+    <Head :title="$t('page.module')" />
 
     <BreezeAuthenticatedLayout>
         <template #header>
@@ -46,7 +46,7 @@
 
                                 </div>
                             </div><div class="text-right mt-10">
-                            <input @click.prevent="save_record()" type="submit" class="btn btn-secondary" name="save" value="Save" /> </div>
+                            <input @click.prevent="save_record()" type="submit" class="btn btn-secondary" name="save" :value="$t('page.save')" /> </div>
                         </div>
                         </div>
 

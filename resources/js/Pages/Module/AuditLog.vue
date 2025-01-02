@@ -1,5 +1,6 @@
 <template>
-    <Head title="Audit Log" />
+    <Head :title="$t('page.audit_log')" />
+
 
     <BreezeAuthenticatedLayout>
         <template #header>
@@ -30,15 +31,15 @@
 
                     <div>
                         <select v-model="type"  class="input select-secondary w-full md:w-1/2 lg:w-1/4">
-                            <option value="">Select a Type</option>
-                            <option value="read">Read</option>
-                            <option value="write">Write</option>
-                            <option value="import">Import</option>
-                            <option value="export">Export</option>
+                            <option value="">{{ $t('page.selectatype') }}</option>
+                            <option value="read">{{ $t('page.read') }}</option>
+                            <option value="write">{{ $t('page.write') }}</option>
+                            <option value="import">{{ $t('page.import') }}</option>
+                            <option value="export">{{ $t('page.export') }}</option>
                         </select>
 
                         <select v-model="user"  class="input select-secondary w-full md:w-1/2 lg:w-1/4">
-                            <option value="">Select a User</option>
+                            <option value="">{{ $t('page.selectauser') }}</option>
                             <option :value="item.id" v-for="item in $page.props.users">{{item.name}}</option>
                         </select>
                     </div>
@@ -48,10 +49,12 @@
 
                 <table class="bg-base-200 text-base-content table table-zebra w-full border-secondary">
                     <thead>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th>User</th>
-                    <th>Date</th>
+                        <tr>
+                            <th>{{ $t('page.id') }}</th>
+                            <th>{{ $t('page.type') }}</th>
+                            <th>{{ $t('page.user') }}</th>
+                            <th>{{ $t('page.date') }}</th>
+                        </tr>
                     </thead>
                     <tbody>
                     <tr v-for="record in display_logs">

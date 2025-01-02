@@ -39,6 +39,7 @@
         "vue-autosuggest": "^2.2.0",
         "vue-cal": "^4.8.0",
         "vue-chart-3": "^3.1.8",
+        "vue-i18n": "^10.0.5",
         "vue3-charts": "^1.1.31",
         "vue3-quill": "^0.3.1",
         "vue3-simple-typeahead": "^1.0.11",

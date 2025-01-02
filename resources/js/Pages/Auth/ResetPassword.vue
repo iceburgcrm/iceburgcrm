@@ -27,7 +27,7 @@ const submit = () => {
 
 <template>
     <BreezeGuestLayout>
-        <Head title="Reset Password" />
+        <Head title="{{ $t('page.resetpassword') }}" />
 
         <BreezeValidationErrors class="mb-4" />
 
@@ -49,7 +49,7 @@ const submit = () => {
 
             <div class="flex items-center justify-end mt-4">
                 <BreezeButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Reset Password
+                    {{ $t('page.resetpassword') }}
                 </BreezeButton>
             </div>
         </form>

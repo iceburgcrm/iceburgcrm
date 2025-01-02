@@ -19,10 +19,10 @@ const submit = () => {
 
 <template>
     <BreezeGuestLayout>
-        <Head title="Confirm Password" />
+        <Head :title="$t('page.confirmpassword')" />
 
         <div class="mb-4 text-sm text-gray-600">
-            This is a secure area of the application. Please confirm your password before continuing.
+            {{ $t('page.confirmtext') }}
         </div>
 
         <BreezeValidationErrors class="mb-4" />
@@ -35,7 +35,7 @@ const submit = () => {
 
             <div class="flex justify-end mt-4">
                 <BreezeButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
+                    {{ $t('page.confirm') }}
                 </BreezeButton>
             </div>
         </form>

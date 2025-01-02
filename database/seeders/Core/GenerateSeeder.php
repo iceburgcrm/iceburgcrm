@@ -284,6 +284,11 @@ class GenerateSeeder extends Seeder
             'value' => '',
         ]);
 
+        Setting::insert([
+            'name' => 'language',
+            'value' => 'en',
+        ]);
+
     }
 
     private function addConnectors()

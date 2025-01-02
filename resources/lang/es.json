@@ -1,0 +1,12 @@
+{
+    "auth.failed": "Estas credenciales no coinciden con nuestros registros.",
+    "auth.password": "La contraseña proporcionada es incorrecta.",
+    "auth.throttle": "Demasiados intentos de inicio de sesión. Por favor, inténtelo de nuevo en :seconds segundos.",
+    "pagination.previous": "&laquo; Anterior",
+    "pagination.next": "Siguiente &raquo;",
+    "passwords.reset": "¡Tu contraseña ha sido restablecida!",
+    "passwords.sent": "¡Te hemos enviado un enlace para restablecer tu contraseña!",
+    "passwords.throttled": "Por favor espera antes de intentarlo de nuevo.",
+    "passwords.token": "Este token de restablecimiento de contraseña no es válido.",
+    "passwords.user": "No podemos encontrar un usuario con esa dirección de correo electrónico."
+}
