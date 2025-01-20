@@ -1,5 +1,3 @@
-[<img src="https://api.gitsponsors.com/api/badge/img?id=569728313" height="90">](https://api.gitsponsors.com/api/badge/link?p=65KmCE3UtHXYCihBQwYrgahBsZrHiWOx3S4aLghrVXfYkaPDzuikx/QaiYMR76aK1IffSTO2pP1HGA4Zthk6d+EOC5kcJUP9HSFK+14jnfKbEXF/sXGOD6QxNlYWJtgXFh7StIL6O3F6PGUxOlm1Wg==)
-
 <p align="center"><a href="https://www.iceburg.ca" target="_blank"><img src="https://www.iceburg.ca/images/iceburg.png" width="400"></a></p>
 
 # Iceburg CRM
