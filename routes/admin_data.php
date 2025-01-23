@@ -20,7 +20,7 @@ Route::get('module', function ($request) {
 
 Route::any('permissions', function () {
     return response()->json(
-        Permission::with('modules')->with('roles')->get()
+        Permission::with('modules', 'roles')->get()
     );
 })->middleware(['auth', 'verified'])
     ->name('permissions_data');
