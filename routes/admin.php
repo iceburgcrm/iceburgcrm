@@ -69,7 +69,7 @@ Route::get('connector/{connector_id?}', function ($connector_id = null) {
 Route::get('workflow', function () {
 
     return Inertia::render('Admin/Workflow', [
-        'permissions' => Permission::with('modules')->with('roles')->get(),
+        'permissions' => Permission::with('modules', 'roles')->get(),
         'roles' => Role::all(),
         'modules' => Module::where('status', 1)->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(
