@@ -77,8 +77,7 @@ Route::get('/audit_log/{moduleId}', function ($moduleId = '', $id = 0) {
 
     return Inertia::render('Module/AuditLog', [
         'logs' => Logs::where('module_id', $moduleId)
-            ->with('module')
-            ->with('user')
+            ->with('module', 'user')
             ->get(),
         'users' => User::all(),
         'module' => $module,
@@ -104,14 +103,12 @@ Route::get('/module/{name}/edit/{id}', function ($moduleName = '', $id = 0) {
     return Inertia::render('Module/Add', [
         'module' => $module,
         'fields' => Field::where('module_id', $module->id)
-            ->with('module')
-            ->with('related_module')
+            ->with('module', 'related_module')
             ->get(),
         'record' => Module::getRecord($module->id, $id),
         'permissions' => Permission::getPermissions($module->id),
         'relationships' => RelationshipModule::where('module_id', $module->id)
-            ->with('relationship')
-            ->with('modulefields')
+            ->with('relationship', 'modulefields')
             ->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(
             ['name' => 'Details', 'url' => '/module/'.$module->name.'/view/'.$id, 'svg' => 'settings'],
