@@ -503,13 +503,13 @@ This file generates the subpanel data.  It needs to be run last.
 - Support
 - User
 
-## IceburgCRM.com
+## hosted.iceburg.ca
 ### Don't want to self install?  Create CRMs Online for free
 - Describe your CRM and build it with AI
 - Select from our premade CRM templates
 - Make any Database into a CRM
 
-[IceburgCRM.com](https://www.iceburgcrm.com)
+[hosted.iceburgcrm.ca](https://hosted.iceburg.ca)
 
 ## Templates
 
