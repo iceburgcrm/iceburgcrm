@@ -21,4 +21,21 @@ class Connector extends Model
     {
         return $this->hasMany(ConnectorCommand::class, 'connector_id', 'id');
     }
+
+    public function endpoints() {
+        return $this->hasMany(Endpoint::class);
+    }
+
+
+    public function connector()
+    {
+        return $this->belongsTo(Connector::class);
+    }
+
+    public function endpoint()
+    {
+        return $this->belongsTo(Endpoint::class);
+    }
+
 }
+

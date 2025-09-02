@@ -6,6 +6,7 @@ use App\Http\Integrations\Generic\GenericAPI;
 use App\Http\Integrations\Generic\Requests\ApiRequest;
 use App\Models\Admin;
 use App\Models\ConnectorCommand;
+use App\Models\Endpoint;
 use App\Models\Permission;
 use App\Models\Setting;
 use App\Services\ApiService;
@@ -93,3 +94,10 @@ Route::get('sendrequest', function (Request $request, $id) {
     ]);
     */
 })->middleware(['auth', 'verified'])->name('sendrequest');
+
+
+
+
+
+
+

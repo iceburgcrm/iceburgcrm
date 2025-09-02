@@ -34,6 +34,9 @@ class SeedDatabase extends Command
 
     public function handle()
     {
+        $dotenv = Dotenv::createImmutable(base_path());
+        $dotenv->load();  
+
         $type = $this->option('type');
         $prompt = $this->option('prompt');
         $model = $this->option('model');
@@ -49,24 +52,25 @@ class SeedDatabase extends Command
         $connection_charset = $this->option('connection_charset');
         $connection_collation = $this->option('connection_collation');
 
-        $dotenv = Dotenv::createImmutable(base_path());
-        $dotenv->load();
+        $env = $_ENV;
 
-        Config::set('database.connections.custom', [
-            'driver' => 'mysql',
-            'host' => !empty($connection_host) ? $connection_host : env('DB_HOST'),
-            'port' => !empty($connection_port) ? $connection_port : env('DB_PORT'),
-            'database' => !empty($connection_database) ? $connection_database : env('DB_DATABASE'),
-            'username' => !empty($connection_username) ? $connection_username : env('DB_USERNAME'),
-            'password' => !empty($connection_password) ? $connection_password : env('DB_PASSWORD'),
-            'unix_socket' => '',
-            'charset' => !empty($connection_charset) ? $connection_charset : 'utf8mb4',
-            'collation' =>  !empty($connection_collation) ? $connection_collation : 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-            'engine' => null,
+       Config::set('database.connections.custom', [
+            'driver'    => 'mysql',
+            'host'      => $connection_host ?: ($env['DB_HOST'] ?? '127.0.0.1'),
+            'port'      => $connection_port ?: ($env['DB_PORT'] ?? '3306'),
+            'database'  => $connection_database ?: ($env['DB_DATABASE'] ?? 'iceburg'),
+            'username'  => $connection_username ?: ($env['DB_USERNAME'] ?? 'root'),
+            'password'  => $connection_password ?: ($env['DB_PASSWORD'] ?? ''),
+            'charset'   => $connection_charset ?: 'utf8mb4',
+            'collation' => $connection_collation ?: 'utf8mb4_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+            'engine'    => null,
         ]);
         Config::set('database.default', 'custom');
+
+        DB::purge('custom');
+        DB::reconnect('custom');
 
         if (!Schema::connection('custom')->hasTable('migrations')) {
             Artisan::call('migrate', [

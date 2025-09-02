@@ -5,64 +5,52 @@ import { InertiaProgress } from '@inertiajs/progress';
 import { createI18n } from 'vue-i18n';
 import maska from 'maska';
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'IceburgCRM';
-const defaultLocale = document.documentElement.getAttribute('lang') || 'en';
+const appName = document.title || 'IceburgCRM';
+const defaultLocale = document.documentElement.lang || 'en';
 
-const i18n = createI18n({
-    legacy: false,
-    locale: defaultLocale,
-    messages: {}, // Start with empty messages
-});
+async function fetchLocaleMessages(locale) {
+    //const cached = localStorage.getItem(`locale-${locale}`);
+    //if (cached) return JSON.parse(cached);
 
-console.log('i18n initialized:', i18n);
+    const res = await fetch(`/lang/${locale}`);
+    if (!res.ok) throw new Error(`Failed to load locale: ${locale}`);
+    const messages = await res.json();
+    localStorage.setItem(`locale-${locale}`, JSON.stringify(messages));
+    return messages;
+}
 
-// Function to load translations (with caching)
-const loadLocaleMessages = async (locale) => {
-    const resolvedLocale = locale || 'en';
-
-    // Try loading from cache
-    const cachedMessages = localStorage.getItem(`locale-${resolvedLocale}`);
-    if (cachedMessages) {
-        i18n.global.setLocaleMessage(resolvedLocale, JSON.parse(cachedMessages));
-        return;
-    }
-
-    // Fetch translations from server if not cached
+(async () => {
     try {
-        const response = await fetch(`/lang/${resolvedLocale}`);
-        if (!response.ok) {
-            throw new Error(`Failed to load locale messages for "${resolvedLocale}". Status: ${response.status}`);
-        }
+        // 1️⃣ Load translations first
+        const messages = await fetchLocaleMessages(defaultLocale);
+        console.log('Loaded messages:', messages); // confirm
 
-        const messages = await response.json();
-        i18n.global.setLocaleMessage(resolvedLocale, messages);
-        i18n.global.locale.value = resolvedLocale;
+        // 2️⃣ Create i18n instance with legacy mode
+        const i18n = createI18n({
+            legacy: true, // <-- changed to true for global $t
+            locale: defaultLocale,
+            messages: { [defaultLocale]: messages },
+        });
 
-        // Cache the messages for future use
-        localStorage.setItem(`locale-${resolvedLocale}`, JSON.stringify(messages));
-    } catch (error) {
-        console.error('Error loading locale messages:', error);
+        // 3️⃣ Create Inertia app
+        createInertiaApp({
+            title: (title) => `${title} - ${appName}`,
+            resolve: (name) => require(`./Pages/${name}.vue`),
+            setup({ el, app, props, plugin }) {
+                const vueApp = createApp({ render: () => h(app, props) });
+                vueApp
+                    .use(plugin)
+                    .use(i18n)
+                    .use(maska)
+                    .mixin({ methods: { route } })
+                    .mount(el);
+
+                return vueApp;
+            }
+        });
+
+        InertiaProgress.init({ color: '#4B5563' });
+    } catch (err) {
+        console.error('Failed to load translations', err);
     }
-};
-
-// Preload default locale during app initialization
-loadLocaleMessages(defaultLocale);
-
-createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
-    resolve: (name) => require(`./Pages/${name}.vue`),
-    setup({ el, app, props, plugin }) {
-        const vueApp = createApp({ render: () => h(app, props) });
-
-        vueApp
-            .use(plugin)
-            .use(i18n)
-            .directive('maska', maska)
-            .mixin({ methods: { route } })
-            .mount(el);
-
-        return vueApp;
-    },
-});
-
-InertiaProgress.init({ color: '#4B5563' });
+})();

@@ -23,7 +23,7 @@
                         </ul>
                     </ul>
                 </div>
-                <a class="btn btn-ghost normal-case text-xl">{{$page.props.auth.system_settings.title ? $page.props.auth.system_settings.title : ''}}</a>
+                <a href="/" class="btn btn-ghost normal-case text-xl">{{$page.props.auth.system_settings.title ? $page.props.auth.system_settings.title : ''}}</a>
             </div>
             <div class="navbar-center hidden lg:flex z-40">
                 <ul class="menu menu-horizontal p-0 text-primary-content bg-primary z-40">

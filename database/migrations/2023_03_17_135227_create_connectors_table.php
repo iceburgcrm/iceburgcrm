@@ -13,21 +13,23 @@ return new class extends Migration
     {
         Schema::create('ice_connectors', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 200);
-            $table->string('class', 50);
-            $table->string('auth_type', 50)->default('None'); // For OAuth2, API Key, Basic Auth, etc.
-            $table->string('auth_key')->default('')->nullable();
-            $table->string('base_url', 200)->default('');
-            $table->string('token_url', 200)->nullable(); // URL to obtain or refresh tokens
-            $table->string('client_id', 200)->nullable(); // For OAuth2
-            $table->string('client_secret', 200)->nullable(); // For OAuth2
-            $table->string('username', 200)->nullable(); // For Basic Auth
-            $table->string('password', 200)->nullable(); // For Basic Auth
-            $table->string('access_token', 500)->nullable(); // For storing the access token
-            $table->string('refresh_token', 500)->nullable(); // For storing the refresh token
-            $table->timestamp('token_expires_at')->nullable(); // For token expiration time
-            $table->integer('status')->default(1);
-            $table->timestamps(); // Adds created_at and updated_at columns
+            $table->string('name', 255); // allow longer names for templates
+            $table->text('description')->nullable(); // only used for template connectors
+            $table->string('class', 50)->nullable(); // only used for custom connectors
+            $table->string('auth_type', 100)->default('None');
+            $table->string('auth_key', 255)->nullable();
+            $table->string('base_url', 255)->default('');
+            $table->string('token_url', 255)->nullable();
+            $table->string('client_id', 255)->nullable();
+            $table->string('client_secret', 255)->nullable();
+            $table->string('username', 255)->nullable();
+            $table->string('password', 255)->nullable();
+            $table->text('access_token')->nullable();
+            $table->text('refresh_token')->nullable();
+            $table->timestamp('token_expires_at')->nullable();
+            $table->integer('status')->default(1); // 1 = active, 0 = inactive
+            $table->tinyInteger('type')->default(1)->comment('1 = template, 2 = custom');
+            $table->timestamps();
         });
     }
 
@@ -39,3 +41,5 @@ return new class extends Migration
         Schema::dropIfExists('ice_connectors');
     }
 };
+
+

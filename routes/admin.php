@@ -24,7 +24,7 @@ Route::get('modules', function () {
 Route::get('connectors', function () {
 
     return Inertia::render('Admin/Connectors', [
-        'connectors' => Connector::with('commands')->get(),
+        'connectors' => Connector::with('commands')->orderBy('name')->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(
             ['name' => 'Admin', 'url' => '', 'svg' => 'admin'],
             ['name' => 'Connectors', 'url' => '', 'svg' => 'settings']),

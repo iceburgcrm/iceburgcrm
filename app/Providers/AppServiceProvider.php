@@ -6,7 +6,9 @@ use App\Models\IcePersonalAccessToken;
 use App\Models\Setting;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 use Laravel\Sanctum\Sanctum;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,8 +29,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $language=Setting::getSetting('language');
-        App::setLocale(!empty($language) ? $language : 'en');
-        #Sanctum::usePersonalAccessTokenModel(IcePersonalAccessToken::class);
+        if (Schema::hasTable('ice_settings')) {
+            $language = Setting::getSetting('language');
+            App::setLocale(!empty($language) ? $language : 'en');
+        } else {
+            App::setLocale('en'); // safe default
+        }     
     }
 }

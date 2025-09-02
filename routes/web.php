@@ -30,7 +30,6 @@ use Inertia\Inertia;
 */
 
 
-
 Route::get('/lang/{locale}', function ($locale) {
     $path = resource_path("lang/{$locale}.json");
     if (!File::exists($path)) {
@@ -38,7 +37,9 @@ Route::get('/lang/{locale}', function ($locale) {
     }
 
     return response()->json(json_decode(File::get($path)));
-});
+})->where('locale', '[a-zA-Z_-]+');
+
+
 
 
 Route::get('/calendar', function () {

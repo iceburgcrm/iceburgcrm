@@ -10,6 +10,7 @@ use App\Models\Field;
 use App\Models\Module;
 use App\Models\ModuleSubpanel;
 use App\Models\Permission;
+use App\Models\Endpoint;
 use App\Models\Relationship;
 use App\Models\RelationshipModule;
 use App\Models\Search;
@@ -356,5 +357,51 @@ Route::post('connector/delete_command/{id}', function ($id) {
         return response()->json(['status' => 'Command not found'], 404);
     }
 })->middleware(['auth', 'verified'])->name('delete_command');
+
+
+Route::get('endpoints/{connector_id}', function (Request $request, $connectorId) {
+    $endpoints = Endpoint::where('connector_id', $connectorId)->get();
+
+    return response()->json($endpoints);
+})->middleware(['auth', 'verified'])->name('connector_endpoints');
+
+Route::get('commands/{connector_id}', function (Request $request, $connectorId) {
+    $commands = Command::where('connector_id', $connectorId)->get();
+    return response()->json($commands);
+})->middleware(['auth', 'verified'])->name('connector_commands');
+
+Route::post('endpoints/add', function (Request $request) {
+    $data = $request->all();
+
+    $endpoint = new Endpoint();
+    $endpoint->connector_id = $data['connector_id'] ?? null;
+    $endpoint->name = $data['name'] ?? '';
+    $endpoint->endpoint = $data['endpoint'] ?? '';
+    $endpoint->request_type = $data['request_type'] ?? 'GET';
+    $endpoint->class_name = $data['class_name'] ?? '';
+    $endpoint->params = $data['params'] ?? '';
+    $endpoint->headers = $data['headers'] ?? '';
+    $endpoint->status = isset($data['status']) ? (bool)$data['status'] : true;
+    $endpoint->save();
+
+    return response()->json(['id' => $endpoint->id]);
+})->middleware(['auth', 'verified']);
+
+// Update existing endpoint
+Route::post('endpoints/update/{id}', function (Request $request, $id) {
+    $endpoint = Endpoint::findOrFail($id);
+    $data = $request->all();
+
+    $endpoint->name = $data['name'] ?? $endpoint->name;
+    $endpoint->endpoint = $data['endpoint'] ?? $endpoint->endpoint;
+    $endpoint->request_type = $data['request_type'] ?? $endpoint->request_type;
+    $endpoint->class_name = $data['class_name'] ?? $endpoint->class_name;
+    $endpoint->params = $data['params'] ?? $endpoint->params;
+    $endpoint->headers = $data['headers'] ?? $endpoint->headers;
+    $endpoint->status = isset($data['status']) ? (bool)$data['status'] : $endpoint->status;
+    $endpoint->save();
+
+    return response()->json(['message' => 'Endpoint updated successfully']);
+})->middleware(['auth', 'verified']);
 
 

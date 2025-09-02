@@ -26,7 +26,7 @@
                     <input type="checkbox" v-model="show_search" id="show-search" />
                     <label class="collapse-title text-xsm select-none" for="show-search">
 
-                        <span v-if="!show_search">{{ $t('page.show') }}</span><span v-if="show_search">Hide</span> Search Fields
+                        <span v-if="!show_search">Show</span><span v-if="show_search">Hide</span> Search Fields
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" />
                     </svg>
@@ -140,11 +140,11 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr v-if="show_loading" ><td class="w-full" colspan="500">{{ $t('page.loading') }}</td></tr>
+                                <tr v-if="show_loading" ><td class="w-full" colspan="500">Loading</td></tr>
                                 <tr v-for="(row, index) in search_data">
                                     <td class="w-50">
                                         <input type="checkbox" v-bind:id="'id-' + row.id"  v-model="selected_records" v-bind:value="row[$page.props.module.name + '_row_id']">
-                                        <a class="pl-3" :href="`/module/${$page.props.module.name}/edit/${row[$page.props.module.name + '_row_id']}`">{{ $t('page.edit') }}</a>
+                                        <a class="pl-3" :href="`/module/${$page.props.module.name}/edit/${row[$page.props.module.name + '_row_id']}`">Edit</a>
                                     </td>
                                     <td class="text-lg h-10" v-for="(item, key) in $page.props.display_fields">
                                         <Display
@@ -159,7 +159,7 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>{{ $t('page.actions') }}</th>
+                                    <th>Actions</th>
                                     <th  v-for="(field, key) in $page.props.display_fields" >
                                         <a v-if="active_fields[key]"  class="underline decoration-gray-900" @click.prevent="sort_by_field(field)">{{ field.label }}</a>
                                     </th>
@@ -192,6 +192,8 @@ import { ref, computed, toRaw, watch, onMounted, reactive } from 'vue';
 import Pagination from "@/Components/Pagination";
 
 const per_page = ref(usePage().props.value.auth.system_settings.search_per_page);
+
+const panel = ref('mails')
 
 const page = ref(1);
 const search_order = ref('asc');

@@ -20,4 +20,9 @@ class ConnectorCommand extends Model
     {
         return $this->belongsto(Connector::class, 'connector_id', 'id');
     }
+
+
+    public function endpoint() {
+        return $this->belongsTo(Endpoint::class);
+    }
 }

@@ -96,6 +96,12 @@ return [
     'clientid' => 'Client ID',
     'actions' => 'Actions',
     'newconnector' => 'New Connector',
+    'page.newconnector' => 'New Connector A',
+    'name' => 'Name',
+    'authtype' => 'Auth Type',
+    'baseurl' => 'Base URL',
+    'clientid' => 'Client ID',
+    'actions' => 'Actions'
 ];
 
 

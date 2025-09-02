@@ -38,6 +38,7 @@ return new class extends Migration
             $table->integer('search_order')->default(9999);
             $table->integer('list_order')->default(9999);
             $table->integer('edit_order')->default(9999);
+            $table->text('description')->nullable();
             $table->id();
             $table->timestamps();
             $table->index('module_id');

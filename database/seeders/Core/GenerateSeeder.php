@@ -3,9 +3,10 @@
 namespace Database\Seeders\Core;
 
 use App\Models\Connector;
+use App\Models\ConnectorCommand;
 use App\Models\Datalet;
 use App\Models\DataletType;
-use App\Models\ConnectorCommand;
+use App\Models\Endpoint;
 use App\Models\Module;
 use App\Models\Permission;
 use App\Models\Role;
@@ -16,6 +17,8 @@ use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Log;
+
+use Database\Seeders\Core\TemplateConnectorSeeder as TemplateConnectorSeeder;
 
 class GenerateSeeder extends Seeder
 {
@@ -36,7 +39,8 @@ class GenerateSeeder extends Seeder
         $this->addDatalets();
 
         Log::info('Generating connectors');
-        $this->addConnectors();
+        $this->addCustomConnectors();
+        $this->addTemplateConnectors();
 
         Log::info('Add Workflow Actions');
        // $this->addWorkflowActions();
@@ -142,6 +146,9 @@ class GenerateSeeder extends Seeder
         Theme::truncate();
         Theme::insert(
             [
+                ['name' => 'iceburgsaas'],
+                ['name' => 'iceburgcorporate'],
+                ['name' => 'iceburgai'],
                 ['name' => 'light'],
                 ['name' => 'dark'],
                 ['name' => 'cupcake'],
@@ -174,6 +181,7 @@ class GenerateSeeder extends Seeder
             ]
         );
     }
+
 
     private function addRoles()
     {
@@ -289,47 +297,67 @@ class GenerateSeeder extends Seeder
             'value' => 'en',
         ]);
 
+
+        Setting::insert([
+            'name' => 'help',
+            'value' => 'true',
+        ]);
+
     }
 
-    private function addConnectors()
+
+    private function addCustomConnectors()
     {
-        $connectorId = Connector::insertGetId([
-            'name' => 'joke of the day',
-            'class' => 'jokes',
-            'base_url' => 'https://official-joke-api.appspot.com',
+        // --- Custom Connector: Joke of the Day ---
+        $jokeConnectorId = Connector::insertGetId([
+            'name'      => 'Joke of the Day',
+            'class'     => 'jokes',
+            'base_url'  => 'https://official-joke-api.appspot.com',
             'auth_type' => 'None',
+            'type'      => 2, // custom connector
+            'status'    => 1,
         ]);
 
         ConnectorCommand::insert([
-            'connector_id' => $connectorId,
-            'name' => 'Random Joke',
-            'description' => 'Get a random jokei',
-            'method_name' => 'random_joke',
+            'connector_id' => $jokeConnectorId,
+            'name'         => 'Random Joke',
+            'description'  => 'Get a random joke',
+            'method_name'  => 'random_joke',
+            'status'       => 1,
         ]);
 
-        $connectorId = Connector::insertGetId([
-            'name' => 'IceburgCRM',
-            'class' => 'iceburg',
-            'base_url' => 'http://localhost',
+        // --- Custom Connector: IceburgCRM ---
+        $iceburgConnectorId = Connector::insertGetId([
+            'name'      => 'IceburgCRM',
+            'class'     => 'iceburg',
+            'base_url'  => 'http://localhost',
             'auth_type' => 'Basic Auth',
-            'username' => 'admin@iceburg.ca',
-            'password' => 'admin',
+            'username'  => 'admin@iceburg.ca',
+            'password'  => 'admin',
+            'type'      => 2, // custom connector
+            'status'    => 1,
         ]);
 
         ConnectorCommand::insert([
-            'connector_id' => $connectorId,
-            'name' => 'Backup Contacts',
-            'description' => 'This method will backup the last 10 contacts to another IceburgCRM instance',
-            'method_name' => 'backup_contacts',
+            'connector_id' => $iceburgConnectorId,
+            'name'         => 'Backup Contacts',
+            'description'  => 'This method will backup the last 10 contacts to another IceburgCRM instance',
+            'method_name'  => 'backup_contacts',
+            'status'       => 1,
         ]);
 
         ConnectorCommand::insert([
-            'connector_id' => $connectorId,
-            'name' => 'Backup Accounts',
-            'description' => 'This method will backup the last 10 accounts to another IceburgCRM instance',
-            'method_name' => 'backup_accounts',
+            'connector_id' => $iceburgConnectorId,
+            'name'         => 'Backup Accounts',
+            'description'  => 'This method will backup the last 10 accounts to another IceburgCRM instance',
+            'method_name'  => 'backup_accounts',
+            'status'       => 1,
         ]);
+    }
 
+    private function addTemplateConnectors()
+    {
+        $this->call(TemplateConnectorSeeder::class);
     }
 
 
