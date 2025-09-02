@@ -503,13 +503,13 @@ This file generates the subpanel data.  It needs to be run last.
 - Support
 - User
 
-## IceburgCRM.com
+## hosted.iceburg.ca
 ### Don't want to self install?  Create CRMs Online for free
 - Describe your CRM and build it with AI
 - Select from our premade CRM templates
 - Make any Database into a CRM
 
-[IceburgCRM.com](https://www.iceburgcrm.com)
+[hosted.iceburgcrm.ca](https://hosted.iceburg.ca)
 
 ## Templates
 
@@ -575,3 +575,6 @@ The Iceburg CRM is open-sourced software licensed under the [AGPL](https://www.g
 
 ## Other Frameworks
 A [Python Django Version](https://github.com/iceburgcrm/iceburgcrmpython) is available
+
+## Sponsorship Opportunity
+[<img src="https://api.gitsponsors.com/api/badge/img?id=569728313" height="20">](https://api.gitsponsors.com/api/badge/link?p=65KmCE3UtHXYCihBQwYrgahBsZrHiWOx3S4aLghrVXfYkaPDzuikx/QaiYMR76aK1IffSTO2pP1HGA4Zthk6d+EOC5kcJUP9HSFK+14jnfKbEXF/sXGOD6QxNlYWJtgXFh7StIL6O3F6PGUxOlm1Wg==)
