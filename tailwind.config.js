@@ -8,38 +8,6 @@ module.exports = {
         './resources/js/**/*.vue',
     ],
 
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
-            },
-            keyframes: {
-                fadeIn: {
-                    '0%': { opacity: '0' },
-                    '100%': { opacity: '1' },
-                },
-                bounceIn: {
-                    '0%': { transform: 'scale(0.9)', opacity: '0' },
-                    '100%': { transform: 'scale(1)', opacity: '1' },
-                },
-                wiggle: {
-                    '0%, 100%': { transform: 'rotate(-3deg)' },
-                    '50%': { transform: 'rotate(3deg)' },
-                },
-                float: {
-                    '0%, 100%': { transform: 'translateY(0)' },
-                    '50%': { transform: 'translateY(-5px)' },
-                },
-            },
-            animation: {
-                fadeIn: 'fadeIn 0.8s ease-out forwards',
-                bounceIn: 'bounceIn 0.5s ease-out',
-                wiggle: 'wiggle 0.3s ease-in-out',
-                float: 'float 3s ease-in-out infinite',
-            },
-        },
-    },
-
     plugins: [
         require('@tailwindcss/forms'),
         require('daisyui'),

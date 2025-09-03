@@ -34,19 +34,20 @@
                     </label>
 
                 <div class="collapse-content">
-                    <form name="search" method="get">
-                        <div class="overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 bg-base-100 text-base-content border-b border-gray-200">
-                                <div class=" grid grid-cols-1 row-gap-5 mt-6 lg:grid-cols-2 md:grid-cols-2 lg:row-gap-6">
-                                    <div class="col-span-1 col-gap-2 lg:col-span-1" v-for="(field, key) in $page.props.search_fields">
-                                        <div class="flex mt-5 items-center">
-                                            <Edit @newFieldValue="fieldValue"
-                                                  :field="field"
-                                                  :type="search_type"
-                                                  :default_value="params[field.module_id + '__' + field.name]"
-                                            />
+                    <form name="search" method="get" class="search-form">
+    <div class="overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="p-6 bg-base-100 text-base-content border-b border-gray-200">
+            <div class="grid grid-cols-1 row-gap-5 mt-6 lg:grid-cols-2 md:grid-cols-2 lg:row-gap-6">
+                <div class="col-span-1 col-gap-2 lg:col-span-1" v-for="(field, key) in $page.props.search_fields">
+                    <div class="flex mt-5 items-center">
+                        <Edit @newFieldValue="fieldValue"
+                              :field="field"
+                              :type="search_type"
+                              :default_value="params[field.module_id + '__' + field.name]"
+                        />
+                    </div>
 
-                                        </div>
+                                       
                                     </div>
                                 </div>
                                 <div class="mt-6">
@@ -341,4 +342,10 @@ const sort_by_field = ((field) => {
 
 });
 </script>
+
+<style>
+.search-form label {
+  @apply text-sm font-normal;
+}
+</style>
 

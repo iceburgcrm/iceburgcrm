@@ -1,6 +1,6 @@
 <template>
     <div class="grid grid-auto grid-flow-row">
-        <label for="search" class="text-lg font-medium leading-5 text-base-content">
+        <label for="search" class="text-sm font-medium leading-5 text-base-content">
             <span class="font-semibold" v-if="type==='relationship'">
                 {{ current_field.module.name.charAt(0).toUpperCase() + current_field.module.name.slice(1) }}
                 {{ current_field.label }}
