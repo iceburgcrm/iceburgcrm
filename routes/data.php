@@ -198,7 +198,7 @@ Route::get('related_fields/field_id/{field_id}', function ($fieldId = 0) {
     return response()->json($records->toArray());
 
 })->middleware(['auth', 'verified'])->name('data')
-    ->name('data_related');
+    ->name('data_related_fields');
 
 Route::get('related_field_name/field_id/{field_id}/value/{value}', function (Request $request, $fieldId = 0, $value = 0) {
     $field = Field::find($fieldId);
@@ -238,7 +238,7 @@ Route::get('connectors', function () {
 
     return response()->json(Connectors::all());
 })->middleware(['auth', 'verified'])->name('data')
-    ->name('subpanel_relationship_fields');
+    ->name('connectors');
 
 
 

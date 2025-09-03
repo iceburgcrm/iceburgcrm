@@ -51,19 +51,55 @@ Route::post('resetcrm', function (Request $request) {
     return response()->json(['status' => Admin::resetCRM()]);
 })->middleware(['auth', 'verified'])->name('reset_crm');
 
+use Illuminate\Http\Request;
+use App\Models\ConnectorCommand;
+use App\Connectors\JokesConnector;
+use Illuminate\Support\Str;
+
 Route::get('commands/run/{id}', function (Request $request, $id) {
 
-    $endpoint = ConnectorCommand::find($id);
-    $customData = [
-        'key1' => 'value1',
-        'key2' => 'value2',
-    ];
+    $command = ConnectorCommand::findOrFail($id);
 
-    $apiService = new ApiService($customData);
-    $response = $apiService->makeRequest($endpoint);
-    return response()->json($response);
+    $connectorInstance = new JokesConnector($command);
+
+    try {
+        // If command has a method name, call it; otherwise, just execute default
+        $method = $command->method_name ?? 'execute';
+
+        if (!method_exists($connectorInstance, $method)) {
+            throw new \Exception("Method {$method} does not exist on JokesConnector");
+        }
+
+        $responseData = $connectorInstance->$method();
+
+        // Update the command record
+        $command->update([
+            'last_run_data' => Str::limit(json_encode($responseData), 200),
+            'last_run_status' => 'success',
+            'last_run_message' => 'Command executed successfully',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $responseData
+        ]);
+
+    } catch (\Exception $e) {
+
+        $command->update([
+            'last_run_data' => Str::limit($e->getTraceAsString(), 200),
+            'last_run_status' => 'fail',
+            'last_run_message' => $e->getMessage(),
+        ]);
+
+        return response()->json([
+            'status' => 'fail',
+            'message' => $e->getMessage()
+        ], 500);
+    }
 
 })->middleware(['auth', 'verified'])->name('endpoint_run');
+
 
 Route::get('sendrequest', function (Request $request, $id) {
 
