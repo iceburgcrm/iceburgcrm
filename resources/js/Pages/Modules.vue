@@ -1,11 +1,12 @@
 
 <template>
-    <Head title="Settings" />
+    <Head title="All Modules" />
     <BreezeAuthenticatedLayout>
 
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ $t('page.allmodules') }}
+                <HelpTooltip slug="allmodules" position="bottom-right"/>
             </h2>
 
         </template>
@@ -61,6 +62,7 @@ import { Head, usePage } from '@inertiajs/inertia-vue3';
 import axios from "axios";
 import BreadCrumbs from "@/Components/BreadCrumbs";
 import BaseIcon from "@/Icons/BaseIcon";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const props = defineProps({
    modules: [Object, Array, null]

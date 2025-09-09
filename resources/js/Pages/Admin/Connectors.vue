@@ -5,6 +5,7 @@
     <template #header>
       <h2 class="font-semibold text-xl text-base-content leading-tight">
         {{ $t('page.connectors') }}
+        <HelpTooltip slug="connectors" position="bottom-right"/>
       </h2>
     </template>
 
@@ -55,6 +56,7 @@ import { ref, computed } from "vue";
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, usePage } from '@inertiajs/inertia-vue3';
 import BreadCrumbs from "@/Components/BreadCrumbs";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const connectors = ref(usePage().props.value.connectors);
 

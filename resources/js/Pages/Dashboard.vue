@@ -5,6 +5,7 @@
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
                 {{ $t('page.dashboard') }}
+                <HelpTooltip slug="dashboard" position="bottom-right"/>
             </h2>
         </template>
 
@@ -26,4 +27,5 @@
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head, usePage } from '@inertiajs/inertia-vue3';
 import Datalet from '@/Components/Datalet.vue';
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 </script>

@@ -5,6 +5,7 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ $t('page.data') }}
+                <HelpTooltip slug="admin_data" position="bottom-right"/>
             </h2>
 
         </template>
@@ -29,6 +30,7 @@ import axios from "axios";
 import { ref, reactive } from "vue";
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import BreadCrumbs from "@/Components/BreadCrumbs";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const reset_crm = async function (){
     let ok = await confirm($t('page.areyousurereset'));

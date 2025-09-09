@@ -101,7 +101,8 @@ return [
     'authtype' => 'Auth Type',
     'baseurl' => 'Base URL',
     'clientid' => 'Client ID',
-    'actions' => 'Actions'
+    'actions' => 'Actions',
+    'workflow' => 'Workflow'
 ];
 
 

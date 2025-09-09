@@ -8,6 +8,7 @@ use App\Models\Permission;
 use App\Models\Relationship;
 use App\Models\Role;
 use App\Models\Setting;
+use App\Models\WorkFlowData;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Inertia\Inertia;
@@ -24,7 +25,7 @@ Route::get('modules', function () {
 Route::get('connectors', function () {
 
     return Inertia::render('Admin/Connectors', [
-        'connectors' => Connector::with('commands')->orderBy('name')->get(),
+        'connectors' => Connector::with('commands')->orderBy('type', 'desc')->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(
             ['name' => 'Admin', 'url' => '', 'svg' => 'admin'],
             ['name' => 'Connectors', 'url' => '', 'svg' => 'settings']),
@@ -66,17 +67,24 @@ Route::get('connector/{connector_id?}', function ($connector_id = null) {
     ]);
 })->middleware(['auth', 'verified'])->name('connector');
 
-Route::get('workflow', function () {
 
+Route::get('workflow', function () {
     return Inertia::render('Admin/Workflow', [
-        'permissions' => Permission::with('modules', 'roles')->get(),
-        'roles' => Role::all(),
-        'modules' => Module::where('status', 1)->get(),
-        'breadcrumbs' => Setting::getBreadCrumbs(
-            ['name' => 'Admin', 'url' => '', 'svg' => 'admin'],
-            ['name' => 'Permissions', 'url' => '', 'svg' => 'settings']),
+        'workflow' => \App\Models\ModuleConvertable::with(['primary_module', 'module'])
+            ->orderBy('level')
+            ->get()
+            ->map(fn($m) => [
+                'id' => $m->id,
+                'primary_module_id' => $m->primary_module_id,
+                'primary_module_name' => $m->primary_module?->name,
+                'module_id' => $m->module_id,
+                'module_name' => $m->module?->name,
+            ]),
+        'modules' => \App\Models\Module::where('status', 1)->get(),
     ]);
 })->middleware(['auth', 'verified'])->name('workflow');
+
+
 
 Route::get('subpanels', function () {
 

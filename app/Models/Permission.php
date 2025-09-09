@@ -28,16 +28,17 @@ class Permission extends Model
 
     public static function checkPermission($module_id = 0, $type = 'read', $message = '')
     {
-
-        if (! in_array($type, self::$types)) {
-            return false;
+        if (!in_array($type, self::$types)) {
+            return 0; // return 0 instead of false
         }
+
         if (
             Auth::user()->role != 'Admin'
             && Module::where('id', $module_id)->value('admin')
         ) {
-            return false;
+            return 0;
         }
+
         Logs::insert([
             'user_id' => Auth::user()->id,
             'type' => $type,
@@ -47,10 +48,15 @@ class Permission extends Model
             'updated_at' => Carbon::now(),
         ]);
 
-        return self::where('module_id', $module_id)
-            ->where('role_id', Auth::user()->role_id)
-            ->where('can_'.$type, 1)->value('id');
+        $hasPermission = self::where('module_id', $module_id)
+                             ->where('role_id', Auth::user()->role_id)
+                             ->where('can_'.$type, 1)
+                             ->exists();
+
+        return $hasPermission ? 1 : 0; // return 1 if exists, 0 otherwise
     }
+
+
 
     public static function getPermissions($moduleId)
     {

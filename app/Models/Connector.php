@@ -26,16 +26,5 @@ class Connector extends Model
         return $this->hasMany(Endpoint::class);
     }
 
-
-    public function connector()
-    {
-        return $this->belongsTo(Connector::class);
-    }
-
-    public function endpoint()
-    {
-        return $this->belongsTo(Endpoint::class);
-    }
-
 }
 

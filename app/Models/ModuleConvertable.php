@@ -11,6 +11,8 @@ class ModuleConvertable extends Model
 
     protected $table = 'ice_module_convertables';
 
+    protected $guarded = [];
+
     public function module()
     {
         return $this->hasOne(Module::class, 'id', 'module_id');

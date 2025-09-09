@@ -7,7 +7,7 @@ const logo = computed(() => usePage().props.value.auth.system_settings.logo);
 const backgroundStyle = computed(() => {
     const imageUrl = logo.value
         ? `data:image/png;base64,${logo.value}`
-        : '/images/iceburg.png';
+        : '/images/iceburg.jpg';
     return { backgroundImage: `url('${imageUrl}')` };
 });
 </script>

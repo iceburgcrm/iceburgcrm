@@ -6,51 +6,16 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('ice_connector_commands', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('connector_id');
-            $table->string('name', 190)->default('');
-            $table->string('description', 500)->default('');
-            $table->string('method_name', 100)->default('default');
-            $table->integer('status')->default(1);
-            $table->json('last_run_data')->nullable(); // Storing data as JSON
-            $table->timestamp('last_ran')->nullable(); // Changed from integer to timestamp
-            $table->integer('retry_count')->default(3); // Number of retry attempts
-            $table->timestamps(); // Adds created_at and updated_at columns
-
-            });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('ice_connector_commands');
-    }
-};
-
-<?php
-
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-
-return new class extends Migration
-{
     public function up(): void
     {
         Schema::create('ice_connector_commands', function (Blueprint $table) {
             $table->id();
             $table->string('name');          // Display name
+            $table->string('class_name');   // Maps to method in Connector class
             $table->string('method_name');   // Maps to method in Connector class
             $table->text('description')->nullable();
-            $table->varchar('last_run_data', 200)->nullable();
+            $table->text('endpoint_id')->default(0);
+            $table->text('last_run_data')->nullable();
             $table->string('last_run_status')->nullable();  // success / fail
             $table->string('last_run_message')->nullable();
             $table->enum('source', ['manual', 'ai'])->default('manual');

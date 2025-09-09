@@ -6,6 +6,7 @@
             <div class="grid grid-flow-col">
                 <div class="col-span-8">
                     <Title :module="$page.props.module" :page_description="$page.props.type === 'add' ? 'Add' : 'Edit'" />
+                    <HelpTooltip slug="add_module_record" position="bottom-right"/>
                 </div>
                 <div class="col-span-4">
 
@@ -63,6 +64,7 @@ import BreadCrumbs from "@/Components/BreadCrumbs";
 import HeadButtons from "@/Components/Header/Buttons";
 import Title from "@/Components/Header/Title";
 import Alert from "@/Components/Alert";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const alert = reactive({
     success_alert : ref(0),

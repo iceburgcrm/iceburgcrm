@@ -5,7 +5,6 @@ use App\Http\Integrations\ApiCall;
 use App\Http\Integrations\Generic\GenericAPI;
 use App\Http\Integrations\Generic\Requests\ApiRequest;
 use App\Models\Admin;
-use App\Models\ConnectorCommand;
 use App\Models\Endpoint;
 use App\Models\Permission;
 use App\Models\Setting;
@@ -13,6 +12,8 @@ use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\Connector;
+use App\Models\ConnectorCommand;
+use Illuminate\Support\Str;
 
 Route::get('module', function ($request) {
     return response()->json(Admin::getData($request));
@@ -51,54 +52,46 @@ Route::post('resetcrm', function (Request $request) {
     return response()->json(['status' => Admin::resetCRM()]);
 })->middleware(['auth', 'verified'])->name('reset_crm');
 
-use Illuminate\Http\Request;
-use App\Models\ConnectorCommand;
-use App\Connectors\JokesConnector;
-use Illuminate\Support\Str;
 
 Route::get('commands/run/{id}', function (Request $request, $id) {
+    $command = ConnectorCommand::with('connector', 'endpoint')->findOrFail($id);
 
-    $command = ConnectorCommand::findOrFail($id);
+    $commandClass = $command->class_name;
+    $fullClass = "App\\Connectors\\" . ucfirst($commandClass) . "Connector";
 
-    $connectorInstance = new JokesConnector($command);
-
-    try {
-        // If command has a method name, call it; otherwise, just execute default
-        $method = $command->method_name ?? 'execute';
-
-        if (!method_exists($connectorInstance, $method)) {
-            throw new \Exception("Method {$method} does not exist on JokesConnector");
-        }
-
-        $responseData = $connectorInstance->$method();
-
-        // Update the command record
-        $command->update([
-            'last_run_data' => Str::limit(json_encode($responseData), 200),
-            'last_run_status' => 'success',
-            'last_run_message' => 'Command executed successfully',
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'data' => $responseData
-        ]);
-
-    } catch (\Exception $e) {
-
-        $command->update([
-            'last_run_data' => Str::limit($e->getTraceAsString(), 200),
-            'last_run_status' => 'fail',
-            'last_run_message' => $e->getMessage(),
-        ]);
-
-        return response()->json([
-            'status' => 'fail',
-            'message' => $e->getMessage()
-        ], 500);
+    if (!$commandClass || !class_exists($fullClass)) {
+        throw new \Exception("Command class not found for command {$command->id}");
     }
 
+    $commandInstance = new $fullClass($command);
+
+    try {
+        $method = $command->method_name ?? 'execute';
+
+        if (!method_exists($commandInstance, $method)) {
+            throw new \Exception("Method {$method} does not exist on class {$fullClass}");
+        }
+
+        $result = $commandInstance->$method();
+
+        $command->update([
+            'last_run_data'   => json_encode($result),
+            'last_run_status' => 'success',
+            'last_run_message'=> 'OK',
+        ]);
+
+        return response()->json($result);
+    } catch (\Throwable $e) {
+        $command->update([
+            'last_run_data'   => json_encode(['trace' => Str::limit($e->getTraceAsString(), 200)]),
+            'last_run_status' => 'fail',
+            'last_run_message'=> $e->getMessage(),
+        ]);
+
+        return response()->json(['status' => 'fail', 'message' => $e->getMessage()]);
+    }
 })->middleware(['auth', 'verified'])->name('endpoint_run');
+
 
 
 Route::get('sendrequest', function (Request $request, $id) {

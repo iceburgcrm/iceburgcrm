@@ -19,7 +19,6 @@ return new class extends Migration
 
             // REST-specific fields
             $table->string('endpoint', 255)->nullable(); 
-            $table->string('class_name', 100)->nullable(); 
             $table->string('request_type', 20)->default('GET'); 
             $table->text('params')->nullable();  
             $table->text('headers')->nullable(); 

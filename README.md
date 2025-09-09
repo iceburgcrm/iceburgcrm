@@ -55,6 +55,7 @@ Iceburg CRM is a metadata driven CRM with AI abilities that allows you to quickl
 - [Calendar, Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
 - [Field Level Relationships, Module Level Relationships 2 way, 3 way, 4 way, ...]
 - [Build-in API, Workflow]
+- [150 Connectors with 5 Endpoints each]
 ## Created With
 
 Iceburg CRM is created with:

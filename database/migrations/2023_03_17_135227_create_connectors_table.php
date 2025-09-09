@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255); // allow longer names for templates
             $table->text('description')->nullable(); // only used for template connectors
-            $table->string('class', 50)->nullable(); // only used for custom connectors
             $table->string('auth_type', 100)->default('None');
             $table->string('auth_key', 255)->nullable();
             $table->string('base_url', 255)->default('');
@@ -41,5 +40,3 @@ return new class extends Migration
         Schema::dropIfExists('ice_connectors');
     }
 };
-
-

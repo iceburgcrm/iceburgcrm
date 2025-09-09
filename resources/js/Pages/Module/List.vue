@@ -6,6 +6,7 @@
             <div class="grid grid-flow-col">
                 <div class="col-span-8">
                     <Title :module="$page.props.module" page_description="Search" />
+                    <HelpTooltip slug="module_search" position="bottom-right"/>
                 </div>
                 <div class="col-span-4">
                     <HeadButtons
@@ -89,7 +90,7 @@
 
                 </div>
             </div>
-                <!-- @submit.prevent="getFormValues" -->
+               
 
             </div>
         <Alert :message="alert_data.alert_text" :is_successful="alert_data.success_alert" :is_error="alert_data.error_alert" />
@@ -191,6 +192,7 @@ import Edit from '@/Components/Fields/Edit'
 import { ref, computed, toRaw, watch, onMounted, reactive } from 'vue';
 
 import Pagination from "@/Components/Pagination";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const per_page = ref(usePage().props.value.auth.system_settings.search_per_page);
 

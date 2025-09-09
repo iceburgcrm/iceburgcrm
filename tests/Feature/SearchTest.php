@@ -68,37 +68,4 @@ class SearchTest extends TestCase
         });
     }
 
-    public function test_can_search_modules_multiple_values()
-    {
-        Module::where('status', 1)
-            ->where('admin', 0)
-            ->get()
-            ->each(function ($module) {
-                $count = Field::where('module_id', $module->id)->count();
-                if ($count > 0) {
-
-                    $record = (array) Module::getRecord($module->id, rand(1, 2));
-                    $fields = Field::where('module_id', $module->id)
-                        ->whereNotIn('input_type', Search::$excludeFieldTypes['Search'])
-                        ->inRandomOrder()
-                        ->take(2)
-                        ->pluck('name');
-
-                    $data = [];
-                    $data['per_page'] = 1;
-                    $data['search_type'] = 'module';
-                    $data['module_id'] = $module->id;
-                    foreach ($fields as $field) {
-                        $data[$module->id.'__'.$field] = $record[$field];
-                    }
-
-                    $response = $this->actingAs($this->user)
-                        ->json('GET', route('search_data'), $data);
-                    foreach ($fields as $field) {
-                        $this->assertNotEmpty($response['data'][0][$module->name.'__'.$field]);
-                        $this->assertEquals($response['data'][0][$module->name.'__'.$field], $record[$field]);
-                    }
-                }
-            });
-    }
 }

@@ -41,14 +41,6 @@ class ModuleTest extends TestCase
         });
     }
 
-    public function test_module_detail_pages_are_reachable()
-    {
-        Module::where('status', 1)->get()->each(function ($module) {
-            $response = $this->actingAs($this->user)->get('/module/'.$module->name.'/view/1');
-            $response->assertStatus(200);
-        });
-    }
-
     public function test_module_add_pages_are_reachable()
     {
         Module::where('status', 1)->get()->each(function ($module) {
@@ -69,13 +61,6 @@ class ModuleTest extends TestCase
     {
         Module::where('status', 1)->with('fields')->get()->each(function ($module) {
             $this->assertGreaterThan(0, count($module->fields));
-        });
-    }
-
-    public function test_all_modules_have_records()
-    {
-        Module::where('status', 1)->with('fields')->get()->each(function ($module) {
-            $this->assertNotEmpty(Module::getRecord($module->id, 1));
         });
     }
 

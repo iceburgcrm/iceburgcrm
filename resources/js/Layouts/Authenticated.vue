@@ -194,6 +194,16 @@
                 </li>
 
                 <li>
+                  <a href="/admin/workflow" class="flex items-center gap-2">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h6l3-3 6 6 3-3v6H3v-6z"/>
+                    </svg>
+                    Workflow
+                  </a>
+                </li>
+
+
+                <li>
                   <a :href="route('data')" class="flex items-center gap-2">
                     <!-- database -->
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">

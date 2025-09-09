@@ -4,6 +4,7 @@
     <template #header>
       <h2 class="font-semibold text-xl text-base-content leading-tight">
         {{ connector.name ? `Connector: ${connector.name}` : 'Create New Connector' }}
+        <HelpTooltip slug="connector" position="bottom-right"/>
       </h2>
     </template>
 
@@ -25,9 +26,7 @@
     <!-- Details Tab -->
     <div v-show="activeTab==='details'" class="bg-base-100 p-4 rounded shadow">
       <div v-if="!editingConnector && connector.id">
-        <!-- Read-only view for existing connector -->
         <h3 class="font-bold text-lg">{{ connector.name }}</h3>
-        <p>Class: {{ connector.class }}</p>
         <p>Auth Type: {{ connector.auth_type }}</p>
         <p>Base URL: {{ connector.base_url }}</p>
         <p>Auth Key: {{ connector.auth_key }}</p>
@@ -36,15 +35,11 @@
       </div>
 
       <div v-else>
-        <!-- Form for new or editing connector -->
         <div class="form-control mb-4">
           <label class="label"><span class="label-text">Name</span></label>
           <input type="text" v-model="connector.name" class="input input-bordered w-full" required />
         </div>
-        <div class="form-control mb-4">
-          <label class="label"><span class="label-text">Class</span></label>
-          <input type="text" v-model="connector.class" class="input input-bordered w-full" required />
-        </div>
+
         <div class="form-control mb-4">
           <label class="label"><span class="label-text">Auth Type</span></label>
           <select v-model="connector.auth_type" class="select select-bordered w-full">
@@ -142,11 +137,6 @@
           <div v-else>Request Type: {{ endpoint.request_type }}</div>
         </div>
         <div class="mb-2">
-          <label v-if="endpoint.editing">Class Name</label>
-          <input v-if="endpoint.editing" v-model="endpoint.class_name" class="input input-bordered w-full"/>
-          <div v-else>Class: {{ endpoint.class_name }}</div>
-        </div>
-        <div class="mb-2">
           <label v-if="endpoint.editing">Params (JSON)</label>
           <textarea v-if="endpoint.editing" v-model="endpoint.params" class="textarea textarea-bordered w-full"></textarea>
           <div v-else>Params: <pre>{{ endpoint.params }}</pre></div>
@@ -180,14 +170,12 @@
         <button @click="add_command()" class="btn btn-primary">Add Command</button>
       </div>
 
-      <div v-for="(command,index) in connector.commands" :key="command.id" class="p-4 mb-4 border rounded">
-        <!-- Name -->
+      <div v-for="(command,index) in connector.commands" :key="command.id || index" class="p-4 mb-4 border rounded">
         <div class="mb-2">
           <label v-if="command.editing">Name</label>
           <input v-if="command.editing" v-model="command.name" class="input input-bordered w-full"/>
           <div v-else class="font-bold">Name: {{ command.name }}</div>
         </div>
-        <!-- Method Name -->
         <div class="mb-2" v-if="command.editing">
           <label>Method Name</label>
           <input v-model="command.method_name" class="input input-bordered w-full"/>
@@ -195,7 +183,13 @@
         <div v-else>
           <div class="font-bold">Method: {{ command.method_name }}</div>
         </div>
-        <!-- Endpoint -->
+        <div class="mb-2" v-if="command.editing">
+          <label>Class Name</label>
+          <input v-model="command.class_name" class="input input-bordered w-full"/>
+        </div>
+        <div v-else>
+          Class: {{ command.class_name }}
+        </div>
         <div class="mb-2" v-if="command.editing">
           <label>Endpoint</label>
           <select v-model="command.endpoint_id" class="select select-bordered w-full">
@@ -206,25 +200,27 @@
         <div v-else-if="command.endpoint_id">
           Endpoint: {{ endpoints.find(ep=>ep.id===command.endpoint_id)?.name || 'Unknown' }}
         </div>
-        <!-- Description -->
         <div class="mb-2">
           <label v-if="command.editing">Description</label>
           <textarea v-if="command.editing" v-model="command.description" class="textarea textarea-bordered w-full"></textarea>
           <div v-else>{{ command.description }}</div>
         </div>
-        <!-- Run & Status (only for saved commands) -->
-        <template v-if="!command.editing && command.id">
-          <div class="mb-2">
+       <template v-if="!command.editing && command.id">
+          <div class="mb-2 flex items-center gap-4">
             <button @click="run_command(command.id)" class="btn btn-success btn-sm">Run</button>
-            <span class="ml-4">Last Ran: {{ command.last_ran }}</span>
-            <span class="ml-4">Last Data: {{ command.last_run_data }}</span>
+            <span>Last Ran: {{ command.last_ran }}</span>
+            <span>Status: <span :class="command.last_run_status==='success' ? 'text-green-600' : 'text-red-600'">{{ command.last_run_status }}</span></span>
           </div>
-          <div class="mb-2">
-            <label>Status:</label>
-            <input type="checkbox" v-model="command.status" class="toggle toggle-success" />
+
+          <div v-if="command.last_run_data" class="mb-2">
+            <label class="font-semibold">Last Run Data:</label>
+            <pre class="bg-base-200 p-2 rounded overflow-auto max-h-48 whitespace-pre-wrap break-words">
+              <code>{{ command.last_run_data.trim() }}</code>
+            </pre>
           </div>
+
         </template>
-        <!-- Action Buttons -->
+
         <div class="mt-2">
           <div v-if="command.editing">
             <button @click="save_command(command.id)" class="btn btn-success btn-sm">Save</button>
@@ -247,6 +243,7 @@ import { Head, usePage } from '@inertiajs/inertia-vue3';
 import axios from 'axios';
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import BreadCrumbs from '@/Components/BreadCrumbs';
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const connector = ref(usePage().props.value.connector || { commands: [] });
 const activeTab = ref('details');
@@ -262,126 +259,81 @@ onMounted(() => {
   }
 });
 
-// Save connector
+
 const save_connector = () => {
-  if (!connector.value.name) {
-    alert('The name field is required.');
-    return;
-  }
+  if (!connector.value.name) { alert('The name field is required.'); return; }
   axios.post('/data/connector/set_connector', connector.value)
     .then(res => { 
       data.success_alert = res.data.message || 'Connector saved successfully'; 
-      if (!connector.value.id) connector.value.id = res.data.id; // assign new ID if created
+      if (!connector.value.id) connector.value.id = res.data.id;
       editingConnector.value = false;
     })
-    .catch(err => { 
-      data.error_alert = err.response?.data?.message || 'Error saving connector'; 
-    });
+    .catch(err => { data.error_alert = err.response?.data?.message || 'Error saving connector'; });
 };
 
-// Delete connector
 const delete_connector = () => {
   if (!connector.value.id || !confirm('Are you sure you want to delete this connector?')) return;
   axios.delete(`/data/connectors/${connector.value.id}`)
-    .then(()=>{ 
-      data.success_alert = 'Connector deleted';
-      connector.value = { commands: [] };
-      endpoints.value = [];
-    })
-    .catch(()=>{ data.error_alert = 'Error deleting connector'; });
+    .then(()=>{ connector.value = { commands: [] }; endpoints.value = []; data.success_alert = 'Connector deleted'; })
+    .catch(()=>data.error_alert = 'Error deleting connector');
 };
 
-// Endpoints Methods
+
 const add_endpoint = () => { 
-  endpoints.value.push({
-    name: '',
-    endpoint: '',
-    request_type: 'GET',
-    params: '',
-    headers: '',
-    status: true,
-    editing: true,
-    id: null,
-    connector_id: connector.value.id
-  }); 
+  endpoints.value.push({ name:'', endpoint:'', request_type:'GET', params:'', headers:'', status:true, editing:true, id:null, connector_id:connector.value.id });
 };
-const edit_endpoint = (ep) => { ep.editing = true; };
-const cancel_edit_endpoint = (ep,index) => { 
-  if (ep.id === null) endpoints.value.splice(index,1); 
-  else ep.editing = false; 
-};
-const save_endpoint = (ep) => {
+const edit_endpoint = ep => ep.editing = true;
+const cancel_edit_endpoint = (ep,index) => { if (ep.id===null) endpoints.value.splice(index,1); else ep.editing=false; };
+const save_endpoint = ep => {
   if (!ep.endpoint) { alert('Endpoint is required'); return; }
   if (ep.id) {
-  axios.post(`/data/endpoints/update/${ep.id}`, ep)
-    .then(()=>ep.editing=false)
-    .catch(()=>alert('Error saving endpoint'));
-} else {
-  axios.post(`/data/endpoints/add`, ep)
-    .then(res => { ep.id = res.data.id; ep.editing=false; })
-    .catch(()=>alert('Error adding endpoint'));
-}
-};
-const delete_endpoint = (id,index) => { 
-  if (!id) { endpoints.value.splice(index,1); return; }
-  axios.post(`/data/endpoints/delete/${id}`)
-    .then(()=>endpoints.value.splice(index,1))
-    .catch(()=>alert('Error deleting endpoint'));
-};
-
-// Commands Methods
-const add_command = () => { 
-  connector.value.commands.push({
-    id: null,
-    connector_id: connector.value.id,
-    name: '',
-    method_name: '',
-    description: '',
-    endpoint_id: null,
-    status: true,
-    editing: true,
-    definition_type: 'manual',
-    ai_code: ''
-  }); 
-};
-
-const edit_command = (cmd) => { cmd.editing = true; };
-const cancel_edit = (cmd) => { 
-  if (cmd.id === null) connector.value.commands.splice(connector.value.commands.indexOf(cmd),1); 
-  else cmd.editing = false; 
-};
-
-const save_command = (id) => {
-  const cmd = connector.value.commands.find(c => c.id === id) || connector.value.commands.find(c => c.id === null);
-  if (!cmd.name || !cmd.method_name || !cmd.description) {
-    alert("Name, Description and Method Name are required."); 
-    return; 
-  }
-  if (cmd.id) {
-    axios.post(`/data/connector/update_command/${cmd.id}`, cmd)
-      .then(()=>cmd.editing=false)
-      .catch(()=>alert('Error saving command'));
+    axios.post(`/data/endpoints/update/${ep.id}`, ep).then(()=>ep.editing=false).catch(()=>alert('Error saving endpoint'));
   } else {
-    axios.post('/data/connector/add_command', cmd)
-      .then(res => { 
-        cmd.id = res.data.command.id; 
-        cmd.editing = false; 
-      })
-      .catch(()=>alert('Error adding command'));
+    axios.post('/data/endpoints/add', ep).then(res=>{ ep.id=res.data.id; ep.editing=false }).catch(()=>alert('Error adding endpoint'));
+  }
+};
+const delete_endpoint = (id,index) => { if (!id) { endpoints.value.splice(index,1); return; } axios.post(`/data/endpoints/delete/${id}`).then(()=>endpoints.value.splice(index,1)).catch(()=>alert('Error deleting endpoint')); };
+
+const add_command = () => { 
+  connector.value.commands.push({ id:null, connector_id:connector.value.id, name:'', method_name:'', class_name:'', description:'', endpoint_id:null, status:true, editing:true, definition_type:'manual', ai_code:'' });
+};
+const edit_command = cmd => cmd.editing = true;
+const cancel_edit = cmd => { if (cmd.id===null) connector.value.commands.splice(connector.value.commands.indexOf(cmd),1); else cmd.editing=false; };
+
+const save_command = id => {
+  const cmd = connector.value.commands.find(c=>c.id===id) || connector.value.commands.find(c=>c.id===null);
+  if (!cmd.name || !cmd.class_name, !cmd.method_name) { alert("Name, Class name and Method Name are required."); return; }
+  if (cmd.id) {
+    axios.post(`/data/connector/update_command/${cmd.id}`, cmd).then(()=>cmd.editing=false).catch(()=>alert('Error saving command'));
+  } else {
+    axios.post('/data/connector/add_command', cmd).then(res=>{ cmd.id=res.data.command.id; cmd.editing=false }).catch(()=>alert('Error adding command'));
   }
 };
 
-const delete_command = (id,index) => { 
-  if (!id) { connector.value.commands.splice(index,1); return; }
-  axios.post(`/data/connector/delete_command/${id}`, {}, { headers })
-    .then(()=>{ connector.value.commands.splice(index,1); })
-    .catch(()=>alert('Error deleting command'));
-};
+const delete_command = (id,index) => { if (!id) { connector.value.commands.splice(index,1); return; } axios.post(`/data/connector/delete_command/${id}`, {}, { headers }).then(()=>connector.value.commands.splice(index,1)).catch(()=>alert('Error deleting command')); };
 
-const run_command = (id) => { 
+const run_command = id => {
+  const cmd = connector.value.commands.find(c=>c.id===id);
+  if (!cmd) return;
+
   axios.get(`/data/commands/run/${id}`)
-    .then(res => console.log(res.data))
-    .catch(() => alert('Error running command'));
+    .then(() => {
+      // Re-fetch command data from backend
+      axios.get(`/data/connector/command/${id}`)
+        .then(res => {
+          const updated = res.data.command;
+          cmd.last_run_data = updated.last_run_data;
+          cmd.last_ran = updated.last_ran;
+          cmd.last_run_status = updated.last_run_status;
+          cmd.last_run_message = updated.last_run_message;
+        })
+        .catch(() => {
+          alert('Error fetching updated command data');
+        });
+    })
+    .catch(err => {
+      alert(err.response?.data?.message || 'Error running command');
+    });
 };
 
 </script>

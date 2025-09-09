@@ -7,6 +7,7 @@
             <div class="grid grid-flow-col">
                 <div class="col-span-8">
                     <Title :module="$page.props.module" page_description="Audit Log" />
+                    <HelpTooltip slug="audit_log" position="bottom-right"/>
                 </div>
                 <div class="col-span-4">
                     <HeadButtons
@@ -84,6 +85,7 @@ import {Head, usePage} from '@inertiajs/inertia-vue3';
 import BreadCrumbs from "@/Components/BreadCrumbs";
 import HeadButtons from "@/Components/Header/Buttons";
 import Title from "@/Components/Header/Title";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 import {computed, ref} from "vue";
 
 const log_list = ref(usePage().props.value.logs);

@@ -6,6 +6,7 @@
         <template #header>
             <h2 class="font-semibold text-xl text-base-content leading-tight">
                 {{ $t('page.permissions') }}
+                <HelpTooltip slug="permissions" position="bottom-right"/>
             </h2>
 
         </template>
@@ -79,6 +80,7 @@ import { Head, usePage } from '@inertiajs/inertia-vue3';
 import axios from "axios";
 import BreadCrumbs from "@/Components/BreadCrumbs";
 import Alert from "@/Components/Alert";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const role_id = ref('');
 const module_id = ref('');

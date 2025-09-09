@@ -6,6 +6,7 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ $t('page.import') }}
+                <HelpTooltip slug="import" position="bottom-right" />
             </h2>
 
         </template>
@@ -64,6 +65,7 @@ import axios from "axios";
 import BreadCrumbs from "@/Components/BreadCrumbs";
 import Preview from "@/Components/Import/Preview";
 import Alert from "@/Components/Alert";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 const file = ref();
 const form = ref();

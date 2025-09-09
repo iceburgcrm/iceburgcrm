@@ -71,7 +71,8 @@ class ApiService
     protected function retryMiddleware(int $retryCount)
     {
         return Middleware::retry(
-            function ($retries, $request, $response = null, RequestException $exception = null) use ($retryCount) {
+            function ($retries, $request, $response = null, $exception = null) use ($retryCount) {
+                // You can still check for Guzzle exceptions if needed
                 return $retries < $retryCount && ($exception || ($response && $response->getStatusCode() >= 500));
             },
             function ($retries) {
@@ -79,6 +80,7 @@ class ApiService
             }
         );
     }
+
 
     protected function buildAuthHeaders($connector): array
     {

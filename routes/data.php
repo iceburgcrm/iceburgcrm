@@ -14,11 +14,28 @@ use App\Models\Endpoint;
 use App\Models\Relationship;
 use App\Models\RelationshipModule;
 use App\Models\Search;
+use App\Models\ModuleConvertable;
+use App\Models\WorkFlowData;
+use App\Models\IceHelp;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
+
+
+Route::get('help', function (Request $request) {
+    $slug = $request->query('slug');
+
+    $help = IceHelp::where('slug', $slug)->first();
+
+    if (! $help) {
+        return response()->json(['error' => 'Help content not found'], 404);
+    }
+
+    return response()->json($help);
+})->middleware(['auth', 'verified'])->name('data')
+    ->name('help');
 
 Route::get('datalet', function (Request $request) {
     $datalet=Datalet::where('id', $request->id)->firstOrFail();
@@ -277,6 +294,7 @@ Route::delete('connector/delete_connector/{id}', function ($id) {
     }
 })->middleware(['auth', 'verified'])->name('delete_connector');
 
+/*
 Route::post('connector/run_command', function (Request $request) {
     $commandId = $request->input('command_id');
 
@@ -321,42 +339,57 @@ Route::post('connector/run_command', function (Request $request) {
 
 })->middleware(['auth', 'verified'])->name('run_command');
 
+*/
 
+// Add Command
+Route::post('connector/add_command', function(Request $request) {
+    $request->validate([
+        'connector_id' => 'required|integer',
+        'name' => 'required|string',
+        'method_name' => 'required|string',
+        'description' => 'required|string',
+        'endpoint_id' => 'nullable|integer',
+        'status' => 'boolean',
+        'class_name' => 'string'   
+    ]);
 
-// Route for Updating a Command
-Route::post('connector/update_command/{id?}', function ($id, Request $request) {
-    $command = ConnectorCommand::find($id);
+    $command = new ConnectorCommand();
+    $command->connector_id = $request->connector_id;
+    $command->name = $request->name;
+    $command->method_name = $request->method_name;
+    $command->description = $request->description;
+    $command->endpoint_id = $request->endpoint_id;
+    $command->status = $request->status ?? true;
+    $command->class_name = $request->class_name; // save class_name
+    $command->save();
 
-    if ($command) {
-        $data = $request->only(['name', 'method_name', 'description', 'status']);
-        $command->update($data);
+    return response()->json(['command' => $command]);
+});
 
-        return response()->json(['status' => 'Command updated successfully']);
-    } else {
-        return response()->json(['status' => 'Command not found'], 404);
-    }
-})->middleware(['auth', 'verified'])->name('update_command');
+// Update Command
+Route::post('connector/update_command/{id}', function(Request $request, $id) {
+    $command = ConnectorCommand::findOrFail($id);
 
-// Route for Adding a New Command
-Route::post('connector/add_command', function (Request $request) {
-    $data = $request->only(['name', 'method_name', 'description', 'status', 'connector_id']);
+    $request->validate([
+        'name' => 'required|string',
+        'method_name' => 'required|string',
+        'description' => 'required|string',
+        'endpoint_id' => 'nullable|integer|exists:endpoints,id',
+        'status' => 'boolean',
+        'class_name' => 'nullable|string'
+    ]);
 
-    $command = ConnectorCommand::create($data);
+    $command->name = $request->name;
+    $command->method_name = $request->method_name;
+    $command->description = $request->description;
+    $command->endpoint_id = $request->endpoint_id;
+    $command->status = $request->status ?? true;
+    $command->class_name = $request->class_name; // save class_name
+    $command->save();
 
-    return response()->json(['status' => 'Command added successfully', 'command' => $command]);
-})->middleware(['auth', 'verified'])->name('add_command');
+    return response()->json(['command' => $command]);
+});
 
-// Route for Deleting a Command
-Route::post('connector/delete_command/{id}', function ($id) {
-    $command = ConnectorCommand::find($id);
-
-    if ($command) {
-        $command->delete();
-        return response()->json(['status' => 'Command deleted successfully']);
-    } else {
-        return response()->json(['status' => 'Command not found'], 404);
-    }
-})->middleware(['auth', 'verified'])->name('delete_command');
 
 
 Route::get('endpoints/{connector_id}', function (Request $request, $connectorId) {
@@ -387,7 +420,7 @@ Route::post('endpoints/add', function (Request $request) {
     return response()->json(['id' => $endpoint->id]);
 })->middleware(['auth', 'verified']);
 
-// Update existing endpoint
+
 Route::post('endpoints/update/{id}', function (Request $request, $id) {
     $endpoint = Endpoint::findOrFail($id);
     $data = $request->all();
@@ -403,5 +436,43 @@ Route::post('endpoints/update/{id}', function (Request $request, $id) {
 
     return response()->json(['message' => 'Endpoint updated successfully']);
 })->middleware(['auth', 'verified']);
+
+
+Route::post('workflow/save', function (Request $request) {
+
+    $workflow = $request->input('workflow', []);
+
+    // Get current module IDs in DB
+    $existingIds = ModuleConvertable::pluck('module_id')->toArray();
+
+    $incomingIds = collect($workflow)->pluck('module_id')->toArray();
+
+    // Remove modules that are no longer in the workflow
+    ModuleConvertable::whereNotIn('module_id', $incomingIds)->delete();
+
+    // Insert or update modules in workflow
+    foreach ($workflow as $index => $item) {
+        ModuleConvertable::updateOrCreate(
+            ['module_id' => $item['module_id']],
+            [
+                'primary_module_id' => $item['module_id'], // adjust if needed
+                'level' => $index + 1,
+            ]
+        );
+    }
+
+    return response()->json(['success' => true]);
+})->middleware(['auth', 'verified']);
+
+Route::delete('workflow/{id}', function ($id) {
+    \App\Models\ModuleConvertable::findOrFail($id)->delete();
+    return response()->json(['success' => true]);
+})->middleware(['auth', 'verified']);
+
+
+Route::get('connector/command/{id}', function ($id) {
+    return ['command' => \App\Models\ConnectorCommand::findOrFail($id)];
+});
+
 
 

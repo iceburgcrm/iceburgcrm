@@ -5,6 +5,7 @@
         <template #header>
             <h2 class="font-semibold text-xl leading-tight">
                 {{ $t('page.settings') }}
+                <HelpTooltip slug="settings" position="bottom-right"/>
             </h2>
         </template>
 
@@ -147,6 +148,21 @@
                         />
                     </div>
 
+                    <!-- Help -->
+                    <div class="p-5 grid grid-row-2 bg-base-100 text-base-content">
+                      <label for="help" class="block text-sm font-medium leading-5">
+                        Help
+                      </label>
+                      <input
+                        type="checkbox"
+                        id="help"
+                        class="toggle toggle-secondary mt-2"
+                        v-model="data.help"
+                      />
+                    </div>
+
+
+
                     <!-- Save Button -->
                     <div class="p-5 bg-base-100 text-base-content">
                         <input 
@@ -171,6 +187,7 @@ import axios from "axios";
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import BreadCrumbs from "@/Components/BreadCrumbs";
 import Alert from "@/Components/Alert";
+import HelpTooltip from '@/Components/HelpTooltip.vue';
 
 // --- Reactive form data ---
 const pageProps = usePage().props.value.auth.system_settings;
@@ -183,6 +200,7 @@ const data = reactive({
     search_per_page: pageProps.search_per_page,
     submodule_search_per_page: pageProps.submodule_search_per_page,
     max_export_records: pageProps.max_export_records,
+    help: !!pageProps.help,
 });
 
 // --- Alerts ---

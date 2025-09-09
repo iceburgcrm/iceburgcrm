@@ -12,11 +12,13 @@ use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Setting;
 use App\Models\Theme;
-use App\Models\User;
+use App\Models\User
+use App\Models\IceHelp;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Log;
+
 
 use Database\Seeders\Core\TemplateConnectorSeeder as TemplateConnectorSeeder;
 
@@ -48,6 +50,9 @@ class GenerateSeeder extends Seeder
         Log::info('Add Datalet Types');
         #$this->addDataletTypes();
         #$this->addDatalets();
+
+        Log::info('Add Datalet Types');
+        $this->addHelp();
 
         Log::info('Generating module');
         $module = new Module;
@@ -308,28 +313,58 @@ class GenerateSeeder extends Seeder
 
     private function addCustomConnectors()
     {
-        // --- Custom Connector: Joke of the Day ---
-        $jokeConnectorId = Connector::insertGetId([
+
+        $jokesConnectorId = Connector::insertGetId([
             'name'      => 'Joke of the Day',
-            'class'     => 'jokes',
             'base_url'  => 'https://official-joke-api.appspot.com',
             'auth_type' => 'None',
             'type'      => 2, // custom connector
             'status'    => 1,
         ]);
 
-        ConnectorCommand::insert([
-            'connector_id' => $jokeConnectorId,
-            'name'         => 'Random Joke',
-            'description'  => 'Get a random joke',
-            'method_name'  => 'random_joke',
+        $tenJokesEndpointId = Endpoint::insertGetId([
+            'connector_id' => $jokesConnectorId,
+            'endpoint'     => '/random_ten',
+            'request_type' => 'GET',
+            'params'       => json_encode([]),
+            'headers'      => json_encode([]),
             'status'       => 1,
         ]);
+
+
+        ConnectorCommand::insert([
+            [
+                'connector_id' => $jokesConnectorId,
+                'name'         => 'Random Joke',
+                'class_name'   => 'jokes',
+                'method_name'  => 'joke_without_endpoint',
+                'description'  => 'Get a random joke',
+                'status'       => 1,
+            ],
+            [
+                'connector_id' => $jokesConnectorId,
+                'name'         => 'Random 10 Jokes',
+                'class_name'   => 'jokes',
+                'method_name'  => 'random_ten',
+                'endpoint_id'  => $tenJokesEndpointId,
+                'description'  => 'Gives you 10 random jokes',
+                'status'       => 1,
+            ],
+            [
+                'connector_id' => $jokesConnectorId,
+                'name'         => 'Random 10 Jokes with mapping',
+                'class_name'   => 'jokes',
+                'method_name'  => 'random_ten_with_mapping',
+                'endpoint_id'  => $tenJokesEndpointId,
+                'description'  => 'Gives you 10 random jokes and saves them to a module',
+                'status'       => 1,
+            ],
+        ]);
+
 
         // --- Custom Connector: IceburgCRM ---
         $iceburgConnectorId = Connector::insertGetId([
             'name'      => 'IceburgCRM',
-            'class'     => 'iceburg',
             'base_url'  => 'http://localhost',
             'auth_type' => 'Basic Auth',
             'username'  => 'admin@iceburg.ca',
@@ -341,6 +376,7 @@ class GenerateSeeder extends Seeder
         ConnectorCommand::insert([
             'connector_id' => $iceburgConnectorId,
             'name'         => 'Backup Contacts',
+            'class_name'   => 'iceburg',
             'description'  => 'This method will backup the last 10 contacts to another IceburgCRM instance',
             'method_name'  => 'backup_contacts',
             'status'       => 1,
@@ -349,6 +385,7 @@ class GenerateSeeder extends Seeder
         ConnectorCommand::insert([
             'connector_id' => $iceburgConnectorId,
             'name'         => 'Backup Accounts',
+            'class_name'     => 'iceburg',
             'description'  => 'This method will backup the last 10 accounts to another IceburgCRM instance',
             'method_name'  => 'backup_accounts',
             'status'       => 1,
@@ -359,6 +396,90 @@ class GenerateSeeder extends Seeder
     {
         $this->call(TemplateConnectorSeeder::class);
     }
+
+    private addhelp()
+    {
+        IceHelp::insert([
+            'slug' => 'dashboard',
+            'content' => 'This is the dashboard, this is the first page you will see when you login in.  Below are datalets.  They are generic widget components that can be defined to display whatever type of data you wish.<br><br>
+                You can change the order, disable, change the name in the <a href="http://localhost:8080/module/ice_datalets">Datalet admin page</a>.<br><br>
+                Datalets data can be defined in the code <a href="https://github.com/iceburgcrm/iceburgcrm/blob/main/app/Models/Datalet.php">here</a> 
+                and you can define the <a href="https://github.com/iceburgcrm/iceburgcrm/blob/main/resources/js/Components/Datalet.vue">display type here</a>'
+        ]);
+
+        IceHelp::insert([
+            'slug' => 'allmodules',
+            'content' => 'This section shows a list of all modules currently available.  Modules are filtered by role so only modules you have access to will appear here.'
+        ]);
+
+        IceHelp::insert([
+            'slug' => 'module_search',
+            'content' => 'This section allows you to search through a module. <br><br>The export button at the top of the page will export all records.  You can select individual records in the dropdown below to export or delete.  You can export in 6 different formats.  Exporting will take related fields and convert the ids to the content the field is connected to.<br><br>Import allows you to import records, the format must follow the same format as exporting.  Importing will take related field values and convert them into the ids that link them automatically.<br><br>Selecting convert will convert to your record for your workflow which will be displayed in the module record detail page.'
+        ]);
+
+        IceHelp::insert([
+            'slug' => 'import',
+            'content' => 'This section allows you to import data. <br><br>The format must follow the same format as exporting.  Importing will take related field values and convert them into the ids that link them automatically.  You have the option of removing the header through the checkbox below.'
+        ]);
+
+
+        IceHelp::insert([
+            'slug' => 'audit_log',
+            'content' => 'This section will show you who performed what action on what record.  There are 4 actions.  Read, write, import and export.'
+        ]);
+
+        IceHelp::insert([
+            'slug' => 'permissions',
+            'content' => 'This section will allow you to set module permissions.  There are 4 types of permissions.  Read, write, import and export.'
+        ]);
+
+
+        IceHelp::insert([
+            'slug' => 'add_module_record',
+            'content' => 'This section will allow you to add new records to this module.  Using the AI Assist button will send over all of the fields and types and let the AI suggest data to fill in the record with.'
+        ]);
+
+
+        IceHelp::insert([
+            'slug' => 'settings',
+            'content' => 'This page will let you change global settings of the crm.  From color changes, to turning off help to setting the number of records per module or changing your language.'
+        ]);
+
+
+        IceHelp::insert([
+            'slug' => 'workflow',
+            'content' => 'This page will allow you to change your workflow.  Select which module you want another module to convert to.  Together they allow you to convert records from one module type to another and to see where the record came from and where it needs to where it currently sits in your workflow.  A typical workflow would have leads convert to contacts.  Contacts to accounts, to opportunities to line items.'
+        ]);
+
+
+        IceHelp::insert([
+            'slug' => 'admin_data',
+            'content' => 'This page will let you reset the data in the crm.  Be careful because all data changes will be lost.'
+        ]);
+
+
+
+        IceHelp::insert([
+            'slug' => 'connectors',
+            'content' => 'This section allows you to create connectors, that are connected to endpoints and connector commands.<br><br>As a sample use the first api, the joke api'
+        ]);
+
+
+        IceHelp::insert([
+            'slug' => 'connector',
+            'content' => 'This section allows you to create endpoints for your connector, allows you to set the connector settings and create connector commands<br><br>Commands are linked to a specific class, method that will allow you to map.  Check out the free jokes connector and methods for examples.'
+        ]);
+
+
+
+
+ 
+
+    }
+
+
+       
+
 
 
 }
