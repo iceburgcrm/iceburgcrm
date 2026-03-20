@@ -65,7 +65,7 @@ class GenerateSeeder extends Seeder
             });
 
         $this->addModulesAndRoles();
-        //$this->sampleMedia();
+        $this->sampleMedia();
     }
 
     private function sampleMedia()

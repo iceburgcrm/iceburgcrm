@@ -371,6 +371,9 @@ Route::get('/import', function (Request $request) {
 })->middleware(['auth', 'verified'])->name('import');
 
 Route::get('/admin', function () {
+    if (Auth::user()->role != 'Admin') {
+        return redirect('dashboard')->withErrors(['No Access']);
+    }
     return Inertia::render('Admin/Index', [
         'themes' => Module::where('status', 1)->get(),
         'breadcrumbs' => Setting::getBreadCrumbs(['name' => 'Import', 'link' => '', 'svg' => 'settings']),

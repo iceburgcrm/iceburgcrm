@@ -350,7 +350,7 @@ Route::post('connector/add_command', function(Request $request) {
         'description' => 'required|string',
         'endpoint_id' => 'nullable|integer',
         'status' => 'boolean',
-        'class_name' => 'string'   
+        'class_name' => 'string'
     ]);
 
     $command = new ConnectorCommand();
@@ -364,7 +364,7 @@ Route::post('connector/add_command', function(Request $request) {
     $command->save();
 
     return response()->json(['command' => $command]);
-});
+})->middleware(['auth', 'verified'])->name('add_command');
 
 // Update Command
 Route::post('connector/update_command/{id}', function(Request $request, $id) {
@@ -388,7 +388,7 @@ Route::post('connector/update_command/{id}', function(Request $request, $id) {
     $command->save();
 
     return response()->json(['command' => $command]);
-});
+})->middleware(['auth', 'verified'])->name('update_command');
 
 
 
@@ -472,7 +472,7 @@ Route::delete('workflow/{id}', function ($id) {
 
 Route::get('connector/command/{id}', function ($id) {
     return ['command' => \App\Models\ConnectorCommand::findOrFail($id)];
-});
+})>middleware(['auth', 'verified'])->name('view_command');
 
 
 

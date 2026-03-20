@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
+/* By default this has been turned off.  Uncomment in a safe network
 Route::get('/run-command/{command}', function (Request $request, $command) {
 
     $allowedCommands = [
@@ -43,3 +44,4 @@ Route::get('/run-command/{command}', function (Request $request, $command) {
         'message' => "Command executed with exit code: {$exitCode}"
     ]);
 });
+*/
