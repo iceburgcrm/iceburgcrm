@@ -1,578 +1,587 @@
-<p align="center"><a href="https://www.iceburg.ca" target="_blank"><img src="https://www.iceburg.ca/images/iceburg.png" width="400"></a></p>
-
-# Iceburg CRM
-### A Laravel CRM Builder
-#### With optional AI Assist, AI Builder
-
-
-Screenshots:
-<p>
-<a href="https://www.iceburg.ca/images/screenshot1.jpg" target="_blank">
-<img src="https://www.iceburg.ca/images/screenshot1.jpg" width="50" />
-</a>
-<a href="https://www.iceburg.ca/images/screenshot2.jpg" target="_blank">
-<img src="https://www.iceburg.ca/images/screenshot2.jpg" width="50" />
-</a>
-<a href="https://www.iceburg.ca/images/screenshot3.jpg" target="_blank">
-<img src="https://www.iceburg.ca/images/screenshot3.jpg" width="50" />
-</a>
-<a href="https://www.iceburg.ca/images/screenshot4.jpg" target="_blank">
-<img src="https://www.iceburg.ca/images/screenshot4.jpg" width="50" />
-</a>
-<a href="https://www.iceburg.ca/images/screenshot5.jpg" target="_blank">
-<img src="https://www.iceburg.ca/images/screenshot5.jpg" width="50" />
-</a>
+<p align="center">
+  <a href="https://www.iceburg.ca" target="_blank">
+    <img src="https://www.iceburg.ca/images/iceburg.png" width="360" alt="Iceburg CRM">
+  </a>
 </p>
 
-[Project Home Page - iceburg.ca](https://www.iceburg.ca)
+# Iceburg CRM
 
-[Demo](https://demo.iceburg.ca)
+Iceburg CRM is a metadata-driven CRM builder for Laravel. It lets you define modules, fields, relationships, subpanels, datalets, permissions, workflows, imports, exports, and external API connectors without hard-coding every CRM shape by hand.
 
+It also includes optional AI-assisted CRM generation: describe the CRM you want, choose a provider such as OpenRouter, OpenAI, or Anthropic, and Iceburg can generate a working starting point.
 
-### Default usernames and passwords
+[Project site](https://www.iceburg.ca) | [Demo](https://demo.iceburg.ca) | [Hosted Iceburg](https://hosted.iceburg.ca)
 
-Username | Password
---- | ---
-admin@iceburg.ca | admin
-user@iceburg.ca | user
-sales@iceburg.ca | sales
-accounting@iceburg.ca | accounting
-marketing@iceburg.ca | marketing
+## Contents
 
-### Describe your CRM and let's AI create it.
+- [Highlights](#highlights)
+- [Requirements](#requirements)
+- [Quick Start With Docker](#quick-start-with-docker)
+- [Local Development Without Docker](#local-development-without-docker)
+- [Creating CRMs](#creating-crms)
+- [AI Configuration](#ai-configuration)
+- [Core Concepts](#core-concepts)
+- [API](#api)
+- [Troubleshooting](#troubleshooting)
 
-## About Iceburg CRM
+## Highlights
 
-Iceburg CRM is a metadata driven CRM with AI abilities that allows you to quickly prototype any CRM.  The default CRM is based on a typical business CRM but the flexibility of dynamic modules, fields, subpanels allows prototyping of any number of different tyes of CRMs.
+- Metadata-driven modules, fields, relationships, subpanels, datalets, permissions, and seed data.
+- Laravel 12 backend with Vue 3, Inertia, Tailwind CSS, DaisyUI, and Heroicons.
+- AI CRM builder and AI Assist with configurable chat/image providers.
+- OpenRouter, OpenAI, and Anthropic chat provider support.
+- OpenRouter and OpenAI image generation support.
+- Import and export support for XLSX, CSV, TSV, ODS, XLS, and HTML.
+- Module permissions for read, write, import, and export.
+- Field-level relationships, multi-module relationships, audit logs, workflow stages, charts, calendars, and connector templates.
+- Curated default connector template set with focused starter endpoints.
 
-## Features
+## Screenshots
 
-- [Metadata creations of  modules, fields, relationships, subpanels, datalets, seeding]
-- [Ability to Import/Export in 6 different formats (XLSX, CSV, TSV, ODS, XLS, HTML]
-- [25 different input types, <b>Laravel</b> field validation, <b>Maska</b> field masking]
-- [26 themes with light and dark themes available]
-- [Module based Role permissions (read, write, import, export)]
-- [Calendar, Audit logs, Vue3 Charts, Convertable modules, Related Fields (related to another module)]
-- [Field Level Relationships, Module Level Relationships 2 way, 3 way, 4 way, ...]
-- [Build-in API, Workflow]
-- [150 Connectors with 5 Endpoints each]
-## Created With
+<p>
+  <a href="https://www.iceburg.ca/images/screenshot1.jpg" target="_blank"><img src="https://www.iceburg.ca/images/screenshot1.jpg" width="90" alt="Iceburg CRM screenshot 1"></a>
+  <a href="https://www.iceburg.ca/images/screenshot2.jpg" target="_blank"><img src="https://www.iceburg.ca/images/screenshot2.jpg" width="90" alt="Iceburg CRM screenshot 2"></a>
+  <a href="https://www.iceburg.ca/images/screenshot3.jpg" target="_blank"><img src="https://www.iceburg.ca/images/screenshot3.jpg" width="90" alt="Iceburg CRM screenshot 3"></a>
+  <a href="https://www.iceburg.ca/images/screenshot4.jpg" target="_blank"><img src="https://www.iceburg.ca/images/screenshot4.jpg" width="90" alt="Iceburg CRM screenshot 4"></a>
+  <a href="https://www.iceburg.ca/images/screenshot5.jpg" target="_blank"><img src="https://www.iceburg.ca/images/screenshot5.jpg" width="90" alt="Iceburg CRM screenshot 5"></a>
+</p>
 
-Iceburg CRM is created with:
-- [Vue 3](https://vuejs.org/) for the frontend
-- [Laravel 10](https://laravel.com/) for the backend
-- [Tailwinds](https://tailwindui.com/) with the DaisyUI plugin
-- [Inertia](https://inertiajs.com/) for routing
-- [heroicons](https://heroicons.com)
+## Requirements
 
+Iceburg CRM currently targets Laravel 12.
 
-## Installation
-### Quick Install
-```php
-composer create-project iceburgcrm/iceburgcrm iceburgcrm
+| Dependency | Version |
+| --- | --- |
+| PHP | 8.2 or newer |
+| Composer | 2.x |
+| Node.js | Current LTS recommended |
+| npm | Bundled with Node.js |
+| Database | MySQL 8.0 recommended |
 
-// Default
-php artisan iceburg:seed
+Laravel 12 supports PHP 8.2 and newer. If you are running Iceburg without Docker, make sure your CLI PHP and web server PHP are both 8.2+.
 
-// Convert Existing DB to CRM
-php artisan iceburg:seed --type=adminpanel 
+Required PHP extensions include `bcmath`, `exif`, `gd`, `mbstring`, `pdo_mysql`, and `zip`.
 
-// Use AI
-php artisan iceburg:seed --type=ai --prompt="Create a stamp collecting crm"
-```
+## Quick Start With Docker
 
+Docker is the easiest way to run Iceburg locally because the app and MySQL services are already wired together.
 
-### Ways to Install
-- <b>Default</b> - Install the default Classic IceburgCRM:  55 Modules, 282 Fields, 43 Relationships,  24 Subpanels, 5 Datalets
-```php
-php artisan iceburg:create
-```
-- <b>AdminPanel</b> - Point to an existing Database and turn it into a CRM.  Type is requires but additional parameters are optional.  If not supplied will use existing connection details.
-```php
-php artisan iceburg:create --type=adminpanel --connection_host=123.123.123.123 --connection_port=3306 --connection_database=databasename --connection_username=dbuser --connection_password=dbpassword --connection_charset=utf8mb4 --connection_collation=utf8mb4_unicode_ci
-```
-Example of a live wordpress database converted to a CRM.
-[Wordpress CRM](https://wordpress.iceburg.ca)  
-[Wordpress Website](https://wordpresssite.iceburg.ca)
-
-- <b>Core</b> - Install only the core files.  This will create a blank CRM template.
-```php
-php artisan iceburg:create --type=core
-```
-- <b>Custom</b> - Add your own modules, field, relationships, subpanels and generate it.
-```php
-php artisan iceburg:create --type=custom
-```
-- <b>AI</b> - Describe the CRM you want and let AI create it.  Including the logo parameter will create an unique image for your login page.  ChatGPT 3.5 is used as the default.
-  Dalle-3 is used for image generation.  Cost: 4 cents per crm with logo or a 1 penny without the logo.
-```php
-php artisan iceburg:create --type=ai --prompt="Create a stamp collecting crm" logo="yes"
-```
-Each AI generation is different.  Based on the prompt above here are three CRM's created:
-[Stamp Collectors CRM 1](https://postagestamps.iceburg.ca/)
-[Stamp Collectors CRM 2](https://postagestamps2.iceburg.ca/)
-[Stamp Collectors CRM 3](https://postagestamps3.iceburg.ca/)
-
-
-
-<i>Note:  Connection parameters, can be used with different types of installation.</i>
-
-
-
-### Full Installation
-
-
-If you do not have a server available visit [digitalocean](https://www.digitalocean.com/?refcode=a52593511cc4) and get $200 dollars in free credit
-
-If not installed, please install [composer](https://getcomposer.org/download/)
-
-If not installed, please install [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm/)
-
-```php
-composer create-project iceburgcrm/iceburgcrm iceburgcrm
-
-or 
-
+```bash
 git clone git@github.com:iceburgcrm/iceburgcrm.git
+cd iceburgcrm
+cp .env.example .env
+```
 
+On Windows PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Optional: add AI keys before starting Docker if you want AI generation or AI Assist.
+
+```dotenv
+AI_PROVIDER=openrouter
+AI_CHAT_MODEL=openai/gpt-4o-mini
+AI_IMAGE_PROVIDER=openrouter
+AI_IMAGE_MODEL=openai/gpt-image-1
+
+OPENROUTER_API_KEY=YOUR_OPENROUTER_KEY
+```
+
+Start the stack:
+
+```bash
+docker compose up -d --build
+```
+
+Create the default CRM:
+
+```bash
+docker compose exec app php artisan iceburg:create
+```
+
+Open the app:
+
+```text
+http://localhost:8080
+```
+
+The Docker entrypoint will create `.env` if it is missing, configure the container database connection, install Composer dependencies, wait for MySQL, run package discovery, and clear Laravel config.
+
+## Local Development Without Docker
+
+Use this path when you already have PHP 8.2+, Composer, Node.js, and MySQL installed locally.
+
+```bash
+git clone git@github.com:iceburgcrm/iceburgcrm.git
+cd iceburgcrm
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+```
+
+You can also start from the Composer package:
+
+```bash
+composer create-project iceburgcrm/iceburgcrm iceburgcrm
 cd iceburgcrm
 ```
 
-Edit your database environment variables
-```php
-vim .env
+Configure your local database in `.env`:
 
-DB_HOST=
-DB_PORT=
-DB_USERNAME=
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=iceburg
+DB_USERNAME=root
 DB_PASSWORD=
-DB_DATABASE=
-
 ```
 
-Open permissions on the storage and
-```php
-sudo chown -R www-data:www-data /path/to/your/project/public
-sudo chown -R www-data:www-data /path/to/your/project/storage
+Create the database in MySQL, then create a CRM:
 
-
-Deploy
-```php
-sudo chmod 775 storage -R
+```bash
+php artisan iceburg:create
 ```
 
-## AI Assist (Optional)
-AI Assist will try to determine values for your current module by using the name, description of the module and the field.   It suggests for blank fields and provides a confirmation preview before you commit to saving.
+Build frontend assets:
+
+```bash
+npm run dev
 ```
-// Add your OPENAI KEY AND ORG ID TO your environment file to enable AI Assist
-// This will enable an AI ASSIST button in add or edit modules 
-// that will allow you to fill in any field with AI Assisted data
 
+For active frontend development:
 
-OPENAI_API_KEY=
+```bash
+npm run watch
+```
+
+Start the Laravel dev server:
+
+```bash
+php artisan serve
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
+For a production-style deploy, point your web server at `public/` and make sure `storage/` and `bootstrap/cache/` are writable by the web server user.
+
+## Login For Local Demo Data
+
+The default seed includes demo users for local development.
+
+| Email | Password |
+| --- | --- |
+| admin@iceburg.ca | admin |
+| user@iceburg.ca | user |
+| sales@iceburg.ca | sales |
+| accounting@iceburg.ca | accounting |
+| marketing@iceburg.ca | marketing |
+
+Change or disable seeded demo accounts before using the app outside a local/demo environment.
+
+## Creating CRMs
+
+The `iceburg:create` command builds the database structure and seed data for different CRM modes.
+
+### Default CRM
+
+Creates the default classic Iceburg CRM.
+
+```bash
+php artisan iceburg:create
+```
+
+With Docker:
+
+```bash
+docker compose exec app php artisan iceburg:create
+```
+
+### Core CRM
+
+Creates the core CRM tables and metadata for a blank starting point.
+
+```bash
+php artisan iceburg:create --type=core
+```
+
+### Custom CRM
+
+Runs your custom module, field, relationship, subpanel, and generation seeders.
+
+```bash
+php artisan iceburg:create --type=custom
+```
+
+### Admin Panel From Existing Database
+
+Point Iceburg at an existing database and generate a CRM-style admin panel around it.
+
+```bash
+php artisan iceburg:create \
+  --type=adminpanel \
+  --connection_host=127.0.0.1 \
+  --connection_port=3306 \
+  --connection_database=your_database \
+  --connection_username=your_user \
+  --connection_password=your_password \
+  --connection_charset=utf8mb4 \
+  --connection_collation=utf8mb4_unicode_ci
+```
+
+### AI Generated CRM
+
+Describe the CRM you want and let the configured provider generate the modules, fields, groups, relationships, and optional logo.
+
+```bash
+php artisan iceburg:create --type=ai --prompt="Create a sales CRM"
+```
+
+With a generated logo:
+
+```bash
+php artisan iceburg:create --type=ai --prompt="Create a sales CRM" --logo=yes
+```
+
+With Docker:
+
+```bash
+docker compose exec app php artisan iceburg:create --type=ai --prompt="Create a sales CRM" --logo=yes
+```
+
+Provider overrides:
+
+```bash
+php artisan iceburg:create --type=ai \
+  --provider=openrouter \
+  --model=openai/gpt-4o-mini \
+  --image_provider=openrouter \
+  --image_model=openai/gpt-image-1 \
+  --prompt="Create a sales CRM" \
+  --logo=yes
+```
+
+```bash
+php artisan iceburg:create --type=ai \
+  --provider=anthropic \
+  --model=claude-sonnet-4-20250514 \
+  --prompt="Create a stamp collecting CRM"
+```
+
+```bash
+php artisan iceburg:create --type=ai \
+  --provider=openai \
+  --model=gpt-4o-mini \
+  --image_provider=openai \
+  --image_model=gpt-image-1 \
+  --prompt="Create a real estate CRM" \
+  --logo=yes
+```
+
+Each AI run can produce a different CRM structure, so treat the output as a strong first draft that you can refine in the admin UI.
+
+## AI Configuration
+
+AI features are optional. Without provider credentials, the core CRM still runs normally.
+
+Default `.env` values:
+
+```dotenv
+AI_PROVIDER=openrouter
+AI_CHAT_MODEL=openai/gpt-4o-mini
+AI_IMAGE_PROVIDER=openrouter
+AI_IMAGE_MODEL=openai/gpt-image-1
+AI_IMAGE_SIZE=1024x1024
+AI_REQUEST_TIMEOUT=60
+```
+
+OpenRouter:
+
+```dotenv
+OPENROUTER_API_KEY=YOUR_OPENROUTER_KEY
+OPENROUTER_CHAT_MODEL=openai/gpt-4o-mini
+OPENROUTER_IMAGE_MODEL=openai/gpt-image-1
+OPENROUTER_HTTP_REFERER="${APP_URL}"
+OPENROUTER_APP_TITLE="${APP_NAME}"
+```
+
+OpenAI:
+
+```dotenv
+OPENAI_API_KEY=YOUR_OPENAI_KEY
 OPENAI_ORGANIZATION=
+OPENAI_CHAT_MODEL=gpt-4o-mini
+OPENAI_IMAGE_MODEL=gpt-image-1
 ```
 
-## API
-```
-Get Token
-curl -X POST localhost:8000/api/login -H "Content-Type: application/json" -d '{"email": "admin@iceburg.ca", "password": "admin"}
+Anthropic:
 
-Sample Return:
-{"token":"2|16ajbNyxwDhBUvupqLCSQSJyFV5d0IQao7Bwm2ch3b6e331b"}
-
-
-# 1. Get All CRM Modules
-curl -X GET http://localhost:8000/api/crm -H "Authorization: Bearer YOUR_TOKEN_HERE"
-
-Sample Return:
-[{"id":1,"name":"ice_users","label":"Users","description":"Users","status":1,"faker_seed":0,"create_table":0,"view_order":0,"admin":0,"parent_id":0,"primary":1,"primary_field":"id","icon":"UserPlusIcon","module_group_id":6,"created_at":null,"updated_at":null},{"id":2,"name":"ice_roles","label":"Roles","description":"Roles","status":1,"faker_seed":0,"create_table":0,"view_order":1,"admin":0,"parent_id":0,"primary":1,"primary_field":"id","icon":"CircleStackIcon","module_group_id":6,"created_at":null,"updated_at":null},
-
-
-# 2. Search CRM Data
-curl -X GET http://localhost:8000/api/crm/search \
--H "Authorization: Bearer YOUR_TOKEN_HERE" \
--H "Content-Type: application/json" \
--d '{"search_key": "value"}'
-
-Use the format of the search which can be seen on the network tab after you've completed a search in the page called search_data.
-
-This will take the users module for a name 'admin' and save the data to a text file.
-curl -X GET http://localhost:8000/api/crm/search -H "Authorization: Bearer 4|DPGVyKHEXoZiWT4kBQYdzC0uzw9EpcR0JeDhBUx6d2744c5c" -H "Content-Type: application/json" -d '{
-    "1__name": "admin",
-    "1__email": "undefined",
-    "1__role_id": "undefined",
-    "page": 1,
-    "per_page": 10,
-    "search_order": "asc",
-    "order_by": "",
-    "search_type": "module",
-    "module_id": 1,
-    "text_search_type": "fuzzy"
-}' > data.txt
-
-Sample output
-{"current_page":1,"data":[{"ice_users__name":"Admin","ice_users__profile_pic":"data:image\/jpg;base64,\/9j...
-
-# 3. Get a Specific CRM Module
-curl -X GET http://localhost:8000/api/crm/1 \
--H "Authorization: Bearer YOUR_TOKEN_HERE"
-
-Sample output
-{"id":1,"name":"ice_users","label":"Users","description":"Users","status":1,"faker_seed":0,"create_table":0,"view_order":0,"admin":0,"parent_id":0,"primary":1,"primary_field":"id","icon":"UserPlusIcon","module_group_id":6,"created_at":null,"updated_at":null}
-
-# 4. Update or Add a CRM Record
-curl -X PUT http://localhost:8000/api/crm/1 \
--H "Authorization: Bearer YOUR_TOKEN_HERE" \
--H "Content-Type: application/json" \
--d '{"field1": "new_value1", "field2": "new_value2"}'
-
-
-To update include the record id
-curl -X PUT http://localhost:8000/api/crm/9 \
--H "Authorization: Bearer 2|qXONV6OYboLruwcdBP3mL55XsEftujd5vogQ5EI9ebb51884" \
--H "Content-Type: application/json" \
--d '{"record_id": 1, "9__name": "Jacobs Ltd 22test"}'
-
-Output
-ID record saved
-
-To Add a new record do not include a record id
-curl -X PUT http://localhost:8000/api/crm/9 -H "Authorization: Bearer 2|qXONV6OYboLruwcdBP3mL55XsEftujd5vogQ5EI9ebb51884" -H "Content-Type: application/json" -d '{"9__name": "Jacobs Ltd test2"}'
-
-Output
-ID of new record
-
-# 5. Delete a Record in a CRM Module
-curl -X DELETE http://localhost:8000/api/crm/1/["module" or "relationship"] \
--H "Authorization: Bearer YOUR_TOKEN_HERE" \
--H "Content-Type: application/json" \
--d '{"record_ids": [1, 2, 3]}'
-
-curl -X DELETE http://localhost:8000/api/crm/2/module -H "Authorization: Bearer 2|16ajbNyxwDhBUvupqLCSQSJyFV5d0IQao7Bwm2ch3b6e331b" -H "Content-Type: application/json" -d '{"record_ids": [1, 2, 3]}' > a.txt
-
-
-
+```dotenv
+ANTHROPIC_API_KEY=YOUR_ANTHROPIC_KEY
+ANTHROPIC_CHAT_MODEL=claude-sonnet-4-20250514
+ANTHROPIC_VERSION=2023-06-01
 ```
 
+After changing AI settings in Docker, recreate the app container and clear config:
 
-## Relationships
-
-### Field Level Relationships
-
-IceburgCRM supports field level relationships.   A field level relationship could be a state field in an accounts module.  When added or searching you would select the value from the dropdown.
-
-In the database, the ID of the related module and field is stored.  When you export module or relationship data IceburgCRM substitutes the ids for the value in the related module.  When you import the reverse process happens.
-For example:   If you had a related State field and had the Alabama saved.  In the database you would see 1 in the accounts tables record.  In the ice_fields you would see that this field is a related type pointing to module with the id 17 (States module id is 17) and field id 2 (2nd field is the value field). 
-When you export by default you will be Alabama and when you import Alabama is replaced with 1 again.
-
-
-### Module Level Relationships
-
-IceburgCRM supports Unlimited relationships between modules.
-
-A typical CRM has a two way relationship between two modules.  For example Accounts have many contacts and contacts can have many accounts.
-
-IceburgCRM allows you to create relationships between 2, 3, 4 or more modules.
-
-Why would you need a relationship between more than 2 modules?
-Let's say you wanted to have a subpanel that stored when a contract was signed, who signed, what location.  A typical CRM will duplicate data or create new fields (that sit empty for all of the other records) or find some awkward method to force the data into a two way relationship.
-
-IceburgCRM allows you to relate a Contract module, Account module, Contact module, City module, State module, Country module without having to add a related field or worse a free text field.
-
-You can have multiple relationships and use them to create multiple subpanels for modules.  For example you may want an Account & Contact subpanel but you may also want an Account Contact Opportunity subpanel.
-
-You would use a relationship for a subpanel and then select the fields you want from any module.
-
-
-A contract module could have a relationship to an account, a contact, a location
-
-
-### Themes
-
-Out of the box these themes are available.  For more information or to try different themes visit (https://daisyui.com/docs/themes/)
-
+```bash
+docker compose up -d --force-recreate app
+docker compose exec app php artisan optimize:clear
 ```
-themes: [
-"light",
-"dark",
-"cupcake",
-"bumblebee",
-"emerald",
-"corporate",
-"synthwave",
-"retro",
-"cyberpunk",
-"valentine",
-"halloween",
-"garden",
-"forest",
-"aqua",
-"lofi",
-"pastel",
-"fantasy",
-"wireframe",
-"black",
-"luxury",
-"dracula",
-"cmyk",
-"autumn",
-"business",
-"acid",
-"lemonade",
-"night",
-"coffee",
-"winter",
-"dim",
-"nord",
-"sunset"],
+
+## Themes
+
+The default theme is `iceburgsaas`.
+
+Iceburg ships with custom DaisyUI themes and the standard DaisyUI theme set:
+
+```text
+iceburgsaas
+iceburgcorporate
+iceburgai
+light
+dark
+cupcake
+bumblebee
+emerald
+corporate
+synthwave
+retro
+cyberpunk
+valentine
+halloween
+garden
+forest
+aqua
+lofi
+pastel
+fantasy
+wireframe
+black
+luxury
+dracula
+cmyk
+autumn
+business
+acid
+lemonade
+night
+coffee
+winter
 ```
 
 ## Field Types
 
-You can customize and add your own field types with their own special properties.  Out of the box IceburgCRM has these:
-```
-tel
-currency
-checkbox
-password
-image
-video
-audio
-file
-number
-email
-url
-zip
-date
-related
+Iceburg fields define how module data is stored, validated, searched, imported, exported, and displayed.
+
+```text
 address
-textarea
+audio
+checkbox
 color
+currency
+date
+email
+file
+image
+number
+password
 radio
+related
+tel
 text
-```
-_Try the Color field type.  It will present a color picker._
-
-## Calender
-
-Fully customizable including colors and event hooks.  You can select, day, week or month for the calendar view.  The meetings module holds the data that powers the calendar.  Allows multiple appointments at the same time.  Click on an event to generate a popup.
-
-## Datalets
-
-Datalets are frontpage widgets.  They can take the form of a graph, table, or video or anything.  In the default IceburgCRM we provide a number of different graphs.  In the AI generated CRMs we provide information base datalets.
-
-Adding your own is easy.  Add the datalet to the datalets table, add your new data function in the backend and create your vue template. 
-
-## Workflow - Confortable Modules
-You can setup a workflow between modules.  A stage box will appear in the module detail screen showing you at what stage this record is in the workflow.  It also allows you to select other records in the workflow to examine what happened previously or later in the chain. 
-
-There a 5 module workflow setup in the default IceburgCRM.  You can modify the workflow in the seeding files or in the workflow table.
-
-Change these records in the ModuleSeeker file:
-```
-        ModuleConvertable::insert([
-        'primary_module_id' => Module::where('name', 'leads')->first()->id,
-        'module_id' => Module::where('name', 'contacts')->first()->id,
-        'level' => 1,
-        ]);
-
-        ModuleConvertable::insert([
-            'primary_module_id' => Module::where('name', 'contacts')->first()->id,
-            'module_id' => Module::where('name', 'accounts')->first()->id,
-            'level' => 2,
-        ]);
-
-        ModuleConvertable::insert([
-            'primary_module_id' => Module::where('name', 'accounts')->first()->id,
-            'module_id' => Module::where('name', 'quotes')->first()->id,
-            'level' => 3,
-        ]);
-
-        ModuleConvertable::insert([
-            'primary_module_id' => Module::where('name', 'quotes')->first()->id,
-            'module_id' => Module::where('name', 'opportunities')->first()->id,
-            'level' => 4,
-        ]);
-
-        ModuleConvertable::insert([
-            'primary_module_id' => Module::where('name', 'opportunities')->first()->id,
-            'module_id' => Module::where('name', 'contracts')->first()->id,
-            'level' => 5,
-        ]);
-
-        ModuleConvertable::insert([
-            'primary_module_id' => Module::where('name', 'contracts')->first()->id,
-            'module_id' => 0,
-            'level' => 6,
-        ]);
+textarea
+url
+video
+zip
 ```
 
-## Roles and Permission
+## Core Concepts
 
-IceburgCRM provides permissions by role and by module.  And allows you to set read, write, export import permissions.
+### Modules
 
+Modules are the primary data objects in a CRM: accounts, contacts, opportunities, projects, assets, tickets, or anything else your CRM needs.
 
-## Import / Export
+### Fields
 
+Fields belong to modules and control storage type, input type, labels, validation, masking, and relationship behavior.
 
-You have the ability to Import/Export in 6 different formats (XLSX, CSV, TSV, ODS, XLS, HTML].  Word is also available to be used but requires a system specific driver so it has been left out of the default options.
+### Relationships
 
+Iceburg supports field-level relationships and module-level relationships. Module relationships can connect two, three, four, or more modules, which lets you model richer workflows without forcing everything into a pairwise structure.
 
+### Subpanels
 
-## Custom Seeding
+Subpanels use relationships to show related records on a module detail page. A module can have multiple subpanels for different relationship paths.
 
-### Files explained
+### Datalets
 
-These files will be run in this sequence
+Datalets are dashboard widgets. They can display charts, tables, media, or custom Vue components backed by server-side data methods.
 
-####  DatabaseSeeder
-A database seeder file calls the remaining seeder files in sequence.  These must be run in sequence and data generated in the previous step may be required in the next step.
+### Workflow
 
-#### ModuleSeeder
+Workflow stages can connect modules into a progression, such as lead to contact to account to quote to opportunity to contract.
 
-This file creates the module records, module groups records and the module_convertable records (workflow)
+### Connectors
 
-#### FieldSeeder
+Connectors define external API integrations. The default seed includes a smaller curated set of connector templates with starter endpoints so new installs stay useful without being noisy.
 
-This file creates all of the fields and relates them to modules
+## API
 
-#### RelationshipSeeder
+Iceburg includes API routes protected by Laravel Sanctum.
 
-This file seeds the relationships between modules
+The examples below use the local Laravel server on port `8000`. If you are using Docker, replace `localhost:8000` with `localhost:8080`.
 
-#### GenerateSeeder
+Get a token:
 
-This file generates the default data for the modules.  It also adds the datalets, roles and permissions and any sample media.
+```bash
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@iceburg.ca", "password": "admin"}'
+```
 
-#### ModuleSubpanelSeeder
+Use the returned token:
 
-This file generates the subpanel data.  It needs to be run last.
+```bash
+curl http://localhost:8000/api/crm \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE"
+```
 
+Search CRM data:
 
+```bash
+curl -X GET http://localhost:8000/api/crm/search \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "module_id": 1,
+    "search_type": "module",
+    "text_search_type": "fuzzy",
+    "page": 1,
+    "per_page": 10
+  }'
+```
 
-## Default Iceburg CRM
+Save a module record:
 
+```bash
+curl -X PUT http://localhost:8000/api/crm/9 \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"9__name": "Example Account"}'
+```
 
-### Number of Modules: 55
+Delete module records:
 
+```bash
+curl -X DELETE http://localhost:8000/api/crm/2/module \
+  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
+  -H "Content-Type: application/json" \
+  -d '{"record_ids": [1, 2, 3]}'
+```
 
-### Primary Modules: 14
-- Accounts
-- Contacts
-- Contracts
-- Leads
-- Opportunities
-- Lineitems
-- Products
-- Campaigns
-- Cases
-- Documents
-- Notes
-- Projects
-- Groups
-- Quotes
+## Useful Commands
 
-### Number of Fields: 282
+```bash
+php artisan optimize:clear
+php artisan migrate
+php artisan iceburg:create
+php artisan iceburg:populate --amount=10 --module_id=9
+npm run dev
+npm run watch
+npm run production
+```
 
-### Number of Relationships: 43
+Docker equivalents:
 
+```bash
+docker compose exec app php artisan optimize:clear
+docker compose exec app php artisan migrate
+docker compose exec app php artisan iceburg:create
+docker compose logs -f app
+```
 
-### Number of Subpanels: 24
+## Troubleshooting
 
+### Service "app" is not running
 
-### 5 Datalets
-- [pie chart] Total Sales
-- [line graph] New Leads / Contacts / Accounts over 7 days
-- [pie chart] New Opportunities / Contracts / Quotes
-- [bar graph] Meeting (Today, 7 Days, 30 Days)
-- [pie chart] Orders this month
+Start or recreate the Docker stack:
 
+```bash
+docker compose up -d --build
+```
 
-### Admin
-- Settings
-- Permissions
-- Modules, Fields, Subpanels, Users, Datalet editing
+### Unknown database "iceburg"
 
+Make sure the MySQL container is healthy and the volume was initialized:
 
-### Roles
-- Accounting
-- Admin
-- HR
-- Marketing
-- Sales
-- Support
-- User
+```bash
+docker compose ps
+docker compose logs db
+```
 
-## hosted.iceburg.ca
-### Don't want to self install?  Create CRMs Online for free
-- Describe your CRM and build it with AI
-- Select from our premade CRM templates
-- Make any Database into a CRM
+If this is a disposable local database, reset the Docker volume and recreate the stack:
 
-[hosted.iceburgcrm.ca](https://hosted.iceburg.ca)
+```bash
+docker compose down -v
+docker compose up -d --build
+```
 
-## Templates
+### AI key is not visible inside Docker
 
-### Classic CRM
-<img src="https://demo.iceburg.ca/images/classic.jpg?rand=12346" alt="Classic CRM Icon" width="100" height="100">
-**Classic CRM. Accounts, Contacts, Contracts, LineItems, etc.**  
-[Preview](https://classic.iceburg.ca)
+Compose reads `.env` before creating the container. After adding keys, recreate the app container:
 
-### Rare Books CRM
-<img src="https://demo.iceburg.ca/images/rarebooks.jpg?rand=12346" alt="Rare Books CRM Icon" width="100" height="100">
-**A platform for sneaker enthusiasts to catalog their collections, track market values, manage trades or sales, and connect with other collectors.**  
-[Preview](https://rarebooks.iceburg.ca)
+```bash
+docker compose up -d --force-recreate app
+docker compose exec app php artisan optimize:clear
+docker compose exec app printenv OPENROUTER_API_KEY
+```
 
-### Wine Connoisseurs CRM
-<img src="https://demo.iceburg.ca/images/wine.jpg?rand=12346" alt="Wine CRM Icon" width="100" height="100"> 
-**For wine enthusiasts and sellers, offering cellar management, tasting notes, vintage tracking, and a community feature for sharing recommendations and organizing tastings.**  
-[Preview](https://wine.iceburg.ca)
+### AI provider returns unauthorized
 
-### Fitness Studio CRM
-<img src="https://demo.iceburg.ca/images/fitness.jpg?rand=12346" alt="Fitness CRM Icon" width="100" height="100"> 
-**Tailored for small to medium fitness studios, featuring membership management, class scheduling, fitness progress tracking for members, and integration with wearable tech for health data.**  
-[Preview](https://fitness.iceburg.ca)
+Check that the correct key is set for the selected provider and that the account has access to the selected model.
 
-### Professional Networking CRM
-<img src="https://demo.iceburg.ca/images/networking.jpg?rand=12346" alt="Networking CRM Icon" width="100" height="100">  
-**A niche CRM for professional networking organizations, offering event planning, member engagement tracking, mentorship program management, and job boards.**  
-[Preview](https://networking.iceburg.ca)
+### Frontend assets are missing
 
-### Crafting Supplies CRM
-<img src="https://demo.iceburg.ca/images/crafting.jpg?rand=12346" alt="Crafting Supplies CRM Icon" width="100" height="100"> 
-**For retailers and enthusiasts of crafting, offering inventory management, project tracking, supplier databases, and community features for sharing project ideas and tutorials.**  
-[Preview](https://crafting.iceburg.ca)
+Build the assets:
 
-### Gourmet Coffee Enthusiasts CRM
-<img src="https://demo.iceburg.ca/images/coffee.jpg?rand=12346" alt="Gourmet Coffee CRM Icon" width="100" height="100">  
-**A platform for coffee lovers to track their favorite beans, roasts, brewing methods, and café experiences, including a marketplace for specialty beans and equipment.**  
-[Preview](https://coffee.iceburg.ca)
+```bash
+npm install
+npm run dev
+```
 
-### BeeKeeping CRM
-<img src="https://demo.iceburg.ca/images/beekeeping.jpg?rand=12346" alt="BeeKeeping CRM Icon" width="100" height="100"> 
-**For beekeepers to track hive health, manage honey production records, schedule maintenance, and engage with local and online beekeeping communities.**  
-[Preview](https://beekeeping.iceburg.ca)
+## Example CRM Templates
 
-### Wordpress CRM  
-<img src="https://demo.iceburg.ca/images/wordpress.jpg?rand=12346" alt="Wordpress CRM Icon" width="100" height="100">
-**This is a premade instance of a wordpress database with iceburgcrm. Once created, download and point your wordpress files.**  Changing the data in the CRM will change the wordpress website.
-[CRM Preview](https://wordpress.iceburg.ca)  
-[Wordpress Website](https://wordpresssite.iceburg.ca)
+- [Classic CRM](https://classic.iceburg.ca): accounts, contacts, contracts, line items, opportunities, quotes, and core business CRM modules.
+- [Rare Books CRM](https://rarebooks.iceburg.ca): catalog collections, authors, valuations, acquisitions, and lending.
+- [Wine Connoisseurs CRM](https://wine.iceburg.ca): cellar management, tasting notes, vintages, recommendations, and tastings.
+- [Fitness Studio CRM](https://fitness.iceburg.ca): memberships, class scheduling, member progress, and studio operations.
+- [Professional Networking CRM](https://networking.iceburg.ca): events, member engagement, mentorship, and job boards.
+- [Crafting Supplies CRM](https://crafting.iceburg.ca): inventory, projects, suppliers, and tutorial tracking.
+- [Coffee Enthusiasts CRM](https://coffee.iceburg.ca): beans, roasts, brewing methods, tastings, and equipment.
+- [WordPress CRM](https://wordpress.iceburg.ca): CRM-style management around a WordPress database.
+
+## Security
+
+If you discover a security vulnerability in Iceburg CRM, please email [security@iceburg.ca](mailto:security@iceburg.ca).
+
+Do not commit `.env`, API keys, database passwords, bearer tokens, generated secrets, or production credentials.
+
+## License
+
+Iceburg CRM is open-source software licensed under the [GNU AGPL v3](https://www.gnu.org/licenses/agpl-3.0.en.html). See [LICENSE](LICENSE).
+
+## Related Projects
+
+A Python Django version is available at [iceburgcrm/iceburgcrmpython](https://github.com/iceburgcrm/iceburgcrmpython).
 
 ## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=iceburgcrm/iceburgcrm&type=Date)](https://star-history.com/#iceburgcrm/iceburgcrm&Date)
-
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Iceburg CRM, please send an e-mail to [security@iceburg.ca](mailto:security@iceburg.ca).
-
-
-## License
-
-The Iceburg CRM is open-sourced software licensed under the [AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html)
-
-## Other Frameworks
-A [Python Django Version](https://github.com/iceburgcrm/iceburgcrmpython) is available

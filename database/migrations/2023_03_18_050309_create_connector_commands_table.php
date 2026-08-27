@@ -10,11 +10,13 @@ return new class extends Migration
     {
         Schema::create('ice_connector_commands', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('connector_id')->default(0);
             $table->string('name');          // Display name
             $table->string('class_name');   // Maps to method in Connector class
             $table->string('method_name');   // Maps to method in Connector class
             $table->text('description')->nullable();
-            $table->text('endpoint_id')->default(0);
+            $table->integer('endpoint_id')->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->text('last_run_data')->nullable();
             $table->string('last_run_status')->nullable();  // success / fail
             $table->string('last_run_message')->nullable();
@@ -32,4 +34,3 @@ return new class extends Migration
         Schema::dropIfExists('ice_connector_commands');
     }
 };
-

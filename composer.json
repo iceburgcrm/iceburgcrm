@@ -1,9 +1,9 @@
 {
     "name": "iceburgcrm/iceburgcrm",
     "type": "project",
-    "description": "Iceburg CRM is a metadata driven CRM that allows you to quickly prototype any CRM. The default CRM is based on a typical business CRM but the flexibility of dynamic modules, fields, subpanels allows prototyping of any number of different tyes of CRMs.",
+    "description": "Iceburg CRM is a metadata-driven CRM that allows you to quickly prototype different types of CRMs with dynamic modules, fields, relationships, and subpanels.",
     "keywords": ["framework", "crm", "vue3", "inertia", "iceburg", "iceburg crm", "cms", "composition api", "ai", "metadata", "laravel", "daisyui", "vue", "tailwinds", "llm"],
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "authors": [
         {
             "name": "Robert Devenyi",
@@ -16,29 +16,27 @@
         "docs": "http://docs.iceburg.ca"
     },
     "require": {
-        "php": "^8.1.0",
+        "php": "^8.2",
         "guzzlehttp/guzzle": "^7.2",
+        "fakerphp/faker": "^1.23",
         "iamcal/sql-parser": "^0.4.0",
-        "inertiajs/inertia-laravel": "^0.6.9",
-        "laravel/framework": "^10.0",
-        "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.7",
+        "inertiajs/inertia-laravel": "^2.0",
+        "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.10",
         "maatwebsite/excel": "^3.1",
-        "openai-php/laravel": "^0.8.1",
         "phpoffice/phpspreadsheet": "^1.9",
         "psr/simple-cache": "^2.0",
-        "tightenco/ziggy": "^1.0",
+        "tightenco/ziggy": "^2.0",
         "vlucas/phpdotenv": "^5.6"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.7",
-        "fakerphp/faker": "^1.9.1",
-        "laravel/breeze": "^1.9",
-        "laravel/pint": "^1.8",
-        "laravel/sail": "^1.0.1",
+        "barryvdh/laravel-debugbar": "^3.16",
+        "laravel/pint": "^1.23",
+        "laravel/sail": "^1.41",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^11.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -80,6 +78,9 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
+        "platform": {
+            "php": "8.2.0"
+        },
         "allow-plugins": {
             "php-http/discovery": true
         }

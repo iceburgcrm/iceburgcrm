@@ -20,6 +20,7 @@ class Search extends Model
     public static function getData($request, $replaceIds = false)
     {
         $request = self::initializeSearch($request);
+        self::authorizeSearch($request);
 
         if ($request['search_type'] == 'relationship') {
             [$results, $order_by_field] = self::relationshipSearch($request);
@@ -28,29 +29,21 @@ class Search extends Model
             [$results, $order_by_field] = self::ModuleSearch($request);
         }
 
-        foreach ($request as $key => $value) {
-            $pieces = explode('__', $key);
+        $filterFields = self::filterFields($request);
+        foreach (self::searchFilters($request) as $filter) {
+            $field = $filterFields->get($filter['module_id'].'__'.$filter['name']);
 
-            if (isset($pieces[0]) && intval($pieces[0]) > 0 && ($value != '' && $value != 'undefined')) {
-                $field = Field::where('module_id', intval($pieces[0]))
-                    ->where('name', 'like', $pieces[1])
-                    ->with('module')
-                    ->firstOrFail();
-                $operator = '=';
-                if ($field->data_type == 'string') {
-                    $operator = 'LIKE';
-                }
-                if ($field->input_type == 'checkbox') {
-                    if ($value == 'true') {
-                        $value = 1;
-                    } else {
-                    $value = 0;
-                    }
-                }
-                $results->where($field->module->name.'.'.$pieces[1], $operator, $value);
-
+            if (! $field) {
+                abort(404);
             }
 
+            $value = $filter['value'];
+            $operator = $field->data_type == 'string' ? 'LIKE' : '=';
+            if ($field->input_type == 'checkbox') {
+                $value = $value == 'true' ? 1 : 0;
+            }
+
+            $results->where($field->module->name.'.'.$field->name, $operator, $value);
         }
         if (! isset($request['order_by']) || empty($request['order_by'])) {
             $request['order_by'] = $order_by_field;
@@ -58,14 +51,80 @@ class Search extends Model
 
         $pieces = explode('__', $request['order_by']);
         if (isset($pieces[1]) && $pieces[0] && is_numeric($pieces[0])) {
-            $moduleOrderBy = Module::where('id', intval($pieces[0]))->first();
-            $request['order_by'] = $moduleOrderBy->name.'.'.$pieces[1];
+            $moduleName = $filterFields
+                ->firstWhere('module_id', intval($pieces[0]))
+                ?->module
+                ?->name;
+
+            if (! $moduleName) {
+                $moduleName = Module::where('id', intval($pieces[0]))->value('name');
+            }
+
+            $request['order_by'] = $moduleName.'.'.$pieces[1];
         }
 
         return $results
             ->orderBy($request['order_by'], $request['search_order'])
             ->paginate($request['per_page']);
 
+    }
+
+    private static function searchFilters($request): array
+    {
+        $filters = [];
+
+        foreach ($request as $key => $value) {
+            $pieces = explode('__', $key);
+
+            if (isset($pieces[1]) && intval($pieces[0]) > 0 && ($value != '' && $value != 'undefined')) {
+                $filters[] = [
+                    'module_id' => intval($pieces[0]),
+                    'name' => $pieces[1],
+                    'value' => $value,
+                ];
+            }
+        }
+
+        return $filters;
+    }
+
+    private static function filterFields($request)
+    {
+        $filters = self::searchFilters($request);
+
+        if (empty($filters)) {
+            return collect();
+        }
+
+        return Field::whereIn('module_id', array_unique(array_column($filters, 'module_id')))
+            ->whereIn('name', array_unique(array_column($filters, 'name')))
+            ->with('module')
+            ->get()
+            ->keyBy(fn ($field) => $field->module_id.'__'.$field->name);
+    }
+
+    protected static function authorizeSearch($request): void
+    {
+        if ($request['search_type'] == 'relationship') {
+            if (isset($request['relationship_name']) && strlen($request['relationship_name']) > 0) {
+                $relationship = Relationship::where('name', $request['relationship_name'])->firstOrFail();
+            } else {
+                $relationship = Relationship::where('id', $request['relationship_id'] ?? 0)->firstOrFail();
+            }
+
+            $moduleIds = RelationshipModule::where('relationship_id', $relationship->id)->pluck('module_id');
+            foreach ($moduleIds as $moduleId) {
+                if (! Permission::checkPermission($moduleId, 'read')) {
+                    abort(403, 'No Access');
+                }
+            }
+
+            return;
+        }
+
+        if (! Permission::checkPermission((int) ($request['module_id'] ?? 0), 'read')) {
+            abort(403, 'No Access');
+        }
     }
 
     public static function initializeSearch($request)
@@ -99,14 +158,16 @@ class Search extends Model
         } else {
             $relationship = Relationship::where('id', $request['relationship_id'])->firstOrFail();
         }
-        $modules = RelationshipModule::where('relationship_id', $relationship->id)->pluck('module_id');
+        $modules = RelationshipModule::where('relationship_id', $relationship->id)
+            ->with('module.fields')
+            ->get();
         $results = DB::table($relationship->name);
 
         $table_primary_ids = '';
-        foreach ($modules as $module_id) {
-            $joinModule = Module::where('id', $module_id)->firstOrFail();
-            $fields = Field::where('module_id', $joinModule->id)->with('module')->with('related_module')->get();
-            foreach ($fields as $field) {
+        foreach ($modules as $relationshipModule) {
+            $joinModule = $relationshipModule->module;
+
+            foreach ($joinModule->fields as $field) {
                 $selectFields[] = $joinModule->name.'.'.$field->name.' as '.$joinModule->name.'__'.$field->name;
             }
 
@@ -132,7 +193,7 @@ class Search extends Model
         if (! isset($request['order_by']) || $request['order_by'] == '') {
             $request['order_by'] = $module->primary_field;
         }
-        $fields = Field::where('module_id', $module->id)->with('module')->with('related_module')->get();
+        $fields = Field::where('module_id', $module->id)->get();
         foreach ($fields as $field) {
             if (empty($request['typeahead']) || (in_array($field->input_type, ['text', 'tel', 'email']))) {
                 $selectFields[] = $module->name.'.'.$field->name.' as '.$module->name.'__'.$field->name;

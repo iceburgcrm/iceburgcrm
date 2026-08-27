@@ -7,19 +7,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB as DB;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Laravel\Facades\OpenAI;
+use App\Services\AI\AIManager;
+use RuntimeException;
 
 class AICreate extends Model
 {
     use HasFactory;
 
-    private static mixed $model = 'gpt-3.5-turbo';
+    private static mixed $model = null;
+    private static mixed $provider = null;
+    private static mixed $imageModel = null;
+    private static mixed $imageProvider = null;
     protected static mixed $retry = 0;
 
 
-    public static function process($prompt, $model = "gpt-3.5-turbo", $logo = false, $seedAmount = 0, $seedType = "")
+    public static function process($prompt, $model = null, $logo = false, $seedAmount = 0, $seedType = "", $provider = null, $imageModel = null, $imageProvider = null)
     {
-        self::$model=$model;
+        self::$model=$model ?: null;
+        self::$provider=$provider ?: null;
+        self::$imageModel=$imageModel ?: null;
+        self::$imageProvider=$imageProvider ?: null;
         if ($logo) {
             Log::info('Creating logo');
             self::createLogo($prompt);
@@ -84,7 +91,7 @@ class AICreate extends Model
         }
     }
 
-    public static function createNextRecord($data=[], $moduleId)
+    public static function createNextRecord($data=[], $moduleId = 0)
     {
 
         if(isset($data) && isset($data['data'])){
@@ -151,7 +158,7 @@ class AICreate extends Model
         $response=self::getData($txt);
 
 
-        return json_decode($response->choices[0]->message->content, true);
+        return self::decodeJsonResponse($response, 'next record');
 
     }
 
@@ -197,20 +204,18 @@ class AICreate extends Model
     }
     public static function createLogo($data)
     {
-        $txt="give me a dalle-3 prompt for a crm using the prompt for inspiration and the crm topic.  The artwork should be clean, with no text, allowing the imagery to speak for itself";
+        $txt="give me an image generation prompt for a crm using the prompt for inspiration and the crm topic.  The artwork should be clean, with no text, allowing the imagery to speak for itself";
         $txt.="Prompt: " . $data;
         $response=self::getData($txt);
-        $image_prompt=$response->choices[0]->message->content;
+        $image_prompt=$response;
         $image_prompt.=" Imagine a sleek, modern dashboard that represents the heart of a CRM system, designed to streamline and enhance customer relationships for businesses. This image should capture the essence of technology at the service of human connections, blending elements of advanced digital interfaces with symbols of personal interaction. Picture a background with a gradient of calming blues and vibrant greens, symbolizing growth and trust. Foreground elements include a network of interconnected dots and lines, representing a digital network, subtly shaped like a handshake or a heart, to symbolize personal connections and the warmth of human relationships. Include icons that represent communication, such as speech bubbles, email envelopes, and phone symbols, seamlessly integrated into the network. The overall feel should be futuristic yet accessible, inviting viewers to see the CRM as a tool that bridges the gap between technology and personal touch in business relationships. The artwork should be clean, with no text, allowing the imagery to speak for itself.";
-        $response=self::getImageData($image_prompt);
-        if(isset($response)){
-            $imageData=file_get_contents($response->data[0]['url']);
-            Setting::where('name', 'logo')->update(['value'=>'1', 'additional_data' => base64_encode($imageData)]);
+        $imageData=self::getImageData($image_prompt);
+        if(isset($imageData)){
+            Setting::where('name', 'logo')->update(['value'=>'1', 'additional_data' => $imageData]);
         }
         else {
-            $response=self::getImageData($image_prompt);
-            $imageData=file_get_contents($response->data[0]['url']);
-            Setting::where('name', 'logo')->update(['value'=>'1', 'additional_data' => base64_encode($imageData)]);
+            $imageData=self::getImageData($image_prompt);
+            Setting::where('name', 'logo')->update(['value'=>'1', 'additional_data' => $imageData]);
         }
     }
 
@@ -235,7 +240,9 @@ class AICreate extends Model
         json encode the array.  Provide no text.
         ";
         $response=self::getData($txt);
-        return json_decode($response->choices[0]->message->content, true);
+        $decoded = self::decodeJsonResponse($response, 'settings');
+
+        return $decoded['settings'] ?? $decoded;
 
     }
 
@@ -274,7 +281,7 @@ Update the existing module list with the new module_group_id
          json encode the array output.  Provide no text or explaining.";
 
         $response=self::getData($txt);
-        return json_decode($response->choices[0]->message->content, true);
+        return self::decodeJsonResponse($response, 'module groups');
 
     }
 
@@ -356,7 +363,7 @@ Do not include any additional text explaining.  Try to add at least 15 modules o
 
         $response=self::getData($txt);
 
-        return json_decode($response->choices[0]->message->content, true);
+        return self::decodeJsonResponse($response, 'modules');
     }
 
 
@@ -394,7 +401,9 @@ output as a json encoded object.  No text.  No explaining.";
 
         $response=self::getData($txt);
 
-        return json_decode($response->choices[0]->message->content, true);
+        $decoded = self::decodeJsonResponse($response, 'fields for '.$module->name);
+
+        return $decoded['fields'] ?? $decoded;
     }
 
     public static function getRelationships(){
@@ -437,44 +446,174 @@ Try to make 2 or 3 relationships for each module
 
         $response=self::getData($txt);
 
-        return json_decode($response->choices[0]->message->content, true);
+        $decoded = self::decodeJsonResponse($response, 'relationships');
+
+        return $decoded['relationships'] ?? $decoded;
         }
 
 
     private static function getData($content)
     {
-        return OpenAI::chat()->create([
-            'model' => self::$model,
-            'messages' => [
-                ['role' => 'user', 'content' => $content],
-            ],
+        $content .= "\n\nWhen this prompt asks for JSON, return strict valid JSON only: double-quoted keys and strings, no Markdown fences, no comments, and no explanatory text.";
+
+        return app(AIManager::class)->chat($content, self::$model, self::$provider);
+    }
+
+    private static function decodeJsonResponse(string $response, string $context): array
+    {
+        $candidates = [];
+        $trimmed = trim($response);
+
+        if ($trimmed !== '') {
+            $candidates[] = $trimmed;
+        }
+
+        if (preg_match('/```(?:json)?\s*(.*?)```/is', $response, $matches)) {
+            $candidates[] = trim($matches[1]);
+        }
+
+        foreach (['{' => '}', '[' => ']'] as $open => $close) {
+            $start = strpos($response, $open);
+            $end = strrpos($response, $close);
+
+            if ($start !== false && $end !== false && $end > $start) {
+                $candidates[] = substr($response, $start, $end - $start + 1);
+            }
+        }
+
+        foreach (array_unique($candidates) as $candidate) {
+            $decoded = json_decode($candidate, true);
+
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        Log::warning('AI create returned invalid JSON', [
+            'context' => $context,
+            'response_preview' => substr($response, 0, 1000),
+            'json_error' => json_last_error_msg(),
         ]);
+
+        throw new RuntimeException('AI returned invalid JSON while generating '.$context.'. Check storage/logs/laravel.log for the response preview.');
     }
 
     private static function getImageData($content)
     {
-
-        return OpenAI::images()->create([
-            'model' => "dall-e-3",
-            'prompt' => $content,
-            'size' => "1024x1024",
-            'quality' => "standard",
-            'n' => 1,
-        ]);
+        return app(AIManager::class)->image($content, self::$imageModel, self::$imageProvider);
     }
 
 
 
     public static function createModuleGroups($data){
+        if (!isset($data['module_groups'], $data['modules']) || !is_array($data['module_groups']) || !is_array($data['modules'])) {
+            throw new RuntimeException('AI module group response must include module_groups and modules arrays.');
+        }
+
+        $groupIds = [];
+        $viewOrder = ((int) ModuleGroup::max('view_order')) + 1;
+
         foreach($data['module_groups'] as $moduleGroup)
         {
-            ModuleGroup::Insert($moduleGroup);
+            if (!is_array($moduleGroup)) {
+                continue;
+            }
+
+            $requestedId = isset($moduleGroup['id']) && is_numeric($moduleGroup['id']) ? (int) $moduleGroup['id'] : null;
+            $name = self::normalizeIdentifier($moduleGroup['name'] ?? $moduleGroup['label'] ?? 'group_'.$viewOrder);
+            $label = $moduleGroup['label'] ?? ucwords(str_replace('_', ' ', $name));
+            $existingGroup = $requestedId
+                ? ModuleGroup::where('id', $requestedId)->where('name', $name)->first()
+                : null;
+            $existingGroup ??= ModuleGroup::where('name', $name)->first();
+            $values = [
+                'name' => $name,
+                'label' => $label,
+                'view_order' => $moduleGroup['view_order'] ?? $viewOrder++,
+            ];
+
+            if ($existingGroup) {
+                ModuleGroup::where('id', $existingGroup->id)->update($values);
+                $groupId = $existingGroup->id;
+            } elseif ($requestedId && !ModuleGroup::where('id', $requestedId)->exists()) {
+                ModuleGroup::insert($values + ['id' => $requestedId]);
+                $groupId = $requestedId;
+            } else {
+                $groupId = ModuleGroup::insertGetId($values);
+            }
+
+            if ($requestedId) {
+                $groupIds[(string) $requestedId] = $groupId;
+            }
+
+            $groupIds[$name] = $groupId;
+            $groupIds[self::normalizeIdentifier($label)] = $groupId;
         }
 
         foreach($data['modules'] as $module)
         {
-            Module::where('id', $module['id'])->update(['module_group_id' => $module['module_group_id']]);
+            if (!is_array($module)) {
+                continue;
+            }
+
+            $moduleId = $module['id'] ?? $module[0] ?? null;
+            $moduleName = $module['name'] ?? $module['module_name'] ?? null;
+            $groupKey = $module['module_group_id']
+                ?? $module['group_id']
+                ?? $module['module_group_name']
+                ?? $module['group_name']
+                ?? $module['group']
+                ?? $module[1]
+                ?? null;
+
+            if (!$moduleId && $moduleName) {
+                $moduleId = Module::where('name', self::normalizeIdentifier($moduleName))->value('id');
+            }
+
+            $moduleGroupId = self::resolveGeneratedModuleGroupId($groupKey, $groupIds);
+
+            if (!$moduleId || !$moduleGroupId) {
+                Log::warning('Skipping AI module group assignment with missing module or group', [
+                    'module' => $module,
+                    'resolved_module_id' => $moduleId,
+                    'resolved_module_group_id' => $moduleGroupId,
+                ]);
+                continue;
+            }
+
+            Module::where('id', $moduleId)->update(['module_group_id' => $moduleGroupId]);
         }
+    }
+
+    private static function resolveGeneratedModuleGroupId(mixed $groupKey, array $groupIds): ?int
+    {
+        if ($groupKey === null || $groupKey === '') {
+            return null;
+        }
+
+        $directKey = (string) $groupKey;
+        if (isset($groupIds[$directKey])) {
+            return (int) $groupIds[$directKey];
+        }
+
+        $normalizedKey = self::normalizeIdentifier($directKey);
+        if (isset($groupIds[$normalizedKey])) {
+            return (int) $groupIds[$normalizedKey];
+        }
+
+        if (is_numeric($groupKey) && ModuleGroup::where('id', (int) $groupKey)->exists()) {
+            return (int) $groupKey;
+        }
+
+        return ModuleGroup::where('name', $normalizedKey)->value('id');
+    }
+
+    private static function normalizeIdentifier(string $value): string
+    {
+        $value = strtolower(trim($value));
+        $value = preg_replace('/[^a-z0-9]+/', '_', $value);
+
+        return trim((string) $value, '_');
     }
 
     public static function createModules($data)
@@ -516,7 +655,7 @@ Try to make 2 or 3 relationships for each module
         self::$retry=0;
     }
 
-    public static function checkFields($data=[], $moduleId)
+    public static function checkFields($data=[], $moduleId = 0)
     {
         $output=[];
 

@@ -254,7 +254,7 @@ class GenerateSeeder extends Seeder
         Log::info('Generating Settings');
         Setting::insert([
             'name' => 'theme',
-            'value' => 'corporate',
+            'value' => 'iceburgsaas',
         ]);
 
         Setting::insert([
@@ -298,15 +298,20 @@ class GenerateSeeder extends Seeder
     {
         $connectorId = Connector::insertGetId([
             'name' => 'joke of the day',
-            'class' => 'jokes',
             'base_url' => 'https://official-joke-api.appspot.com',
+            'auth_type' => 'None',
+            'type' => 2,
+            'status' => 1,
         ]);
 
         ConnectorCommand::insert([
             'connector_id' => $connectorId,
             'name' => 'Random Joke',
+            'class_name' => 'jokes',
             'description' => 'Get a random jokei',
             'method_name' => 'random_joke',
+            'endpoint_id' => 0,
+            'status' => 1,
         ]);
     }
 
