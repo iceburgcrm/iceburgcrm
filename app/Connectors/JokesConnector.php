@@ -4,6 +4,10 @@ namespace App\Connectors;
 
 class JokesConnector extends BaseConnector {
 
+    public static function allowedCommands(): array {
+        return ['joke_without_endpoint', 'random_ten', 'random_ten_with_mapping'];
+    }
+
     protected function getHeaders(): array {
         return ['Content-Type' => 'application/json'];
     }

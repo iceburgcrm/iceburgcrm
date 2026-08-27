@@ -19,6 +19,10 @@ abstract class BaseConnector {
         $this->api_service = new ApiService();
     }
 
+    public static function allowedCommands(): array {
+        return [];
+    }
+
     protected function getHeaders(): array {
         return $this->endpoint ? json_decode($this->endpoint->headers, true) ?? [] : [];
     }

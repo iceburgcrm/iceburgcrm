@@ -4,6 +4,10 @@ namespace App\Connectors;
 
 class IceburgCRMConnector extends BaseConnector {
 
+    public static function allowedCommands(): array {
+        return ['backup_contacts', 'backup_accounts'];
+    }
+
     protected function getHeaders() {
         return array_merge(
             ['Content-Type' => 'application/json'],

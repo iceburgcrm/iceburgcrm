@@ -34,13 +34,19 @@ class ModuleSubpanel extends Model
         foreach ($subPanels as $subPanel) {
             $data = [];
             $modules = explode(',', $subPanel->relationship->modules);
-            $subPanelModule = Module::find($subPanel->module_id)->firstOrFail();
+            $subPanelModule = $subPanel->module;
+
             if (count($modules) > 0) {
+                $joinModules = Module::whereIn('id', $modules)->get()->keyBy('id');
                 $relationshipQuery = DB::table($subPanel->relationship->name);
 
                 $table_primary_ids = '';
                 foreach ($modules as $module_id) {
-                    $joinModule = Module::where('id', $module_id)->first();
+                    $joinModule = $joinModules->get((int) $module_id);
+                    if (! $joinModule) {
+                        continue;
+                    }
+
                     $relationshipQuery->join($joinModule->name, $subPanel->relationship->name.'.'.$joinModule->name.'_id', '=', $joinModule->name.'.id');
                     $table_primary_ids .= ', '.$joinModule->name.'.id as '.$joinModule->name.'_row_id';
                 }
@@ -53,23 +59,7 @@ class ModuleSubpanel extends Model
                     ->get();
             }
 
-            $subPanelFields = [];
-            $subPanelFieldData = explode(',', $subPanel->subpanel_fields);
-
-            foreach ($subPanelFieldData as $fields) {
-                $data_part = explode(' as ', $fields);
-                if (isset($data_part[1])) {
-                    $field = explode('__', $data_part[1]);
-                }
-                $module = Module::where('name', strtolower(ucfirst($field[0])))->first();
-                if ($module) {
-                    $subPanelFields[] = Field::where('name', $field[1])
-                        ->where('module_id', $module->id)
-                        ->with('module')
-                        ->with('related_module')
-                        ->first();
-                }
-            }
+            $subPanelFields = self::selectAliasesToFields($subPanel->subpanel_fields);
 
             $field_names = [];
             foreach (explode(',', $subPanel->subpanel_fields) as $value) {
@@ -144,26 +134,62 @@ class ModuleSubpanel extends Model
 
     public static function selectFieldToDatabaseField($fields)
     {
-        $fieldsArray = [];
-        $fieldsData = explode(',', $fields);
-        foreach ($fieldsData as $field) {
-            $field = explode('.', $field);
-            $module = Module::where('name', strtolower(ucfirst($field[0])))->first();
-            if ($module) {
-                $item = Field::where('name', $field[1])
-                    ->where('module_id', $module->id)
-                    ->with('module')
-                    ->with('related_module')
-                    ->first();
+        return self::fieldReferencesToFields(
+            collect(explode(',', $fields))
+                ->map(function ($field) {
+                    $parts = explode('.', trim($field));
 
-                if ($item) {
-                    $fieldsArray[] = (object) $item;
+                    return count($parts) === 2 ? $parts : null;
+                })
+                ->filter()
+                ->all()
+        );
+    }
+
+    private static function selectAliasesToFields(string $fields): array
+    {
+        $references = collect(explode(',', $fields))
+            ->map(function ($field) {
+                $dataPart = explode(' as ', trim($field));
+                if (! isset($dataPart[1])) {
+                    return null;
                 }
 
-            }
+                $parts = explode('__', trim($dataPart[1]));
+
+                return count($parts) === 2 ? $parts : null;
+            })
+            ->filter()
+            ->all();
+
+        return self::fieldReferencesToFields($references);
+    }
+
+    private static function fieldReferencesToFields(array $references): array
+    {
+        if (empty($references)) {
+            return [];
         }
 
-        return $fieldsArray;
+        $moduleNames = collect($references)
+            ->map(fn ($reference) => strtolower($reference[0]))
+            ->unique()
+            ->values();
+
+        $modules = Module::whereIn('name', $moduleNames)->get()->keyBy('name');
+        $fieldNames = collect($references)->map(fn ($reference) => $reference[1])->unique()->values();
+        $fields = Field::whereIn('module_id', $modules->pluck('id'))
+            ->whereIn('name', $fieldNames)
+            ->with('module')
+            ->with('related_module')
+            ->get()
+            ->keyBy(fn ($field) => $field->module->name.'.'.$field->name);
+
+        return collect($references)
+            ->map(fn ($reference) => $fields->get(strtolower($reference[0]).'.'.$reference[1]))
+            ->filter()
+            ->values()
+            ->all();
     }
 
     public static function parseRequest($request)

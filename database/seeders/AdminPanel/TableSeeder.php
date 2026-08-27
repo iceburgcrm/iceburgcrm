@@ -497,7 +497,7 @@ class TableSeeder extends Seeder
 
         DB::table('settings')->insert([
             'name' => 'theme',
-            'value' => 'light',
+            'value' => 'iceburgsaas',
         ]);
 
         DB::table('settings')->insert([

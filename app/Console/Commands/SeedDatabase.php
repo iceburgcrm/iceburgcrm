@@ -7,7 +7,6 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Dotenv\Dotenv;
 
 class SeedDatabase extends Command
@@ -18,8 +17,8 @@ class SeedDatabase extends Command
      * @var string
      */
 
-    protected $signature = 'iceburg:create {--type=default} {--prompt=} {--model=gpt-3.5-turbo} {--logo=} {--seed_amount=} {--seed_type=} {--module_id=} {--connection_host=} {--connection_port=} {--connection_database=} {--connection_username=} {--connection_password=} {--connection_charset=} {--connection_collation=}';
-    protected $description = 'Creates a crm.  iceburg:create {--type=default} {--prompt=} {--model=gpt-3.5-turbo} {--logo=} {--seed_amount=} {--seed_type=} {--module_id=} {--connection_host=} {--connection_port=} {--connection_database=} {--connection_username=} {--connection_password=} {--connection_charset=} {--connection_collation=}';
+    protected $signature = 'iceburg:create {--type=default} {--prompt=} {--provider=} {--model=} {--image_provider=} {--image_model=} {--logo=} {--seed_amount=} {--seed_type=} {--module_id=} {--connection_host=} {--connection_port=} {--connection_database=} {--connection_username=} {--connection_password=} {--connection_charset=} {--connection_collation=}';
+    protected $description = 'Creates a crm.  iceburg:create {--type=default} {--prompt=} {--provider=} {--model=} {--image_provider=} {--image_model=} {--logo=} {--seed_amount=} {--seed_type=} {--module_id=} {--connection_host=} {--connection_port=} {--connection_database=} {--connection_username=} {--connection_password=} {--connection_charset=} {--connection_collation=}';
 
     /**
      * The console command description.
@@ -39,7 +38,10 @@ class SeedDatabase extends Command
 
         $type = $this->option('type');
         $prompt = $this->option('prompt');
+        $provider = $this->option('provider');
         $model = $this->option('model');
+        $image_provider = $this->option('image_provider');
+        $image_model = $this->option('image_model');
         $logo = $this->option('logo');
         $seed_amount = $this->option('seed_amount');
         $seed_type = $this->option('seed_type');
@@ -54,7 +56,7 @@ class SeedDatabase extends Command
 
         $env = $_ENV;
 
-       Config::set('database.connections.custom', [
+        $customConnection = [
             'driver'    => 'mysql',
             'host'      => $connection_host ?: ($env['DB_HOST'] ?? '127.0.0.1'),
             'port'      => $connection_port ?: ($env['DB_PORT'] ?? '3306'),
@@ -66,18 +68,20 @@ class SeedDatabase extends Command
             'prefix'    => '',
             'strict'    => false,
             'engine'    => null,
-        ]);
+        ];
+
+        $this->ensureDatabaseExists($customConnection);
+
+        Config::set('database.connections.custom', $customConnection);
         Config::set('database.default', 'custom');
 
         DB::purge('custom');
         DB::reconnect('custom');
 
-        if (!Schema::connection('custom')->hasTable('migrations')) {
-            Artisan::call('migrate', [
-                '--force' => true,
-                '--database' => 'custom',
-            ]);
-        }
+        Artisan::call('migrate', [
+            '--force' => true,
+            '--database' => 'custom',
+        ]);
 
 
         if ($type == 'ai' && is_null($prompt)) {
@@ -132,7 +136,7 @@ class SeedDatabase extends Command
                 $errorOutput = $output->fetch();
                 \Log::error("Seeder2 error output: " . $errorOutput);
                 \Log::info("Second seeder: " . $returnValue);
-                AICreate::process($prompt, $model, $logo, $seed_amount, $seed_type);
+                AICreate::process($prompt, $model, $logo, $seed_amount, $seed_type, $provider, $image_model, $image_provider);
                 $returnValue=Artisan::call('db:seed', [
                     '--database' => 'custom', // Use the custom connection for seeding
                     '--class' =>  \Database\Seeders\Ai\DatabaseSeeder::class,
@@ -150,5 +154,32 @@ class SeedDatabase extends Command
                 break;
         }
 
+    }
+
+    private function ensureDatabaseExists(array $connection): void
+    {
+        $database = $connection['database'];
+        $charset = $connection['charset'];
+        $collation = $connection['collation'];
+
+        Config::set('database.connections.iceburg_server', array_merge($connection, [
+            'database' => null,
+        ]));
+
+        DB::purge('iceburg_server');
+        DB::connection('iceburg_server')->statement(
+            sprintf(
+                'CREATE DATABASE IF NOT EXISTS %s CHARACTER SET %s COLLATE %s',
+                $this->quoteIdentifier($database),
+                $charset,
+                $collation
+            )
+        );
+        DB::disconnect('iceburg_server');
+    }
+
+    private function quoteIdentifier(string $identifier): string
+    {
+        return '`'.str_replace('`', '``', $identifier).'`';
     }
 }

@@ -6,6 +6,11 @@ use App\Models\Contact; // Your local contacts model
 
 class SalesforceConnector extends BaseConnector
 {
+    public static function allowedCommands(): array
+    {
+        return ['fetchContacts', 'syncContacts'];
+    }
+
     // Optional: override headers if needed
     protected function getHeaders()
     {

@@ -261,7 +261,7 @@ class GenerateSeeder extends Seeder
         Log::info('Generating Settings');
         Setting::insert([
             'name' => 'theme',
-            'value' => 'light',
+            'value' => 'iceburgsaas',
         ]);
 
         Setting::insert([

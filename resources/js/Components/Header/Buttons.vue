@@ -36,7 +36,7 @@
             </select>
         </div>
 
-        <div class="btn-group" v-if="$page.props.auth.openai === true && props.fields">
+        <div class="btn-group" v-if="$page.props.auth.ai_enabled === true && props.fields">
             <a v-if="props.permissions.import && props.allowed.includes('import')" class="p-2 w-20 text-xs btn   btn-outline btn-secondary text-secondary-content rounded-box shadow"  as="button"  @click="toggle_modal" @keydown.escape="toggle_modal">
                 AI Assist
             </a>

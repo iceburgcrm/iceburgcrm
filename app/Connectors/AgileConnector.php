@@ -9,6 +9,11 @@ use Faker\Factory;
 
 class AgileConnector extends BaseConnector
 {
+    public static function allowedCommands(): array
+    {
+        return ['fetchContacts', 'saveContactsToModule', 'get_contacts'];
+    }
+
     protected function getHeaders()
     {
         return [

@@ -9,6 +9,7 @@ use GuzzleHttp\Middleware;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Exception\RequestException;
 use Carbon\Carbon;
+use RuntimeException;
 
 class ApiService
 {
@@ -29,12 +30,13 @@ class ApiService
         $connector = $endpoint->connector ?? $endpoint->command->connector;
         $retryCount = $endpoint->retry_count ?? 3;
 
-        // Build Guzzle client with retry
-        $this->client = $this->createClientWithRetry($retryCount, $connector);
-
         // Determine method, URL, headers, and parameters
         $httpMethod = $method ?? ($endpoint->request_type ?? 'GET');
         $endpointUrl = $url ?? ($endpoint->endpoint ?? '');
+        $requestUrl = $this->buildRequestUrl($connector->base_url, $endpointUrl);
+
+        // Build Guzzle client with retry
+        $this->client = $this->createClientWithRetry($retryCount);
         $headers = json_decode($endpoint->headers ?? '[]', true) ?? [];
         $params = $payload ?? (json_decode($endpoint->params ?? '[]', true) ?? []);
 
@@ -43,6 +45,7 @@ class ApiService
 
         $options = [
             'headers' => $headers,
+            'allow_redirects' => false,
         ];
 
         if (in_array(strtoupper($httpMethod), ['POST', 'PUT'])) {
@@ -51,21 +54,91 @@ class ApiService
             $options['query'] = $params;
         }
 
-        $response = $this->client->request($httpMethod, $connector->base_url . $endpointUrl, $options);
+        $response = $this->client->request($httpMethod, $requestUrl, $options);
 
         return $this->processResponse($response, $endpoint);
     }
 
-    protected function createClientWithRetry(int $retryCount, $connector): Client
+    protected function createClientWithRetry(int $retryCount): Client
     {
         $handlerStack = HandlerStack::create();
         $handlerStack->push($this->retryMiddleware($retryCount));
 
         return new Client([
             'handler' => $handlerStack,
-            'base_uri' => $connector->base_url,
             'timeout' => 30,
         ]);
+    }
+
+    protected function buildRequestUrl(?string $baseUrl, ?string $endpointUrl): string
+    {
+        $baseUrl = trim((string) $baseUrl);
+        $endpointUrl = trim((string) $endpointUrl);
+        $url = $this->isAbsoluteUrl($endpointUrl)
+            ? $endpointUrl
+            : rtrim($baseUrl, '/').'/'.ltrim($endpointUrl, '/');
+
+        $this->assertAllowedOutboundUrl($url);
+
+        return $url;
+    }
+
+    protected function isAbsoluteUrl(string $url): bool
+    {
+        return in_array(strtolower((string) parse_url($url, PHP_URL_SCHEME)), ['http', 'https'], true);
+    }
+
+    protected function assertAllowedOutboundUrl(string $url): void
+    {
+        $parts = parse_url($url);
+        $scheme = strtolower($parts['scheme'] ?? '');
+        $host = strtolower(trim($parts['host'] ?? '', '[]'));
+
+        if (!in_array($scheme, ['http', 'https'], true) || $host === '') {
+            throw new RuntimeException('Connector URL must be an absolute HTTP or HTTPS URL.');
+        }
+
+        if (isset($parts['user']) || isset($parts['pass'])) {
+            throw new RuntimeException('Connector URL cannot include embedded credentials.');
+        }
+
+        if ($host === 'localhost' || str_ends_with($host, '.localhost')) {
+            throw new RuntimeException('Connector URL cannot target localhost.');
+        }
+
+        foreach ($this->resolveHostIps($host) as $ip) {
+            if (!filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+                throw new RuntimeException('Connector URL cannot target private or reserved networks.');
+            }
+        }
+    }
+
+    protected function resolveHostIps(string $host): array
+    {
+        if (filter_var($host, FILTER_VALIDATE_IP)) {
+            return [$host];
+        }
+
+        $records = @dns_get_record($host, DNS_A + DNS_AAAA) ?: [];
+        $ips = [];
+        foreach ($records as $record) {
+            if (!empty($record['ip'])) {
+                $ips[] = $record['ip'];
+            }
+            if (!empty($record['ipv6'])) {
+                $ips[] = $record['ipv6'];
+            }
+        }
+
+        if (empty($ips)) {
+            $ips = @gethostbynamel($host) ?: [];
+        }
+
+        if (empty($ips)) {
+            throw new RuntimeException('Connector URL host could not be resolved.');
+        }
+
+        return array_unique($ips);
     }
 
     protected function retryMiddleware(int $retryCount)

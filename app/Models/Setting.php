@@ -12,11 +12,13 @@ class Setting extends Model
 
     protected $table = 'ice_settings';
 
+    private static ?array $settingsCache = null;
+
     public static function getSetting($key)
     {
-            $setting = Setting::where('name', $key)->pluck('value')->first();
+            $setting = self::settingsCache()[$key] ?? null;
             if (! $setting && $key == 'theme') {
-            return 'light';
+            return 'iceburgsaas';
             }
 
             return $setting;
@@ -67,6 +69,17 @@ class Setting extends Model
             Setting::where('name', $key)->update(['value' => $value]);
         }
 
+        self::$settingsCache = null;
+
         return 1;
+    }
+
+    private static function settingsCache(): array
+    {
+        if (self::$settingsCache === null) {
+            self::$settingsCache = Setting::query()->pluck('value', 'name')->all();
+        }
+
+        return self::$settingsCache;
     }
 }

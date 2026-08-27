@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use OpenAI\Laravel\Facades\OpenAI;
+use App\Services\AI\AIManager;
 
 class AIAssist extends Model
 {
@@ -42,16 +42,11 @@ class AIAssist extends Model
 
         $response=self::getData($txt);
 
-        return json_decode($response->choices[0]->message->content, true);
+        return json_decode($response, true);
     }
 
     private static function getData($content)
     {
-        return OpenAI::chat()->create([
-            'model' => 'gpt-3.5-turbo',
-            'messages' => [
-                ['role' => 'user', 'content' => $content],
-            ],
-        ]);
+        return app(AIManager::class)->chat($content);
     }
 }

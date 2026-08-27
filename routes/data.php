@@ -23,6 +23,18 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 
+$deleteConnectorWithCommands = function ($id) {
+    $connector = Connector::find($id);
+
+    if ($connector) {
+        $connector->commands()->delete();
+        $connector->delete();
+
+        return response()->json(['status' => 'Connector and its commands deleted successfully']);
+    }
+
+    return response()->json(['status' => 'Connector not found'], 404);
+};
 
 Route::get('help', function (Request $request) {
     $slug = $request->query('slug');
@@ -233,28 +245,19 @@ Route::get('related_field_name/field_id/{field_id}/value/{value}', function (Req
 
 
 
-Route::get('connector/delete_command/{command_id}', function ($commandId) {
+Route::match(['post', 'delete'], 'connector/delete_command/{command_id}', function ($commandId) {
 
     ConnectorCommand::where('id', $commandId)->delete();
 
-    return response()->json(Connectors::all());
+    return response()->json(Connector::all());
 
-})->middleware(['auth', 'verified'])->name('data')
+})->middleware(['auth', 'verified', 'admin'])->name('data')
     ->name('delete_endpoint');
-
-Route::get('connector/delete_connector/{connector_id}', function ($connectorId) {
-
-    ConnectorCommand::where('connector_id', $connectorId)->delete();
-    Connector::where('id', $connectorId)->delete();
-
-    return response()->json(Connectors::all());
-})->middleware(['auth', 'verified'])->name('data')
-    ->name('delete_connector');
 
 Route::get('connectors', function () {
 
-    return response()->json(Connectors::all());
-})->middleware(['auth', 'verified'])->name('data')
+    return response()->json(Connector::all());
+})->middleware(['auth', 'verified', 'admin'])->name('data')
     ->name('connectors');
 
 
@@ -275,83 +278,40 @@ Route::post('connector/set_connector', function (Request $request) {
         $data
     );
 
-    return response()->json(['status' => 'Connector saved successfully', 'connector' => $connector]);
-})->middleware(['auth', 'verified'])->name('set_connector');
+    return response()->json([
+        'status' => 'Connector saved successfully',
+        'message' => 'Connector saved successfully',
+        'id' => $connector->id,
+    ]);
+})->middleware(['auth', 'verified', 'admin'])->name('set_connector');
 
 // Route for Deleting the Connector
-Route::delete('connector/delete_connector/{id}', function ($id) {
-    $connector = Connector::find($id);
+Route::delete('connector/delete_connector/{id}', function ($id) use ($deleteConnectorWithCommands) {
+    return $deleteConnectorWithCommands($id);
+})->middleware(['auth', 'verified', 'admin'])->name('delete_connector');
 
-    if ($connector) {
-        // Delete all associated ConnectorCommands
-        $connector->commands()->delete();
-        // Delete the connector
-        $connector->delete();
-
-        return response()->json(['status' => 'Connector and its commands deleted successfully']);
-    } else {
-        return response()->json(['status' => 'Connector not found'], 404);
-    }
-})->middleware(['auth', 'verified'])->name('delete_connector');
-
-/*
-Route::post('connector/run_command', function (Request $request) {
-    $commandId = $request->input('command_id');
-
-    $custom_command=ConnectorCommand::where('id', $commandId)->with('connector')->firstOrFail();
-    $className = $custom_command->connector['class'];
-
-    // Define the full path to the class
-    $classPath = app_path("Connectors/{$className}Connector.php");
-
-    // Check if the class file exists
-    if (File::exists($classPath)) {
-        // Create the full namespace for the class
-        $fullClassName = "App\\Connectors\\{$className}Connector";
-
-        // Check if the class exists and is instantiable
-        if (class_exists($fullClassName)) {
-            $connectorInstance = new $fullClassName($custom_command);
-
-            $response = $connectorInstance->{$custom_command->method_name}();
-            $custom_command->last_updated=\Carbon\Carbon::now();
-            $custom_command->last_output=$response;
-            $custom_command->save();
-
-            return response()->json([
-                'status' => 'success',
-                'message' => $response,
-                'class' => $fullClassName,
-                'instance' => $connectorInstance,
-            ]);
-        } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => "Class {$fullClassName} is not instantiable",
-            ], 500);
-        }
-    } else {
-        return response()->json([
-            'status' => 'error',
-            'message' => "Class {$className} does not exist in /app/Connectors",
-        ], 404);
-    }
-
-})->middleware(['auth', 'verified'])->name('run_command');
-
-*/
+Route::delete('connectors/{id}', function ($id) use ($deleteConnectorWithCommands) {
+    return $deleteConnectorWithCommands($id);
+})->middleware(['auth', 'verified', 'admin'])->name('delete_connector_short');
 
 // Add Command
 Route::post('connector/add_command', function(Request $request) {
     $request->validate([
         'connector_id' => 'required|integer',
         'name' => 'required|string',
-        'method_name' => 'required|string',
+        'method_name' => ['required', 'string', 'regex:/^[A-Za-z_][A-Za-z0-9_]*$/'],
         'description' => 'required|string',
         'endpoint_id' => 'nullable|integer',
         'status' => 'boolean',
-        'class_name' => 'string'
+        'class_name' => ['required', 'string', 'regex:/^[A-Za-z_][A-Za-z0-9_]*$/']
     ]);
+
+    $fullClass = "App\\Connectors\\" . ucfirst($request->class_name) . "Connector";
+    if (!class_exists($fullClass)
+        || !is_subclass_of($fullClass, \App\Connectors\BaseConnector::class)
+        || !in_array($request->method_name, $fullClass::allowedCommands(), true)) {
+        return response()->json(['message' => 'Connector command class or method is not allowed.'], 422);
+    }
 
     $command = new ConnectorCommand();
     $command->connector_id = $request->connector_id;
@@ -364,7 +324,7 @@ Route::post('connector/add_command', function(Request $request) {
     $command->save();
 
     return response()->json(['command' => $command]);
-})->middleware(['auth', 'verified'])->name('add_command');
+})->middleware(['auth', 'verified', 'admin'])->name('add_command');
 
 // Update Command
 Route::post('connector/update_command/{id}', function(Request $request, $id) {
@@ -372,12 +332,19 @@ Route::post('connector/update_command/{id}', function(Request $request, $id) {
 
     $request->validate([
         'name' => 'required|string',
-        'method_name' => 'required|string',
+        'method_name' => ['required', 'string', 'regex:/^[A-Za-z_][A-Za-z0-9_]*$/'],
         'description' => 'required|string',
         'endpoint_id' => 'nullable|integer|exists:endpoints,id',
         'status' => 'boolean',
-        'class_name' => 'nullable|string'
+        'class_name' => ['required', 'string', 'regex:/^[A-Za-z_][A-Za-z0-9_]*$/']
     ]);
+
+    $fullClass = "App\\Connectors\\" . ucfirst($request->class_name) . "Connector";
+    if (!class_exists($fullClass)
+        || !is_subclass_of($fullClass, \App\Connectors\BaseConnector::class)
+        || !in_array($request->method_name, $fullClass::allowedCommands(), true)) {
+        return response()->json(['message' => 'Connector command class or method is not allowed.'], 422);
+    }
 
     $command->name = $request->name;
     $command->method_name = $request->method_name;
@@ -388,7 +355,7 @@ Route::post('connector/update_command/{id}', function(Request $request, $id) {
     $command->save();
 
     return response()->json(['command' => $command]);
-})->middleware(['auth', 'verified'])->name('update_command');
+})->middleware(['auth', 'verified', 'admin'])->name('update_command');
 
 
 
@@ -396,12 +363,12 @@ Route::get('endpoints/{connector_id}', function (Request $request, $connectorId)
     $endpoints = Endpoint::where('connector_id', $connectorId)->get();
 
     return response()->json($endpoints);
-})->middleware(['auth', 'verified'])->name('connector_endpoints');
+})->middleware(['auth', 'verified', 'admin'])->name('connector_endpoints');
 
 Route::get('commands/{connector_id}', function (Request $request, $connectorId) {
-    $commands = Command::where('connector_id', $connectorId)->get();
+    $commands = ConnectorCommand::where('connector_id', $connectorId)->get();
     return response()->json($commands);
-})->middleware(['auth', 'verified'])->name('connector_commands');
+})->middleware(['auth', 'verified', 'admin'])->name('connector_commands');
 
 Route::post('endpoints/add', function (Request $request) {
     $data = $request->all();
@@ -418,7 +385,7 @@ Route::post('endpoints/add', function (Request $request) {
     $endpoint->save();
 
     return response()->json(['id' => $endpoint->id]);
-})->middleware(['auth', 'verified']);
+})->middleware(['auth', 'verified', 'admin']);
 
 
 Route::post('endpoints/update/{id}', function (Request $request, $id) {
@@ -435,7 +402,7 @@ Route::post('endpoints/update/{id}', function (Request $request, $id) {
     $endpoint->save();
 
     return response()->json(['message' => 'Endpoint updated successfully']);
-})->middleware(['auth', 'verified']);
+})->middleware(['auth', 'verified', 'admin']);
 
 
 Route::post('workflow/save', function (Request $request) {
@@ -472,7 +439,4 @@ Route::delete('workflow/{id}', function ($id) {
 
 Route::get('connector/command/{id}', function ($id) {
     return ['command' => \App\Models\ConnectorCommand::findOrFail($id)];
-})>middleware(['auth', 'verified'])->name('view_command');
-
-
-
+})->middleware(['auth', 'verified', 'admin'])->name('view_command');

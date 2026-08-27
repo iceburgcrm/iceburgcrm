@@ -8,14 +8,28 @@ services:
     volumes:
       - .:/var/www/html
     environment:
+      DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
       DB_DATABASE: iceburg
       DB_USERNAME: iceburg_user
       DB_PASSWORD: secret
       PHP_MEMORY_LIMIT: 512M
+      AI_PROVIDER: ${AI_PROVIDER:-openrouter}
+      AI_CHAT_MODEL: ${AI_CHAT_MODEL:-openai/gpt-4o-mini}
+      AI_IMAGE_PROVIDER: ${AI_IMAGE_PROVIDER:-openrouter}
+      AI_IMAGE_MODEL: ${AI_IMAGE_MODEL:-openai/gpt-image-1}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENROUTER_CHAT_MODEL: ${OPENROUTER_CHAT_MODEL:-openai/gpt-4o-mini}
+      OPENROUTER_IMAGE_MODEL: ${OPENROUTER_IMAGE_MODEL:-openai/gpt-image-1}
+      OPENROUTER_HTTP_REFERER: ${OPENROUTER_HTTP_REFERER:-http://localhost:8080}
+      OPENROUTER_APP_TITLE: ${OPENROUTER_APP_TITLE:-Iceburg CRM}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_CHAT_MODEL: ${ANTHROPIC_CHAT_MODEL:-claude-3-5-sonnet-latest}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   db:
     image: mysql:8.0
@@ -30,6 +44,11 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uiceburg_user", "-psecret"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
 volumes:
   db_data:

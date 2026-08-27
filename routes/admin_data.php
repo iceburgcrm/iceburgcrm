@@ -1,6 +1,7 @@
 <?php
 
 use App\Admin\CRMBuilder;
+use App\Connectors\BaseConnector;
 use App\Http\Integrations\ApiCall;
 use App\Http\Integrations\Generic\GenericAPI;
 use App\Http\Integrations\Generic\Requests\ApiRequest;
@@ -63,10 +64,18 @@ Route::get('commands/run/{id}', function (Request $request, $id) {
         throw new \Exception("Command class not found for command {$command->id}");
     }
 
+    if (!is_subclass_of($fullClass, BaseConnector::class)) {
+        throw new \Exception("Command class {$fullClass} is not a connector");
+    }
+
     $commandInstance = new $fullClass($command);
 
     try {
         $method = $command->method_name ?? 'execute';
+
+        if (!in_array($method, $fullClass::allowedCommands(), true)) {
+            throw new \Exception("Method {$method} is not allowed on class {$fullClass}");
+        }
 
         if (!method_exists($commandInstance, $method)) {
             throw new \Exception("Method {$method} does not exist on class {$fullClass}");
@@ -123,7 +132,6 @@ Route::get('sendrequest', function (Request $request, $id) {
     ]);
     */
 })->middleware(['auth', 'verified'])->name('sendrequest');
-
 
 
 

@@ -5,9 +5,10 @@ namespace App\Http\Middleware;
 use App\Models\ModuleGroup;
 use App\Models\Role;
 use App\Models\Setting;
+use App\Services\AI\AIManager;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Tightenco\Ziggy\Ziggy;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -42,7 +43,8 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $user,
-                'openai' => !empty(env('OPENAI_API_KEY')),
+                'ai_enabled' => $this->aiEnabled(),
+                'openai' => $this->aiEnabled(),
                 'system_settings' => Setting::getSettings(),
                 'modules' => ModuleGroup::with('modules')->get(),
             ],
@@ -50,5 +52,14 @@ class HandleInertiaRequests extends Middleware
                 return (new Ziggy)->toArray();
             },
         ]);
+    }
+
+    protected function aiEnabled(): bool
+    {
+        try {
+            return app(AIManager::class)->enabled();
+        } catch (\Throwable $exception) {
+            return false;
+        }
     }
 }
