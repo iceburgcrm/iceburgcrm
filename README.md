@@ -585,11 +585,6 @@ This file generates the subpanel data.  It needs to be run last.
 [CRM Preview](https://wordpress.iceburg.ca)  
 [Wordpress Website](https://wordpresssite.iceburg.ca)
 
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=iceburgcrm/iceburgcrm&type=Date)](https://star-history.com/#iceburgcrm/iceburgcrm&Date)
-
-
 ## Security Vulnerabilities
 
 If you discover a security vulnerability within Iceburg CRM, please send an e-mail to [security@iceburg.ca](mailto:security@iceburg.ca).
