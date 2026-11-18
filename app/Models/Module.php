@@ -326,6 +326,9 @@ class Module extends Model
             }
 
             $module = Module::find($key);
+            if (! $module || ! Permission::checkPermission((int) $key, 'write')) {
+                continue;
+            }
             if (intval($recordId) > 0) {
 
                 if (intval($relationshipId) > 0) {
